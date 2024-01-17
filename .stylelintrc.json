@@ -1,0 +1,16 @@
+{
+	"plugins": ["stylelint-prettier"],
+	"extends": ["stylelint-config-standard-scss", "stylelint-config-recommended-vue/scss"],
+	"rules": {
+		"prettier/prettier": true,
+		"color-named": "never",
+		"color-hex-case": "lower",
+		"custom-property-pattern": null,
+		"color-hex-length": "long",
+		"font-family-name-quotes": "always-unless-keyword",
+		"declaration-empty-line-before": null,
+		"selector-pseudo-element-colon-notation": null,
+		"scss/dollar-variable-empty-line-before": null,
+		"value-keyword-case": null
+	}
+}

@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import Calculator from "@/Calculator.vue";
-import FightWindow from "@/components/FatePrototype/FightWindow.vue";
+import Calculator from '@/Calculator.vue'
+import FightWindow from '@/components/FatePrototype/FightWindow.vue'
 </script>
 
 <template>
-	<FightWindow/>
-<Calculator/>
+	<FightWindow />
+	<Calculator />
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

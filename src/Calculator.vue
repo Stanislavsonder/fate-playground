@@ -1,27 +1,35 @@
 <script setup>
-import Armor from "@/components/Calculator blocks/Armor.vue";
-import CritChance from "@/components/Calculator blocks/CritChance.vue";
-import HitChance from "@/components/Calculator blocks/HitChance.vue";
-import MissChance from "@/components/Calculator blocks/MissChance.vue";
-import {ref} from "vue";
-import ResultHitChance from "@/components/Calculator blocks/ResultHitChance.vue";
-import Damage from "@/components/Calculator blocks/Damage.vue";
+import Armor from '@/components/Calculator blocks/Armor.vue'
+import CritChance from '@/components/Calculator blocks/CritChance.vue'
+import HitChance from '@/components/Calculator blocks/HitChance.vue'
+import MissChance from '@/components/Calculator blocks/MissChance.vue'
+import { ref } from 'vue'
+import ResultHitChance from '@/components/Calculator blocks/ResultHitChance.vue'
+import Damage from '@/components/Calculator blocks/Damage.vue'
 
 const missChance = ref(0)
 const hitChance = ref(0)
-
 </script>
 
 <template>
-	<Damage/>
-	<Armor/>
-	<CritChance/>
-	<HitChance v-model="hitChance"/>
-	<MissChance v-model="missChance"/>
-	<ResultHitChance :hit="hitChance" :miss="missChance"/>
+	<div class="calculator">
+		<Damage />
+		<Armor />
+		<CritChance />
+		<HitChance v-model="hitChance" />
+		<MissChance v-model="missChance" />
+		<ResultHitChance
+			:hit="hitChance"
+			:miss="missChance"
+		/>
+	</div>
 </template>
 
 <style lang="scss">
+.calculator {
+	color: white;
+}
+
 .inputs {
 	label {
 		flex-grow: 1;

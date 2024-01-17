@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import {computed, ref} from "vue";
-const COMPRESS_COUNT = 5;
-const BREATH_COUNT = 2;
+import { computed, ref } from 'vue'
+const COMPRESS_COUNT = 5
+const BREATH_COUNT = 2
 
-const maxErrors = 3;
-const errors = ref(0);
-const successes = ref(0);
+const maxErrors = 3
+const errors = ref(0)
+const successes = ref(0)
 
 const compress = ref(0)
 const breath = ref(0)
@@ -14,7 +14,7 @@ const stageCompress = ref(0)
 const stageBreath = ref(0)
 
 const isLose = computed(() => {
-	return errors.value >= maxErrors;
+	return errors.value >= maxErrors
 })
 
 const aaa = ref(65)
@@ -27,7 +27,6 @@ const _percent = computed(() => aaa.value + '%')
 setInterval(() => {
 	aaa.value = Math.max(0, aaa.value - 0.3)
 }, 10)
-
 
 function validateCompress() {
 	console.log(stageCompress.value)
@@ -45,7 +44,6 @@ function validateBreath() {
 	} else {
 		validateStage()
 	}
-
 }
 function validateStage() {
 	if (stageBreath.value >= BREATH_COUNT && stageCompress.value >= COMPRESS_COUNT) {
@@ -74,25 +72,22 @@ function breathing() {
 	aaa.value = Math.min(100, aaa.value + 10)
 	stageBreath.value++
 	validateBreath()
-
 }
 
 function compressing() {
 	aaa.value = Math.min(100, aaa.value + 10)
-    stageCompress.value++
+	stageCompress.value++
 	validateCompress()
 }
 
-
 function clear() {
 	compress.value = 0
-    breath.value = 0
+	breath.value = 0
 	errors.value = 0
-	successes.value = 0;
-	stageBreath.value = 0;
-	stageCompress.value = 0;
+	successes.value = 0
+	stageBreath.value = 0
+	stageCompress.value = 0
 }
-
 </script>
 
 <template>
@@ -100,20 +95,26 @@ function clear() {
 		<span
 			v-for="(_, index) in new Array(maxErrors).fill(false)"
 			class="error"
-			:class="{'error-filled': index < errors}"
+			:class="{ 'error-filled': index < errors }"
 		/>
 		<span>
 			{{ successes }}
 		</span>
 	</div>
 	<p>
-		{{ isLose? 'Пациент умер' : ''}}
+		{{ isLose ? 'Пациент умер' : '' }}
 	</p>
 	<div class="buttons">
-		<button :disabled="isLose" @click="compressing">
+		<button
+			:disabled="isLose"
+			@click="compressing"
+		>
 			Компрессия
 		</button>
-		<button :disabled="isLose" @click="breathing">
+		<button
+			:disabled="isLose"
+			@click="breathing"
+		>
 			Вдох
 		</button>
 	</div>
@@ -134,13 +135,15 @@ function clear() {
 		</span>
 	</div>
 	<p class="progress">
-		<span class="zone"/>
+		<span class="zone" />
 	</p>
-	<input type="range" v-model="aaa">
+	<input
+		v-model="aaa"
+		type="range"
+	/>
 </template>
 
 <style scoped>
-
 .progress {
 	position: relative;
 	border: 1px solid white;
@@ -158,7 +161,6 @@ function clear() {
 	height: 32px;
 	translate: 0 -4px;
 }
-
 
 .errors {
 	display: flex;
@@ -183,7 +185,7 @@ function clear() {
 .buttons {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-    gap: 16px;
+	gap: 16px;
 
 	button {
 		border: none;

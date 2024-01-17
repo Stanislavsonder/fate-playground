@@ -5,10 +5,10 @@ defineProps<{
 </script>
 
 <template>
-<div class="block">
-	<h2>{{ title }}</h2>
-	<slot/>
-</div>
+	<div class="block">
+		<h2>{{ title }}</h2>
+		<slot />
+	</div>
 </template>
 
 <style scoped lang="scss">

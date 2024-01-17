@@ -1,5 +1,3 @@
-import {defineStore} from "pinia";
+import { defineStore } from 'pinia'
 
-const AppStore = defineStore('appStore', () => {
-
-})
+const AppStore = defineStore('appStore', () => {})

@@ -1,7 +1,6 @@
 <script setup lang="ts">
-
 const dice = defineModel<number[]>({
-	default: () => [0,0,0,0]
+	default: () => [0, 0, 0, 0]
 })
 
 const result = defineModel<number>('result', {
@@ -10,7 +9,7 @@ const result = defineModel<number>('result', {
 
 function roll() {
 	dice.value = dice.value.map(() => {
-		return Math.floor(Math.random() * 3) - 1;
+		return Math.floor(Math.random() * 3) - 1
 	})
 	result.value = dice.value.reduce((a, b) => a + b)
 }
@@ -18,34 +17,38 @@ function roll() {
 function set(value) {
 	result.value = value
 }
-
 </script>
 
 <template>
-<div class="dice">
-	<div class="dice__inner">
-		<ul>
-			<li
-				v-for="(die, index) in dice"
-				:class="`dice__result dice__result--${die}`"
-				:key="index">
-				{{ die > 0 ? '+' : die < 0 ? '–' : 'o' }}
-			</li>
-		</ul>
-		<span class="dice__res" :class="`dice__result--${Math.sign(result)}`">
-		{{ result > 0 ? '+' : '' }}{{ result }}
-	</span>
-		<button @click="roll">Roll</button>
+	<div class="dice">
+		<div class="dice__inner">
+			<ul>
+				<li
+					v-for="(die, index) in dice"
+					:key="index"
+					:class="`dice__result dice__result--${die}`"
+				>
+					{{ die > 0 ? '+' : die < 0 ? '–' : 'o' }}
+				</li>
+			</ul>
+			<span
+				class="dice__res"
+				:class="`dice__result--${Math.sign(result)}`"
+			>
+				{{ result > 0 ? '+' : '' }}{{ result }}
+			</span>
+			<button @click="roll">Roll</button>
+		</div>
+		<div class="dice__inner">
+			<button
+				v-for="(_, index) in new Array(dice.length * 2 + 1).fill(0)"
+				class="dice__setter"
+				@click="set(index - dice.length)"
+			>
+				{{ index - dice.length }}
+			</button>
+		</div>
 	</div>
-	<div class="dice__inner">
-		<button
-			v-for="(_, index) in new Array(dice.length * 2 + 1).fill(0)"
-			@click="set(index - dice.length)"
-			class="dice__setter">
-			{{ index - dice.length }}
-		</button>
-	</div>
-</div>
 </template>
 
 <style scoped lang="scss">
@@ -62,7 +65,6 @@ function set(value) {
 		display: inline-flex;
 		gap: 4px;
 	}
-
 
 	ul {
 		display: flex;
@@ -101,11 +103,9 @@ function set(value) {
 
 	&__setter {
 		font-size: 4px;
-		padding: 2px!important;
+		padding: 2px !important;
 		width: 8px;
 		height: 8px;
-
-
 	}
 
 	&__res {
@@ -114,5 +114,4 @@ function set(value) {
 		font-size: 12px;
 	}
 }
-
 </style>
