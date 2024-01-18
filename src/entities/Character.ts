@@ -2,10 +2,11 @@ import { CharacterSize, Skills } from '../types'
 import { Weapon, WeaponModifier, WeaponRange } from './Weapon'
 import { Armor, ArmorModifier } from './Armor'
 import { Wound } from './Wound'
-import { BASE_CHARACTER_HIT_POINTS, EMPTY_SKILL_SET } from '../constants/Character'
+import { BASE_CHARACTER_CRITICAL_MULTIPLIER, BASE_CHARACTER_HEALTH_POINTS, BASE_CHARACTER_HIT_CHANCE, EMPTY_SKILL_SET } from '../constants/Character'
 import { copy, getArmorStat, getSkillBonus, getWeaponStat, getWoundsPenalty } from '../utils'
 import { ArmorSlot } from '../constants/Armor'
 import { DEFAULT_FIST_PROPS } from '../constants/Weapon'
+import DiceService, { Dice, DiceRollResult } from '@/services/dice.service'
 
 type CharacterStats = Required<WeaponModifier & ArmorModifier> & {}
 
@@ -20,6 +21,8 @@ interface ICharacter {
 	readonly skills: Skills
 	readonly wounds: Wound[]
 
+	readonly level: number
+	readonly experience: number
 	readonly maxHealthPoints: number
 	readonly minDamage: number
 	readonly maxDamage: number
@@ -75,7 +78,7 @@ export class Character implements ICharacter {
 	}
 
 	get maxHealthPoints(): number {
-		return BASE_CHARACTER_HIT_POINTS + getSkillBonus('additionalMaxHealth', this.skills) + getWoundsPenalty('maxHealthPoints', this.wounds)
+		return Math.max(BASE_CHARACTER_HEALTH_POINTS + getSkillBonus('additionalMaxHealth', this.skills) + getWoundsPenalty('maxHealthPoints', this.wounds), 0)
 	}
 
 	get minDamage(): number {
@@ -85,8 +88,10 @@ export class Character implements ICharacter {
 			this.skills
 		)
 
-		return (
-			getWeaponStat('minDamage', this.weapon, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied) * (1 + damageTypeMultiplier + weaponRangeMultiplier)
+		return Math.max(
+			getWeaponStat('minDamage', this.weapon, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied) *
+				(1 + damageTypeMultiplier + weaponRangeMultiplier),
+			0
 		)
 	}
 
@@ -97,37 +102,66 @@ export class Character implements ICharacter {
 			this.skills
 		)
 
-		return (
-			getWeaponStat('maxDamage', this.weapon, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied) * (1 + damageTypeMultiplier + weaponRangeMultiplier)
+		return Math.max(
+			getWeaponStat('maxDamage', this.weapon, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied) *
+				(1 + damageTypeMultiplier + weaponRangeMultiplier),
+			0
 		)
 	}
 
 	get criticalChance(): number {
-		return (
-			getSkillBonus('criticalChance', this.skills) + getWeaponStat('criticalChance', this.weapon, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied)
+		return Math.max(
+			getSkillBonus('criticalChance', this.skills) + getWeaponStat('criticalChance', this.weapon, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied),
+			0
 		)
 	}
 
 	get criticalMultiplier(): number {
-		return (
-			getSkillBonus('criticalMultiplier', this.skills) +
-			getWeaponStat('criticalMultiplier', this.weapon, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied)
+		return Math.max(
+			BASE_CHARACTER_CRITICAL_MULTIPLIER +
+				getSkillBonus('criticalMultiplier', this.skills) +
+				getWeaponStat('criticalMultiplier', this.weapon, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied),
+			0
 		)
 	}
 
 	get evadeChance(): number {
-		return getSkillBonus('evadeChance', this.skills) + getArmorStat('evadeChance', this.armor)
+		return Math.max(getSkillBonus('evadeChance', this.skills) + getArmorStat('evadeChance', this.armor), 0)
 	}
 
 	get defence(): number {
-		return this.armor.reduce((a, b) => a + b.totalDefence, 0) * (1 + getSkillBonus('defenceMultiplier', this.skills))
+		return Math.round(this.armor.reduce((a, b) => a + b.totalDefence, 0) * (1 + getSkillBonus('defenceMultiplier', this.skills)))
 	}
 
 	get block(): number {
-		return Armor.BlockPercentage(this.defence)
+		return 1 - Armor.BlockPercentage(this.defence)
 	}
 
 	get hitChance(): number {
-		return 1 + getWeaponStat('hitChance', this.weapon, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied)
+		return Math.max(BASE_CHARACTER_HIT_CHANCE + getWeaponStat('hitChance', this.weapon, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied), 0)
+	}
+
+	get level(): number {
+		return 1 // TODO
+	}
+
+	get experience(): number {
+		return 1 // TODO
+	}
+
+	public rollDice(): Dice[] {
+		return DiceService.roll(4, this.luck)
+	}
+
+	public rollCriticalChance(): boolean {
+		return Math.random() <= this.criticalChance
+	}
+
+	public rollHitChance(): boolean {
+		return Math.random() <= this.hitChance
+	}
+
+	public rollEvadeChance(): boolean {
+		return Math.random() <= this.evadeChance
 	}
 }

@@ -5,7 +5,7 @@ import FightWindow from '@/components/FatePrototype/FightWindow.vue'
 
 <template>
 	<FightWindow />
-	<Calculator />
+	<!--	<Calculator />-->
 </template>
 
 <style scoped lang="scss"></style>

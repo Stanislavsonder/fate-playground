@@ -76,6 +76,11 @@ export class Weapon implements IWeapon {
 		this.penalty = props.penalty
 	}
 
+	public static GetDamage(min: number, max: number, rollResult: number): number {
+		const step = (max - min) / 8
+		return Math.round(min + step * (rollResult + 4))
+	}
+
 	stats(bonus = false, penalty = false): WeaponModifier {
 		return objectsSum<WeaponModifier>(
 			{

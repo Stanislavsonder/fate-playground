@@ -57,7 +57,7 @@ export class Armor implements IArmor {
 
 	private static BLOCK_CONSTANT = BLOCK_CONSTANT
 	public static BlockPercentage(defence: number): number {
-		return 1 - (Armor.BLOCK_CONSTANT * defence) / (1 + Armor.BLOCK_CONSTANT * Math.abs(defence))
+		return (Armor.BLOCK_CONSTANT * defence) / (1 + Armor.BLOCK_CONSTANT * Math.abs(defence))
 	}
 
 	private getTypeModifier(): ArmorModifier {

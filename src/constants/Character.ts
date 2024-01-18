@@ -1,8 +1,9 @@
 import { Skills, SkillModifiers, SkillLevelModifiers } from '@/types'
 
-export const BASE_CHARACTER_HIT_POINTS = 100
-export const SKILL_EXPERIENCE_CUP: SkillLevelModifiers =
-	[10, 20, 40, 70, 120, 200, 250, 350, 500, 700]
+export const BASE_CHARACTER_HEALTH_POINTS = 100
+export const BASE_CHARACTER_HIT_CHANCE = 1.0
+export const BASE_CHARACTER_CRITICAL_MULTIPLIER = 1.5
+export const SKILL_EXPERIENCE_CUP: SkillLevelModifiers = [10, 20, 40, 70, 120, 200, 250, 350, 500, 700]
 export const EMPTY_SKILL_SET: Skills = {
 	agility: {
 		level: 0,

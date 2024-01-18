@@ -13,7 +13,7 @@ export const Sword = new WeaponType({
 		maxDamage: 10
 	},
 	penalty: {
-		diceResult: -1,
+		diceResult: -1
 	}
 })
 
@@ -24,6 +24,17 @@ export const Fist = new WeaponType({
 	minEffectiveDistance: 0,
 	maxEffectiveDistance: 2,
 	maxDistance: 3,
+	bonus: {},
+	penalty: {}
+})
+
+export const Bow = new WeaponType({
+	name: 'Bow',
+	range: WeaponRange.Ranged,
+	minDistance: 6,
+	minEffectiveDistance: 10,
+	maxEffectiveDistance: 30,
+	maxDistance: 40,
 	bonus: {},
 	penalty: {}
 })
