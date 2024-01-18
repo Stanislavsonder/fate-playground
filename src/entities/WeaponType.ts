@@ -1,4 +1,4 @@
-import { objectsSum } from '../utils'
+import { objectsSum } from '@/utils'
 import { WeaponDistances, WeaponModifier, WeaponRange } from './Weapon'
 
 interface IWeaponType extends WeaponDistances {

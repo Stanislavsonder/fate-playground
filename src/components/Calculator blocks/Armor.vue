@@ -15,8 +15,8 @@ const percent = computed(() => Armor.BlockPercentage(armor.value))
 			v-model="armor"
 			class="input"
 			type="range"
-			min="-100"
-			max="100"
+			min="-500"
+			max="500"
 			step="1"
 		/>
 		<p class="armor">{{ Math.round(percent * 100) }}%</p>

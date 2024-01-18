@@ -9,10 +9,11 @@ export const Sword = new WeaponType({
 	maxEffectiveDistance: 3,
 	maxDistance: 4,
 	bonus: {
-		diceResult: 1
+		diceResult: 1,
+		maxDamage: 10
 	},
 	penalty: {
-		diceResult: -1
+		diceResult: -1,
 	}
 })
 

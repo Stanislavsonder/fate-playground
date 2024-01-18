@@ -128,6 +128,6 @@ export class Character implements ICharacter {
 	}
 
 	get hitChance(): number {
-		return 1
+		return 1 + getWeaponStat('hitChance', this.weapon, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied)
 	}
 }

@@ -2,6 +2,7 @@
 	"name": "untitled",
 	"version": "0.0.0",
 	"private": true,
+	"homepage": "https://stanislavsonder.github.io/fate-playground",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
