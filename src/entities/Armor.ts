@@ -17,21 +17,30 @@ import {
 	MEDIUM_MOVE_DISTANCE_MULTIPLIER
 } from '@/constants/Armor'
 
-export type ArmorModifier = {
-	evadeChance?: number
-	defence?: number
-	defenceMultiplier?: number
+export type ArmorStats = {
+	defence: number
+}
+
+export type MovementModifiers = {
 	moveDistance?: number
 	moveDistanceMultiplier?: number
 }
 
-interface IArmor {
+export type DefenceModifiers = {
+	defence?: number
+	defenceMultiplier?: number
+}
+
+export type ArmorModifier = DefenceModifiers &
+	MovementModifiers & {
+		evadeChance?: number
+	}
+
+interface IArmor extends ArmorStats {
 	name: string
 	slots: ArmorSlot[]
 	size: CharacterSize
 	type: ArmorType
-	defence: number
-	defenceMultiplier?: number
 	bonuses?: ArmorModifier
 	penalty?: ArmorModifier
 }

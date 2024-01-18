@@ -77,7 +77,7 @@ const ivan = reactive(
 		},
 		size: CharacterSize.Medium,
 		slots: [ArmorSlot.Ears, ArmorSlot.TopHead, ArmorSlot.Nose],
-		weapon: woodenSword,
+		weapon: [woodenSword],
 		armor: [bronzeHelmet, glove]
 	})
 )
@@ -94,6 +94,18 @@ const bow = new Weapon({
 	quality: WeaponQuality.Common
 })
 
+const fist = new Weapon({
+	name: 'Fist',
+	type: Fist,
+	minDamage: 0,
+	maxDamage: 3,
+	hitChance: 0.4,
+	criticalChance: 0.3,
+	criticalMultiplier: 0,
+	bonus: {},
+	quality: WeaponQuality.Common
+})
+
 const ratLord = reactive(
 	new Character({
 		name: 'RatLord',
@@ -101,14 +113,21 @@ const ratLord = reactive(
 		skills: {
 			...EMPTY_SKILL_SET,
 			...{
-				perception: { level: 8, experience: 0 },
-				agility: { level: 2, experience: 0 },
-				shooting: { level: 2, experience: 0 }
+				perception: { level: 4, experience: 0 },
+				agility: { level: 3, experience: 0 },
+				deceit: { level: 3, experience: 0 },
+				craft: { level: 2, experience: 0 },
+				theft: { level: 2, experience: 0 },
+				stealth: { level: 2, experience: 0 },
+				shooting: { level: 1, experience: 0 },
+				constitution: { level: 2, experience: 0 },
+				knowledge: { level: 1, experience: 0 },
+				will: { level: 1, experience: 0 }
 			}
 		},
 		size: CharacterSize.Small,
 		slots: [ArmorSlot.Ears, ArmorSlot.TopHead, ArmorSlot.Nose],
-		weapon: bow,
+		weapon: [bow, fist],
 		armor: [boots]
 	})
 )

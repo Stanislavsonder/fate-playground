@@ -1,4 +1,3 @@
-import { objectsSum } from '@/utils'
 import { WeaponType } from './WeaponType'
 
 export enum WeaponQuality {
@@ -15,7 +14,7 @@ export enum WeaponRange {
 	Ranged
 }
 
-export type WeaponDistances = {
+export type WeaponDistancesModifier = {
 	minDistance: number
 	minEffectiveDistance: number
 	maxEffectiveDistance: number
@@ -31,8 +30,11 @@ export type WeaponStats = {
 }
 
 export type WeaponModifier = Partial<WeaponStats> &
-	Partial<WeaponDistances> & {
+	Partial<WeaponDistancesModifier> & {
 		diceResult?: number
+		damageMultiplier?: number
+		evadeChance?: number
+		defence?: number
 	}
 
 export type WeaponProps = WeaponStats & {
@@ -81,18 +83,23 @@ export class Weapon implements IWeapon {
 		return Math.round(min + step * (rollResult + 4))
 	}
 
-	stats(bonus = false, penalty = false): WeaponModifier {
-		return objectsSum<WeaponModifier>(
-			{
-				minDamage: this.minDamage,
-				maxDamage: this.maxDamage,
-				hitChance: this.hitChance,
-				criticalChance: this.criticalChance,
-				criticalMultiplier: this.criticalMultiplier
-			},
-			this.bonus,
-			this.penalty,
-			this.type.stats(bonus, penalty)
-		)
+	public static GetMedianStat(stat: keyof WeaponModifier, weapons: Weapon[], activeIndex: number, bonus = false, penalty = false): number {
+		let result = 0
+		weapons.forEach((weapon, index) => {
+			result += weapon.getStat(stat, index === activeIndex && bonus, index === activeIndex && penalty)
+		})
+		return result / weapons.length
+	}
+
+	getStat(stat: keyof WeaponModifier, bonus = false, penalty = false): number {
+		const stats: Partial<WeaponModifier> = {
+			minDamage: this.minDamage,
+			maxDamage: this.maxDamage,
+			hitChance: this.hitChance,
+			criticalChance: this.criticalChance,
+			criticalMultiplier: this.criticalMultiplier
+		}
+
+		return (stats[stat] || 0) + this.type.getStat(stat, bonus, penalty)
 	}
 }

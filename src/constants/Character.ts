@@ -3,7 +3,11 @@ import { Skills, SkillModifiers, SkillLevelModifiers } from '@/types'
 export const BASE_CHARACTER_HEALTH_POINTS = 100
 export const BASE_CHARACTER_HIT_CHANCE = 1.0
 export const BASE_CHARACTER_CRITICAL_MULTIPLIER = 1.5
-export const SKILL_EXPERIENCE_CUP: SkillLevelModifiers = [10, 20, 40, 70, 120, 200, 250, 350, 500, 700]
+export const SKILL_EXPERIENCE_CUP: SkillLevelModifiers = [20, 50, 90, 150, 200, 300, 450, 625, 825, 1000]
+export const CHARACTER_LEVEL_CUPS = [
+	0, 200, 233, 266, 300, 333, 366, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1075, 1150, 1225, 1300, 1375, 1450, 1525, 1600, 1675,
+	1750
+]
 export const EMPTY_SKILL_SET: Skills = {
 	agility: {
 		level: 0,
@@ -98,7 +102,7 @@ export const SKILL_MODIFIERS: SkillModifiers = {
 	},
 	perception: {
 		criticalChance: [0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18, 0.2],
-		evadeChance: [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1],
+		evadeChance: [0.01, 0.015, 0.02, 0.03, 0.04, 0.06, 0.07, 0.075, 0.09, 0.12],
 		additionalViewRange: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
 	},
 	fight: {
@@ -111,7 +115,7 @@ export const SKILL_MODIFIERS: SkillModifiers = {
 	},
 	agility: {
 		additionalMoveRange: [2.5, 5, 7.5, 10, 12.5, 15, 17.5, 20, 22.5, 25],
-		evadeChance: [0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18, 0.2],
+		evadeChance: [0.02, 0.03, 0.05, 0.07, 0.1, 0.12, 0.15, 0.17, 0.2, 0.25],
 		criticalMultiplier: [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0]
 	},
 	stealth: {
@@ -124,7 +128,7 @@ export const SKILL_MODIFIERS: SkillModifiers = {
 	},
 	constitution: {
 		additionalMaxHealth: [20, 40, 60, 80, 100, 120, 140, 160, 180, 200],
-		defenceMultiplier: [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5],
+		defenceMultiplier: [0.1, 0.2, 0.35, 0.45, 0.6, 0.8, 1.0, 1.1, 1.25, 1.5],
 		physicalDamageMultiplier: [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
 	},
 	lockpicking: {},

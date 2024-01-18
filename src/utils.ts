@@ -1,6 +1,5 @@
 import { Skills, SkillModifier } from './types'
 import { SKILL_MODIFIERS } from './constants/Character'
-import { Weapon, WeaponModifier } from './entities/Weapon'
 import { Armor, ArmorModifier } from './entities/Armor'
 import { Wound, WoundConsequence } from './entities/Wound'
 
@@ -50,18 +49,11 @@ export function getWoundsPenalty(stat: keyof Omit<WoundConsequence, 'skills' | '
 	return result
 }
 
-export function getWeaponStat(stat: keyof WeaponModifier, weapon: Weapon, bonus = false, penalty = false): number {
-	const stats = weapon.stats(bonus, penalty)
-	if (stat in stats) {
-		return stats[stat] as number
-	}
-	return 0
-}
-
 export function getArmorStat(stat: keyof ArmorModifier, armors: Armor[]): number {
 	let result = 0
 	armors.forEach(armor => {
-		result += ((armor[stat] as number) || 0) + ((armor.bonuses && armor.bonuses[stat]) || 0) + ((armor.penalty && armor.penalty[stat]) || 0)
+		// @ts-ignore
+		result += (armor[stat] || 0) + ((armor.bonuses && armor.bonuses[stat]) || 0) + ((armor.penalty && armor.penalty[stat]) || 0)
 	})
 	return result
 }

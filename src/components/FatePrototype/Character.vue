@@ -4,6 +4,7 @@ import { Dice, DiceType } from '@/services/dice.service'
 import { computed, ref } from 'vue'
 import { Weapon } from '../../entities/Weapon'
 import { Armor } from '../../entities/Armor'
+import { CHARACTER_LEVEL_CUPS } from '../../constants/Character'
 
 const character = defineModel<Character>({
 	required: false,
@@ -54,6 +55,7 @@ function rollAttack() {
 			{{ character.name }}
 			<span class="character__level"> ( {{ character.level }} Level ) </span>
 		</h2>
+		<p>Total XP: {{ character.experience }} / {{ CHARACTER_LEVEL_CUPS[character.level] }}</p>
 		<h3>
 			HP:
 			<span class="character__value">
@@ -98,6 +100,15 @@ function rollAttack() {
 				:class="`character__value--${!character.criticalChance ? 'neutral' : 'positive'}`"
 			>
 				{{ Math.round(character.criticalChance * 100) }}%
+			</span>
+		</p>
+		<p>
+			Critical multiplier:
+			<span
+				class="character__value"
+				:class="`character__value--${!character.criticalMultiplier ? 'neutral' : 'positive'}`"
+			>
+				{{ Math.round(character.criticalMultiplier * 100) }}%
 			</span>
 		</p>
 
