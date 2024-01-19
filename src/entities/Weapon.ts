@@ -1,4 +1,6 @@
 import { WeaponType } from './WeaponType'
+import { MULTIPLIED_LIMITED_MODIFIERS, SUMMED_MODIFIERS } from '@/constants/Common'
+import { combineStats } from '@/utils'
 
 export enum WeaponQuality {
 	Garbage,
@@ -41,16 +43,14 @@ export type WeaponProps = WeaponStats & {
 	name: string
 	type: WeaponType
 	quality: WeaponQuality
-	bonus?: WeaponModifier
-	penalty?: WeaponModifier
+	modifiers?: WeaponModifier
 }
 
 interface IWeapon extends WeaponStats {
 	name: string
 	type: WeaponType
 	quality: WeaponQuality
-	bonus?: WeaponModifier
-	penalty?: WeaponModifier
+	modifiers: WeaponModifier
 }
 
 export class Weapon implements IWeapon {
@@ -62,8 +62,7 @@ export class Weapon implements IWeapon {
 	public readonly hitChance: number
 	public readonly criticalChance: number
 	public readonly criticalMultiplier: number
-	public readonly bonus?: WeaponModifier
-	public readonly penalty?: WeaponModifier
+	public readonly modifiers: WeaponModifier = {}
 
 	constructor(props: WeaponProps) {
 		this.name = props.name
@@ -74,8 +73,7 @@ export class Weapon implements IWeapon {
 		this.hitChance = props.hitChance
 		this.criticalChance = props.criticalChance
 		this.criticalMultiplier = props.criticalMultiplier
-		this.bonus = props.bonus
-		this.penalty = props.penalty
+		this.modifiers = props.modifiers || {}
 	}
 
 	public static GetDamage(min: number, max: number, rollResult: number): number {
@@ -91,7 +89,9 @@ export class Weapon implements IWeapon {
 		return result / weapons.length
 	}
 
-	getStat(stat: keyof WeaponModifier, bonus = false, penalty = false): number {
+	public static CombineStats = combineStats<keyof WeaponModifier>
+
+	public getStat(stat: keyof WeaponModifier, bonus = false, penalty = false): number {
 		const stats: Partial<WeaponModifier> = {
 			minDamage: this.minDamage,
 			maxDamage: this.maxDamage,
@@ -100,6 +100,6 @@ export class Weapon implements IWeapon {
 			criticalMultiplier: this.criticalMultiplier
 		}
 
-		return (stats[stat] || 0) + this.type.getStat(stat, bonus, penalty)
+		return Weapon.CombineStats(stat, [(stats[stat] || 0) + (this.modifiers[stat] || 0), this.type.getStat(stat, bonus, penalty)])
 	}
 }

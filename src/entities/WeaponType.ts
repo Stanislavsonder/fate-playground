@@ -1,4 +1,4 @@
-import { WeaponDistancesModifier, WeaponModifier, WeaponRange } from './Weapon'
+import { Weapon, WeaponDistancesModifier, WeaponModifier, WeaponRange } from './Weapon'
 
 interface IWeaponType extends WeaponDistancesModifier {
 	name: string
@@ -34,22 +34,6 @@ export class WeaponType implements IWeaponType {
 		this.penalty = props.penalty
 	}
 
-	getMinDistance(bonus = false, penalty = false): number {
-		return this.minDistance + (bonus ? this.bonus.minDistance || 0 : 0) + (penalty ? this.penalty.minDistance || 0 : 0)
-	}
-
-	getMaxDistance(bonus = false, penalty = false): number {
-		return this.maxDistance + (bonus ? this.bonus.maxDistance || 0 : 0) + (penalty ? this.penalty.maxDistance || 0 : 0)
-	}
-
-	getMinEffectiveDistance(bonus = false, penalty = false): number {
-		return this.minEffectiveDistance + (bonus ? this.bonus.minEffectiveDistance || 0 : 0) + (penalty ? this.penalty.minEffectiveDistance || 0 : 0)
-	}
-
-	getMaxEffectiveDistance(bonus = false, penalty = false): number {
-		return this.maxEffectiveDistance + (bonus ? this.bonus.maxEffectiveDistance || 0 : 0) + (penalty ? this.penalty.maxEffectiveDistance || 0 : 0)
-	}
-
 	getStat(stat: keyof WeaponModifier, bonus = false, penalty = false): number {
 		const stats: Partial<WeaponModifier> = {
 			minDistance: this.minDistance,
@@ -60,6 +44,6 @@ export class WeaponType implements IWeaponType {
 			hitChance: this.hitChance
 		}
 
-		return (stats[stat] || 0) + (bonus ? this.bonus[stat] || 0 : 0) + (penalty ? this.penalty[stat] || 0 : 0)
+		return Weapon.CombineStats(stat, [stats[stat] || 0, bonus ? this.bonus[stat] || 0 : 0, penalty ? this.penalty[stat] || 0 : 0])
 	}
 }

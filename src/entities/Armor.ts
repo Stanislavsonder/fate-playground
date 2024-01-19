@@ -16,6 +16,8 @@ import {
 	MEDIUM_EVADE_CHANCE,
 	MEDIUM_MOVE_DISTANCE_MULTIPLIER
 } from '@/constants/Armor'
+import { combineStats } from '@/utils'
+import { CharacterBody } from '@/entities/Character'
 
 export type ArmorStats = {
 	defence: number
@@ -29,6 +31,7 @@ export type MovementModifiers = {
 export type DefenceModifiers = {
 	defence?: number
 	defenceMultiplier?: number
+	diceResult?: number
 }
 
 export type ArmorModifier = DefenceModifiers &
@@ -41,18 +44,16 @@ interface IArmor extends ArmorStats {
 	slots: ArmorSlot[]
 	size: CharacterSize
 	type: ArmorType
-	bonuses?: ArmorModifier
-	penalty?: ArmorModifier
+	modifiers?: ArmorModifier
 }
 
 export class Armor implements IArmor {
 	public readonly name: string = ''
-	public readonly slots: ArmorSlot[] = []
+	public slots: ArmorSlot[] = []
 	public readonly size: CharacterSize = CharacterSize.Medium
 	public readonly type: ArmorType = ArmorType.Cloth
 	public readonly defence: number = 0
-	public readonly bonuses?: ArmorModifier
-	public readonly penalty?: ArmorModifier
+	public readonly modifiers: ArmorModifier = {}
 
 	constructor(props: IArmor) {
 		this.name = props.name
@@ -60,13 +61,30 @@ export class Armor implements IArmor {
 		this.size = props.size
 		this.type = props.type
 		this.defence = props.defence
-		this.bonuses = props.bonuses
-		this.penalty = props.penalty
+		this.modifiers = props.modifiers || {}
 	}
 
 	private static BLOCK_CONSTANT = BLOCK_CONSTANT
 	public static BlockPercentage(defence: number): number {
 		return (Armor.BLOCK_CONSTANT * defence) / (1 + Armor.BLOCK_CONSTANT * Math.abs(defence))
+	}
+
+	public static CombineStats = combineStats<keyof ArmorModifier>
+
+	public static GetDefence(armor: Armor[], body: CharacterBody) {
+		return armor.reduce((a, b) => a + b.getStat('defence') * b.getStat('defenceMultiplier') * Armor.GetSlotMultiplier(b, body), 0)
+	}
+
+	public static GetEvadeChance(armor: Armor[], body: CharacterBody) {
+		return armor.reduce((a, b) => a + b.getStat('evadeChance') * Armor.GetSlotMultiplier(b, body), 0)
+	}
+
+	public static GetSlotMultiplier(armor: Armor, body: CharacterBody) {
+		let result = 0
+		for (const slot in armor.slots) {
+			result += (body.find(e => e[0] === armor.slots[slot]) || [0, 0])[1]
+		}
+		return result
 	}
 
 	private getTypeModifier(): ArmorModifier {
@@ -100,21 +118,11 @@ export class Armor implements IArmor {
 		}
 	}
 
-	get baseDefence(): number {
-		return (
-			this.defence * ((this.getTypeModifier().defenceMultiplier || 0) + (this.bonuses?.defenceMultiplier || 0) + (this.penalty?.defenceMultiplier || 0))
-		)
-	}
+	public getStat(stat: keyof ArmorModifier) {
+		const stats: Partial<ArmorModifier> = {
+			defence: this.defence
+		}
 
-	get bonusDefence(): number {
-		return (this.bonuses?.defence || 0) + (this.penalty?.defence || 0)
-	}
-
-	get totalDefence(): number {
-		return this.baseDefence + this.bonusDefence
-	}
-
-	get evadeChance(): number {
-		return (this.getTypeModifier().evadeChance || 0) + (this.bonuses?.evadeChance || 0) + (this.penalty?.evadeChance || 0)
+		return Armor.CombineStats(stat, [stats[stat], this.modifiers[stat], this.getTypeModifier()[stat]])
 	}
 }

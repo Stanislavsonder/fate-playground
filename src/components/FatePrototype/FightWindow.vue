@@ -5,21 +5,16 @@ import { Weapon, WeaponQuality } from '@/entities/Weapon'
 import { Bow, Fist, Sword } from '@/constants/Weapons'
 import { reactive, ref, watch } from 'vue'
 import { Character } from '@/entities/Character'
-import CharacterComponent from './Character.vue'
+import CharacterComponent from './Character/Character.vue'
 import { ArmorSlot, ArmorType } from '@/constants/Armor'
-import { EMPTY_SKILL_SET } from '@/constants/Character'
+import { DEFAULT_HUMAN_BODY, EMPTY_SKILL_SET } from '@/constants/Character'
 
 const bronzeHelmet = new Armor({
-	name: 'Bronze Helmet',
+	name: 'Bronze cuirass',
 	size: CharacterSize.Medium,
-	type: ArmorType.Heavy,
-	defence: 24,
-	slots: [ArmorSlot.Ears, ArmorSlot.TopHead, ArmorSlot.Nose],
-	bonuses: {
-		moveDistance: -10,
-		evadeChance: 0.1,
-		defence: 2
-	}
+	type: ArmorType.Medium,
+	defence: 100,
+	slots: [ArmorSlot.Chest, ArmorSlot.Back, ArmorSlot.Belt, ArmorSlot.Groin, ArmorSlot.Stomach]
 })
 
 const glove = new Armor({
@@ -28,7 +23,7 @@ const glove = new Armor({
 	type: ArmorType.Light,
 	defence: 3,
 	slots: [ArmorSlot.Fingers, ArmorSlot.Wrist],
-	bonuses: {
+	modifiers: {
 		moveDistance: +2,
 		evadeChance: 0,
 		defence: -1
@@ -41,7 +36,7 @@ const boots = new Armor({
 	type: ArmorType.Light,
 	defence: 4,
 	slots: [ArmorSlot.Foot, ArmorSlot.Foot, ArmorSlot.Fingers, ArmorSlot.Fingers],
-	bonuses: {
+	modifiers: {
 		moveDistance: +5,
 		evadeChance: 0.1,
 		defence: 1
@@ -56,8 +51,8 @@ const woodenSword = new Weapon({
 	maxDamage: 8,
 	criticalChance: 0.5,
 	criticalMultiplier: 0,
-	hitChance: 0,
-	bonus: {
+	hitChance: 1,
+	modifiers: {
 		minDamage: 15,
 		maxDamage: 20
 	}
@@ -90,7 +85,6 @@ const bow = new Weapon({
 	hitChance: 0,
 	criticalChance: 0.2,
 	criticalMultiplier: 0,
-	bonus: {},
 	quality: WeaponQuality.Common
 })
 
@@ -99,17 +93,16 @@ const fist = new Weapon({
 	type: Fist,
 	minDamage: 0,
 	maxDamage: 3,
-	hitChance: 0.4,
+	hitChance: 0,
 	criticalChance: 0.3,
 	criticalMultiplier: 0,
-	bonus: {},
 	quality: WeaponQuality.Common
 })
 
 const ratLord = reactive(
 	new Character({
 		name: 'RatLord',
-		luck: 2,
+		luck: 6,
 		skills: {
 			...EMPTY_SKILL_SET,
 			...{
@@ -127,7 +120,7 @@ const ratLord = reactive(
 		},
 		size: CharacterSize.Small,
 		slots: [ArmorSlot.Ears, ArmorSlot.TopHead, ArmorSlot.Nose],
-		weapon: [bow, fist],
+		weapon: [fist, bow],
 		armor: [boots]
 	})
 )

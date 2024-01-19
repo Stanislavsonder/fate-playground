@@ -1,21 +1,24 @@
-import { CharacterSize, Skill, Skills } from '../types'
-import { Weapon, WeaponModifier, WeaponRange } from './Weapon'
-import { Armor, ArmorModifier } from './Armor'
+import { CharacterSize, Skill, Skills } from '@/types'
+import { Weapon, WeaponRange } from './Weapon'
+import { Armor } from './Armor'
 import { Wound } from './Wound'
 import {
 	BASE_CHARACTER_CRITICAL_MULTIPLIER,
 	BASE_CHARACTER_HEALTH_POINTS,
-	BASE_CHARACTER_HIT_CHANCE,
 	CHARACTER_LEVEL_CUPS,
+	DEFAULT_HUMAN_BODY,
+	DICE_EVADE_MULTIPLIER,
+	DICE_HIT_MULTIPLIER,
 	EMPTY_SKILL_SET,
 	SKILL_EXPERIENCE_CUP
-} from '../constants/Character'
-import { copy, getArmorStat, getSkillBonus, getWoundsPenalty } from '../utils'
-import { ArmorSlot } from '../constants/Armor'
-import { DEFAULT_FIST_PROPS } from '../constants/Weapon'
-import DiceService, { Dice, DiceRollResult } from '@/services/dice.service'
+} from '@/constants/Character'
+import { copy, getArmorStat, getSkillBonus, getWoundsPenalty } from '@/utils'
+import { ArmorSlot } from '@/constants/Armor'
+import { DEFAULT_FIST_PROPS } from '@/constants/Weapon'
+import DiceService, { Dice } from '@/services/dice.service'
 
-type CharacterStats = Required<WeaponModifier & ArmorModifier> & {}
+type CharacterBodyPart = [ArmorSlot, number]
+export type CharacterBody = CharacterBodyPart[]
 
 interface ICharacter {
 	readonly name: string
@@ -27,6 +30,7 @@ interface ICharacter {
 	readonly slots: ArmorSlot[]
 	readonly skills: Skills
 	readonly wounds: Wound[]
+	readonly body: CharacterBody
 
 	readonly level: number
 	readonly experience: number
@@ -35,7 +39,7 @@ interface ICharacter {
 	readonly maxDamage: number
 }
 
-type CharacterProps = Partial<Pick<ICharacter, 'name' | 'luck' | 'size' | 'currenHealthPoints' | 'weapon' | 'armor' | 'slots' | 'skills' | 'wounds'>>
+type CharacterProps = Partial<Pick<ICharacter, 'name' | 'luck' | 'size' | 'currenHealthPoints' | 'weapon' | 'armor' | 'slots' | 'skills' | 'wounds' | 'body'>>
 
 export class Character implements ICharacter {
 	public readonly name: string
@@ -47,6 +51,7 @@ export class Character implements ICharacter {
 	public weapon: Weapon[] = []
 	public armor: Armor[] = []
 	public wounds: Wound[] = []
+	public body: CharacterBody = []
 
 	private isWeaponBonusApplied = false
 	private isWeaponPenaltyApplied = false
@@ -61,6 +66,7 @@ export class Character implements ICharacter {
 		this.slots = props.slots || []
 		this.skills = props.skills || copy(EMPTY_SKILL_SET)
 		this.wounds = props.wounds || []
+		this.body = props.body || copy(DEFAULT_HUMAN_BODY)
 		this.currenHealthPoints = props.currenHealthPoints || this.maxHealthPoints
 	}
 
@@ -149,19 +155,24 @@ export class Character implements ICharacter {
 	}
 
 	get evadeChance(): number {
-		return Math.max(
-			getSkillBonus('evadeChance', this.skills) +
-				getArmorStat('evadeChance', this.armor) +
-				Weapon.GetMedianStat('evadeChance', this.weapon, this.activeWeaponIndex, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied),
-			0
+		return Math.min(
+			Math.max(
+				getSkillBonus('evadeChance', this.skills) +
+					Armor.GetEvadeChance(this.armor, this.body) +
+					Weapon.GetMedianStat('evadeChance', this.weapon, this.activeWeaponIndex, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied),
+				0
+			),
+			1
 		)
 	}
 
 	get defence(): number {
-		return Math.round(
-			(this.armor.reduce((a, b) => a + b.totalDefence, 0) +
-				Weapon.GetMedianStat('defence', this.weapon, this.activeWeaponIndex, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied)) *
-				(1 + getSkillBonus('defenceMultiplier', this.skills))
+		return (
+			Math.round(
+				Armor.GetDefence(this.armor, this.body) +
+					Weapon.GetMedianStat('defence', this.weapon, this.activeWeaponIndex, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied)
+			) *
+			(1 + getSkillBonus('defenceMultiplier', this.skills))
 		)
 	}
 
@@ -170,11 +181,7 @@ export class Character implements ICharacter {
 	}
 
 	get hitChance(): number {
-		return Math.max(
-			BASE_CHARACTER_HIT_CHANCE *
-				Weapon.GetMedianStat('hitChance', this.weapon, this.activeWeaponIndex, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied),
-			0
-		)
+		return Math.max(Weapon.GetMedianStat('hitChance', this.weapon, this.activeWeaponIndex, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied), 0)
 	}
 
 	get level(): number {
@@ -205,12 +212,33 @@ export class Character implements ICharacter {
 		return Math.random() <= this.criticalChance
 	}
 
-	public rollHitChance(): boolean {
-		return Math.random() <= this.hitChance
+	public rollHitChance(): {
+		diceResult: Dice[]
+		result: boolean
+	} {
+		const dice = this.rollDice()
+		const diceValue =
+			dice.reduce((a, b) => a + b.result, 0) + this.activeWeapon.getStat('diceResult', this.isWeaponBonusApplied, this.isWeaponPenaltyApplied)
+		const additionalChance = diceValue * DICE_HIT_MULTIPLIER * this.hitChance
+
+		return {
+			diceResult: dice,
+			result: Math.random() <= this.hitChance + additionalChance
+		}
 	}
 
-	public rollEvadeChance(): boolean {
-		return Math.random() <= this.evadeChance
+	public rollEvadeChance(): {
+		diceResult: Dice[]
+		result: boolean
+	} {
+		const dice = this.rollDice()
+		const diceValue = dice.reduce((a, b) => a + b.result, 0)
+		const additionalChance = diceValue * DICE_EVADE_MULTIPLIER * this.evadeChance
+
+		return {
+			diceResult: dice,
+			result: Math.random() <= this.evadeChance + additionalChance
+		}
 	}
 
 	public swapActiveWeapon(index?: number): void {

@@ -44,3 +44,5 @@ export const Bow = new WeaponType({
 	bonus: {},
 	penalty: {}
 })
+
+export const ALL_WEAPON_TYPES = [Sword, Fist, Bow]

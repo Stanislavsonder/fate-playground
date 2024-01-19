@@ -2,9 +2,24 @@ import { Skills, SkillModifier } from './types'
 import { SKILL_MODIFIERS } from './constants/Character'
 import { Armor, ArmorModifier } from './entities/Armor'
 import { Wound, WoundConsequence } from './entities/Wound'
+import { MULTIPLIED_LIMITED_MODIFIERS, SUMMED_MODIFIERS } from '@/constants/Common'
+import { WeaponModifier } from '@/entities/Weapon'
 
 export function copy<T>(data: T): T {
 	return JSON.parse(JSON.stringify(data))
+}
+
+export function combineStats<T extends keyof WeaponModifier | keyof ArmorModifier>(stat: T, values: (number | undefined)[]): number {
+	if (SUMMED_MODIFIERS.includes(stat)) {
+		return values.reduce((a, b) => (a || 0) + (b || 0), 0) || 0
+	}
+
+	if (MULTIPLIED_LIMITED_MODIFIERS.includes(stat)) {
+		return Math.min(values.reduce((a, b) => (a || 0) + (b || 0), 0) || 0, 1)
+	}
+
+	console.error('Unknown stat for combination: ', stat)
+	return 0
 }
 
 export function objectsSum<T>(...objects: (Record<string, number> | undefined)[]): T {

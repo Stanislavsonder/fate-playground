@@ -1,7 +1,10 @@
 import { Skills, SkillModifiers, SkillLevelModifiers } from '@/types'
+import { ArmorSlot } from '@/constants/Armor'
+import { CharacterBody } from '@/entities/Character'
 
 export const BASE_CHARACTER_HEALTH_POINTS = 100
-export const BASE_CHARACTER_HIT_CHANCE = 1.0
+export const DICE_HIT_MULTIPLIER = 0.1
+export const DICE_EVADE_MULTIPLIER = 0.1
 export const BASE_CHARACTER_CRITICAL_MULTIPLIER = 1.5
 export const SKILL_EXPERIENCE_CUP: SkillLevelModifiers = [20, 50, 90, 150, 200, 300, 450, 625, 825, 1000]
 export const CHARACTER_LEVEL_CUPS = [
@@ -145,3 +148,43 @@ export const SKILL_MODIFIERS: SkillModifiers = {
 	craft: {},
 	magic: {}
 }
+
+export const DEFAULT_HUMAN_BODY: CharacterBody = [
+	[ArmorSlot.TopHead, 0.035],
+	[ArmorSlot.Mask, 0.02],
+	[ArmorSlot.Ears, 0.005],
+	[ArmorSlot.Eye, 0.0025],
+	[ArmorSlot.Eye, 0.0025],
+	[ArmorSlot.Nose, 0.005],
+	[ArmorSlot.Neck, 0.02],
+
+	[ArmorSlot.Shoulder, 0.01],
+	[ArmorSlot.TopArm, 0.03],
+	[ArmorSlot.Elbow, 0.005],
+	[ArmorSlot.LowArm, 0.03],
+	[ArmorSlot.Wrist, 0.01],
+	[ArmorSlot.Fingers, 0.005],
+
+	[ArmorSlot.Shoulder, 0.01],
+	[ArmorSlot.TopArm, 0.03],
+	[ArmorSlot.Elbow, 0.005],
+	[ArmorSlot.LowArm, 0.03],
+	[ArmorSlot.Wrist, 0.01],
+	[ArmorSlot.Fingers, 0.005],
+
+	[ArmorSlot.Chest, 0.06],
+	[ArmorSlot.Stomach, 0.06],
+	[ArmorSlot.Back, 0.18],
+	[ArmorSlot.Belt, 0.03],
+	[ArmorSlot.Groin, 0.03],
+
+	[ArmorSlot.TopLeg, 0.08],
+	[ArmorSlot.Knee, 0.015],
+	[ArmorSlot.LowLeg, 0.07],
+	[ArmorSlot.Foot, 0.02],
+
+	[ArmorSlot.TopLeg, 0.08],
+	[ArmorSlot.Knee, 0.015],
+	[ArmorSlot.LowLeg, 0.07],
+	[ArmorSlot.Foot, 0.02]
+]
