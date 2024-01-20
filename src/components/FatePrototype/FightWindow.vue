@@ -8,14 +8,47 @@ import { Character } from '@/entities/Character'
 import CharacterComponent from './Character/Character.vue'
 import { ArmorSlot, ArmorType } from '@/constants/Armor'
 import { EMPTY_SKILL_SET } from '@/constants/Character'
+import { copy } from '@/utils'
 
-const bronzeHelmet = new Armor({
+const bronzeHelmetProps = {
 	name: 'Bronze cuirass',
 	size: CharacterSize.Medium,
 	type: ArmorType.Medium,
 	defence: 100,
-	slots: [ArmorSlot.Chest, ArmorSlot.Back, ArmorSlot.Belt, ArmorSlot.Groin, ArmorSlot.Stomach]
-})
+	slots: [
+		ArmorSlot.TopHead,
+		ArmorSlot.Mask,
+		ArmorSlot.Ears,
+		ArmorSlot.Eyes,
+		ArmorSlot.Nose,
+		ArmorSlot.Neck,
+		ArmorSlot.Shoulder,
+		ArmorSlot.Shoulder,
+		ArmorSlot.TopArm,
+		ArmorSlot.TopArm,
+		ArmorSlot.Elbow,
+		ArmorSlot.Elbow,
+		ArmorSlot.LowArm,
+		ArmorSlot.LowArm,
+		ArmorSlot.Wrist,
+		ArmorSlot.Wrist,
+		ArmorSlot.Fingers,
+		ArmorSlot.Fingers,
+		ArmorSlot.Chest,
+		ArmorSlot.Back,
+		ArmorSlot.Belt,
+		ArmorSlot.Groin,
+		ArmorSlot.Stomach,
+		ArmorSlot.TopLeg,
+		ArmorSlot.TopLeg,
+		ArmorSlot.Knee,
+		ArmorSlot.Knee,
+		ArmorSlot.LowLeg,
+		ArmorSlot.LowLeg,
+		ArmorSlot.Foot,
+		ArmorSlot.Foot
+	]
+}
 
 const glove = new Armor({
 	name: 'Glove of wolf',
@@ -63,7 +96,7 @@ const ivan = reactive(
 		name: 'Ivan',
 		luck: 1,
 		skills: {
-			...EMPTY_SKILL_SET,
+			...copy(EMPTY_SKILL_SET),
 			...{
 				fight: { level: 3, experience: 0 },
 				agility: { level: 1, experience: 0 },
@@ -73,7 +106,7 @@ const ivan = reactive(
 		size: CharacterSize.Medium,
 		slots: [ArmorSlot.Ears, ArmorSlot.TopHead, ArmorSlot.Nose],
 		weapon: [woodenSword],
-		armor: [bronzeHelmet, glove]
+		armor: [new Armor(copy(bronzeHelmetProps))]
 	})
 )
 
@@ -104,7 +137,7 @@ const ratLord = reactive(
 		name: 'RatLord',
 		luck: 6,
 		skills: {
-			...EMPTY_SKILL_SET,
+			...copy(EMPTY_SKILL_SET),
 			...{
 				perception: { level: 4, experience: 0 },
 				agility: { level: 3, experience: 0 },
@@ -121,7 +154,7 @@ const ratLord = reactive(
 		size: CharacterSize.Small,
 		slots: [ArmorSlot.Ears, ArmorSlot.TopHead, ArmorSlot.Nose],
 		weapon: [fist, bow],
-		armor: [boots]
+		armor: [new Armor(copy(bronzeHelmetProps))]
 	})
 )
 
