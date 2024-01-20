@@ -29,3 +29,9 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./dist  # Set this to the directory where your build is output
+
+    - name: Deploy to GitHub Pages 2
+      uses: actions/deploy-pages@v4
+      with:
+        token: ${{ github.token }}
+        publish_dir: ./dist  # Set this to the directory where your build is output
