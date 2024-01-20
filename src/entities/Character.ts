@@ -12,7 +12,7 @@ import {
 	EMPTY_SKILL_SET,
 	SKILL_EXPERIENCE_CUP
 } from '@/constants/Character'
-import { copy, getArmorStat, getSkillBonus, getWoundsPenalty } from '@/utils'
+import { copy, getSkillBonus, getWoundsPenalty } from '@/utils'
 import { ArmorSlot } from '@/constants/Armor'
 import { DEFAULT_FIST_PROPS } from '@/constants/Weapon'
 import DiceService, { Dice } from '@/services/dice.service'
@@ -189,11 +189,11 @@ export class Character implements ICharacter {
 		let tmpExperience = 0
 		for (let i = 0; i < CHARACTER_LEVEL_CUPS.length; i++) {
 			if (totalExperience <= tmpExperience) {
-				return i
+				return Math.max(1, i - 5)
 			}
 			tmpExperience += CHARACTER_LEVEL_CUPS[i]
 		}
-		return CHARACTER_LEVEL_CUPS.length
+		return Math.max(1, CHARACTER_LEVEL_CUPS.length - 5)
 	}
 
 	get experience(): number {
@@ -260,6 +260,7 @@ export class Character implements ICharacter {
 	}
 
 	public hit(hp: number) {
+		hp = Math.round(hp * (1 - Armor.BlockPercentage(this.defence)))
 		this.currenHealthPoints = Math.max(0, this.currenHealthPoints - hp)
 	}
 }

@@ -1,21 +1,5 @@
 import { CharacterSize } from '@/types'
-import {
-	ArmorSlot,
-	ArmorType,
-	BLOCK_CONSTANT,
-	CLOTH_DEFENCE_MULTIPLIER,
-	CLOTH_EVADE_CHANCE,
-	CLOTH_MOVE_DISTANCE_MULTIPLIER,
-	HEAVY_DEFENCE_MULTIPLIER,
-	HEAVY_EVADE_CHANCE,
-	HEAVY_MOVE_DISTANCE_MULTIPLIER,
-	LIGHT_DEFENCE_MULTIPLIER,
-	LIGHT_EVADE_CHANCE,
-	LIGHT_MOVE_DISTANCE_MULTIPLIER,
-	MEDIUM_DEFENCE_MULTIPLIER,
-	MEDIUM_EVADE_CHANCE,
-	MEDIUM_MOVE_DISTANCE_MULTIPLIER
-} from '@/constants/Armor'
+import { ArmorSlot, ArmorType, BLOCK_CONSTANT } from '@/constants/Armor'
 import { combineStats } from '@/utils'
 import { CharacterBody } from '@/entities/Character'
 
@@ -87,42 +71,11 @@ export class Armor implements IArmor {
 		return result
 	}
 
-	private getTypeModifier(): ArmorModifier {
-		switch (this.type) {
-			case ArmorType.Cloth:
-				return {
-					evadeChance: CLOTH_EVADE_CHANCE,
-					defenceMultiplier: CLOTH_DEFENCE_MULTIPLIER,
-					moveDistanceMultiplier: CLOTH_MOVE_DISTANCE_MULTIPLIER
-				}
-			case ArmorType.Light:
-				return {
-					evadeChance: LIGHT_EVADE_CHANCE,
-					defenceMultiplier: LIGHT_DEFENCE_MULTIPLIER,
-					moveDistanceMultiplier: LIGHT_MOVE_DISTANCE_MULTIPLIER
-				}
-			case ArmorType.Medium:
-				return {
-					evadeChance: MEDIUM_EVADE_CHANCE,
-					defenceMultiplier: MEDIUM_DEFENCE_MULTIPLIER,
-					moveDistanceMultiplier: MEDIUM_MOVE_DISTANCE_MULTIPLIER
-				}
-			case ArmorType.Heavy:
-				return {
-					evadeChance: HEAVY_EVADE_CHANCE,
-					defenceMultiplier: HEAVY_DEFENCE_MULTIPLIER,
-					moveDistanceMultiplier: HEAVY_MOVE_DISTANCE_MULTIPLIER
-				}
-			default:
-				return {}
-		}
-	}
-
 	public getStat(stat: keyof ArmorModifier) {
 		const stats: Partial<ArmorModifier> = {
 			defence: this.defence
 		}
 
-		return Armor.CombineStats(stat, [stats[stat], this.modifiers[stat], this.getTypeModifier()[stat]])
+		return Armor.CombineStats(stat, [stats[stat], this.modifiers[stat]])
 	}
 }

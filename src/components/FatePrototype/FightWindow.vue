@@ -7,7 +7,7 @@ import { reactive, ref, watch } from 'vue'
 import { Character } from '@/entities/Character'
 import CharacterComponent from './Character/Character.vue'
 import { ArmorSlot, ArmorType } from '@/constants/Armor'
-import { DEFAULT_HUMAN_BODY, EMPTY_SKILL_SET } from '@/constants/Character'
+import { EMPTY_SKILL_SET } from '@/constants/Character'
 
 const bronzeHelmet = new Armor({
 	name: 'Bronze cuirass',
