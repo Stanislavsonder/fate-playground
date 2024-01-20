@@ -39,6 +39,8 @@ export class Armor implements IArmor {
 	public readonly defence: number = 0
 	public readonly modifiers: ArmorModifier = {}
 
+	public isDisabled: boolean = false
+
 	constructor(props: IArmor) {
 		this.name = props.name
 		this.slots = props.slots
@@ -56,7 +58,7 @@ export class Armor implements IArmor {
 	public static CombineStats = combineStats<keyof ArmorModifier>
 
 	public static GetDefence(armor: Armor[], body: CharacterBody) {
-		return armor.reduce((a, b) => a + b.getStat('defence') * b.getStat('defenceMultiplier') * Armor.GetSlotMultiplier(b, body), 0)
+		return armor.reduce((a, b) => a + b.getStat('defence') * Armor.GetSlotMultiplier(b, body), 0)
 	}
 
 	public static GetEvadeChance(armor: Armor[], body: CharacterBody) {
@@ -76,6 +78,6 @@ export class Armor implements IArmor {
 			defence: this.defence
 		}
 
-		return Armor.CombineStats(stat, [stats[stat], this.modifiers[stat]])
+		return this.isDisabled ? 0 : Armor.CombineStats(stat, [stats[stat], this.modifiers[stat]])
 	}
 }

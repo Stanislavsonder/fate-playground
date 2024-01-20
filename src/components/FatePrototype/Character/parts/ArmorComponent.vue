@@ -7,15 +7,16 @@ const armor = defineModel<Armor>({
 	required: true
 })
 
-console.log(ArmorType)
-
 function removeSlot(index: number) {
 	armor.value.slots = armor.value.slots.filter((_, i) => i !== index)
 }
 </script>
 
 <template>
-	<div class="weapon">
+	<div
+		class="weapon"
+		:class="{ 'weapon--disabled': armor.isDisabled }"
+	>
 		<table>
 			<thead>
 				<tr>
@@ -25,6 +26,17 @@ function removeSlot(index: number) {
 							v-model="armor.name"
 							type="text"
 						/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<label>
+							<input
+								v-model="armor.isDisabled"
+								type="checkbox"
+							/>
+							Disabled
+						</label>
 					</td>
 				</tr>
 				<tr>
@@ -177,6 +189,10 @@ function removeSlot(index: number) {
 	background-color: #ffffff;
 	color: black;
 	flex-grow: 0;
+
+	&--disabled {
+		background-color: #886969;
+	}
 
 	&__slots {
 		display: flex;
