@@ -31,6 +31,13 @@ defineProps<{
 		<span class="stats__value"> {{ Math.round(character.minDamage) }} - {{ Math.round(character.maxDamage) }} </span>
 	</p>
 	<p>
+		Weapon distance:
+		<span class="stats__value"> {{ character.minWeaponDistance }} - {{ character.maxWeaponDistance }} ft. </span>
+		(
+		<span class="stats__value stats__value--positive"> {{ character.minEffectiveWeaponDistance }} - {{ character.maxEffectiveWeaponDistance }} ft. </span>
+		)
+	</p>
+	<p>
 		Defence:
 		<span class="stats__value"> {{ Math.round(character.defence) }} ({{ Math.round(Armor.BlockPercentage(character.defence) * 100) }}%) </span>
 	</p>

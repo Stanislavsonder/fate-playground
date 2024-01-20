@@ -1,10 +1,18 @@
 <script setup lang="ts">
+import { onClickOutside } from '@vueuse/core'
+import { ref } from 'vue'
 const isOpen = defineModel<boolean>()
+const modal = ref()
+
+onClickOutside(modal, event => {
+	isOpen.value = false
+})
 </script>
 
 <template>
 	<div
 		v-if="isOpen"
+		ref="modal"
 		class="modal-window"
 	>
 		<button

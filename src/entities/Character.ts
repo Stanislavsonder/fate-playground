@@ -52,9 +52,10 @@ export class Character implements ICharacter {
 	public armor: Armor[] = []
 	public wounds: Wound[] = []
 	public body: CharacterBody = []
+	public currentDistance: number = 0
 
-	private isWeaponBonusApplied = false
-	private isWeaponPenaltyApplied = false
+	public isWeaponAdvantageApplied = false
+	public isWeaponDisadvantageApplied = false
 	private activeWeaponIndex = 0
 
 	constructor(props: CharacterProps) {
@@ -72,14 +73,6 @@ export class Character implements ICharacter {
 
 	private static GetSkillTotalExperience(skill: Skill): number {
 		return SKILL_EXPERIENCE_CUP.slice(0, skill.level).reduce((a, b) => a + b, skill.experience)
-	}
-
-	setWeaponBonus(value: boolean): void {
-		this.isWeaponBonusApplied = value
-	}
-
-	setWeaponPenalty(value: boolean): void {
-		this.isWeaponPenaltyApplied = value
 	}
 
 	setSkillLevel(skill: keyof Skills, level: number): number {
@@ -111,11 +104,17 @@ export class Character implements ICharacter {
 		)
 
 		return Math.max(
-			Weapon.GetMedianStat('minDamage', this.weapon, this.activeWeaponIndex, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied) *
+			Weapon.GetMedianStat('minDamage', this.weapon, this.activeWeaponIndex, this.isWeaponAdvantageApplied, this.isWeaponDisadvantageApplied) *
 				(1 +
 					damageTypeMultiplier +
 					weaponRangeMultiplier +
-					Weapon.GetMedianStat('damageMultiplier', this.weapon, this.activeWeaponIndex, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied)),
+					Weapon.GetMedianStat(
+						'damageMultiplier',
+						this.weapon,
+						this.activeWeaponIndex,
+						this.isWeaponAdvantageApplied,
+						this.isWeaponDisadvantageApplied
+					)),
 			0
 		)
 	}
@@ -128,19 +127,41 @@ export class Character implements ICharacter {
 		)
 
 		return Math.max(
-			Weapon.GetMedianStat('maxDamage', this.weapon, this.activeWeaponIndex, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied) *
+			Weapon.GetMedianStat('maxDamage', this.weapon, this.activeWeaponIndex, this.isWeaponAdvantageApplied, this.isWeaponDisadvantageApplied) *
 				(1 +
 					damageTypeMultiplier +
 					weaponRangeMultiplier +
-					Weapon.GetMedianStat('damageMultiplier', this.weapon, this.activeWeaponIndex, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied)),
+					Weapon.GetMedianStat(
+						'damageMultiplier',
+						this.weapon,
+						this.activeWeaponIndex,
+						this.isWeaponAdvantageApplied,
+						this.isWeaponDisadvantageApplied
+					)),
 			0
 		)
+	}
+
+	get minWeaponDistance(): number {
+		return this.activeWeapon.getStat('minDistance')
+	}
+
+	get maxWeaponDistance(): number {
+		return this.activeWeapon.getStat('maxDistance')
+	}
+
+	get minEffectiveWeaponDistance(): number {
+		return this.activeWeapon.getStat('minEffectiveDistance')
+	}
+
+	get maxEffectiveWeaponDistance(): number {
+		return this.activeWeapon.getStat('maxEffectiveDistance')
 	}
 
 	get criticalChance(): number {
 		return Math.max(
 			getSkillBonus('criticalChance', this.skills) +
-				Weapon.GetMedianStat('criticalChance', this.weapon, this.activeWeaponIndex, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied),
+				Weapon.GetMedianStat('criticalChance', this.weapon, this.activeWeaponIndex, this.isWeaponAdvantageApplied, this.isWeaponDisadvantageApplied),
 			0
 		)
 	}
@@ -149,7 +170,13 @@ export class Character implements ICharacter {
 		return Math.max(
 			BASE_CHARACTER_CRITICAL_MULTIPLIER +
 				getSkillBonus('criticalMultiplier', this.skills) +
-				Weapon.GetMedianStat('criticalMultiplier', this.weapon, this.activeWeaponIndex, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied),
+				Weapon.GetMedianStat(
+					'criticalMultiplier',
+					this.weapon,
+					this.activeWeaponIndex,
+					this.isWeaponAdvantageApplied,
+					this.isWeaponDisadvantageApplied
+				),
 			0
 		)
 	}
@@ -159,7 +186,7 @@ export class Character implements ICharacter {
 			Math.max(
 				getSkillBonus('evadeChance', this.skills) +
 					Armor.GetEvadeChance(this.armor, this.body) +
-					Weapon.GetMedianStat('evadeChance', this.weapon, this.activeWeaponIndex, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied),
+					Weapon.GetMedianStat('evadeChance', this.weapon, this.activeWeaponIndex, this.isWeaponAdvantageApplied, this.isWeaponDisadvantageApplied),
 				0
 			),
 			1
@@ -170,7 +197,7 @@ export class Character implements ICharacter {
 		return (
 			Math.round(
 				Armor.GetDefence(this.armor, this.body) +
-					Weapon.GetMedianStat('defence', this.weapon, this.activeWeaponIndex, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied)
+					Weapon.GetMedianStat('defence', this.weapon, this.activeWeaponIndex, this.isWeaponAdvantageApplied, this.isWeaponDisadvantageApplied)
 			) *
 			(1 + getSkillBonus('defenceMultiplier', this.skills))
 		)
@@ -181,7 +208,24 @@ export class Character implements ICharacter {
 	}
 
 	get hitChance(): number {
-		return Math.max(Weapon.GetMedianStat('hitChance', this.weapon, this.activeWeaponIndex, this.isWeaponBonusApplied, this.isWeaponPenaltyApplied), 0)
+		if (this.currentDistance > this.maxWeaponDistance || this.currentDistance < this.minWeaponDistance) {
+			return 0
+		}
+
+		const baseChance = Math.max(
+			Weapon.GetMedianStat('hitChance', this.weapon, this.activeWeaponIndex, this.isWeaponAdvantageApplied, this.isWeaponDisadvantageApplied),
+			0
+		)
+
+		if (this.currentDistance >= this.minEffectiveWeaponDistance && this.currentDistance <= this.maxEffectiveWeaponDistance) {
+			return baseChance
+		}
+
+		const isBeforeEffective = this.currentDistance < this.minEffectiveWeaponDistance
+		const min = isBeforeEffective ? this.minWeaponDistance : this.maxEffectiveWeaponDistance
+		const max = isBeforeEffective ? this.minEffectiveWeaponDistance : this.maxWeaponDistance
+		const currentPercent = (this.currentDistance - (min - 0.1)) / (max + 0.1 - (min - 0.1))
+		return isBeforeEffective ? currentPercent : (1 - currentPercent) * baseChance
 	}
 
 	get level(): number {
@@ -218,7 +262,7 @@ export class Character implements ICharacter {
 	} {
 		const dice = this.rollDice()
 		const diceValue =
-			dice.reduce((a, b) => a + b.result, 0) + this.activeWeapon.getStat('diceResult', this.isWeaponBonusApplied, this.isWeaponPenaltyApplied)
+			dice.reduce((a, b) => a + b.result, 0) + this.activeWeapon.getStat('diceResult', this.isWeaponAdvantageApplied, this.isWeaponDisadvantageApplied)
 		const additionalChance = diceValue * DICE_HIT_MULTIPLIER * this.hitChance
 
 		return {
@@ -260,7 +304,6 @@ export class Character implements ICharacter {
 	}
 
 	public hit(hp: number) {
-		hp = Math.round(hp * (1 - Armor.BlockPercentage(this.defence)))
-		this.currenHealthPoints = Math.max(0, this.currenHealthPoints - hp)
+		this.currenHealthPoints = Math.max(0, this.currenHealthPoints - Math.round(hp * this.block))
 	}
 }

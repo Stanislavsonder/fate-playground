@@ -81,17 +81,23 @@ export class Weapon implements IWeapon {
 		return Math.round(min + step * (rollResult + 4))
 	}
 
-	public static GetMedianStat(stat: keyof WeaponModifier, weapons: Weapon[], activeIndex: number, bonus = false, penalty = false): number {
+	public static GetMedianStat(
+		stat: keyof WeaponModifier,
+		weapons: Weapon[],
+		activeIndex: number,
+		isAdvantageApplied = false,
+		isDisadvantageApplied = false
+	): number {
 		let result = 0
 		weapons.forEach((weapon, index) => {
-			result += weapon.getStat(stat, index === activeIndex && bonus, index === activeIndex && penalty)
+			result += weapon.getStat(stat, index === activeIndex && isAdvantageApplied, index === activeIndex && isDisadvantageApplied)
 		})
 		return result / weapons.length
 	}
 
 	public static CombineStats = combineStats<keyof WeaponModifier>
 
-	public getStat(stat: keyof WeaponModifier, bonus = false, penalty = false): number {
+	public getStat(stat: keyof WeaponModifier, isAdvantageApplied = false, isDisadvantageApplied = false): number {
 		const stats: Partial<WeaponModifier> = {
 			minDamage: this.minDamage,
 			maxDamage: this.maxDamage,
@@ -100,6 +106,6 @@ export class Weapon implements IWeapon {
 			criticalMultiplier: this.criticalMultiplier
 		}
 
-		return Weapon.CombineStats(stat, [(stats[stat] || 0) + (this.modifiers[stat] || 0), this.type.getStat(stat, bonus, penalty)])
+		return Weapon.CombineStats(stat, [(stats[stat] || 0) + (this.modifiers[stat] || 0), this.type.getStat(stat, isAdvantageApplied, isDisadvantageApplied)])
 	}
 }

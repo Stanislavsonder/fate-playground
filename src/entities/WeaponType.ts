@@ -5,8 +5,8 @@ interface IWeaponType extends WeaponDistancesModifier {
 	range: WeaponRange
 	damageMultiplier: number
 	hitChance: number
-	bonus: WeaponModifier
-	penalty: WeaponModifier
+	advantage: WeaponModifier
+	disadvantage: WeaponModifier
 }
 
 export class WeaponType implements IWeaponType {
@@ -16,8 +16,8 @@ export class WeaponType implements IWeaponType {
 	public readonly minEffectiveDistance: number
 	public readonly maxEffectiveDistance: number
 	public readonly maxDistance: number
-	public readonly bonus: WeaponModifier
-	public readonly penalty: WeaponModifier
+	public readonly advantage: WeaponModifier
+	public readonly disadvantage: WeaponModifier
 	public readonly hitChance: number
 	public readonly damageMultiplier: number
 
@@ -30,11 +30,11 @@ export class WeaponType implements IWeaponType {
 		this.maxDistance = props.maxDistance
 		this.damageMultiplier = props.damageMultiplier
 		this.hitChance = props.hitChance
-		this.bonus = props.bonus
-		this.penalty = props.penalty
+		this.advantage = props.advantage
+		this.disadvantage = props.disadvantage
 	}
 
-	getStat(stat: keyof WeaponModifier, bonus = false, penalty = false): number {
+	getStat(stat: keyof WeaponModifier, isAdvantageApplied = false, isDisadvantageApplied = false): number {
 		const stats: Partial<WeaponModifier> = {
 			minDistance: this.minDistance,
 			maxDistance: this.maxDistance,
@@ -44,6 +44,10 @@ export class WeaponType implements IWeaponType {
 			hitChance: this.hitChance
 		}
 
-		return Weapon.CombineStats(stat, [stats[stat] || 0, bonus ? this.bonus[stat] || 0 : 0, penalty ? this.penalty[stat] || 0 : 0])
+		return Weapon.CombineStats(stat, [
+			stats[stat] || 0,
+			isAdvantageApplied ? this.advantage[stat] || 0 : 0,
+			isDisadvantageApplied ? this.disadvantage[stat] || 0 : 0
+		])
 	}
 }

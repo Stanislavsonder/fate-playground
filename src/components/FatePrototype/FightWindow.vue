@@ -10,8 +10,8 @@ import { ArmorSlot, ArmorType } from '@/constants/Armor'
 import { EMPTY_SKILL_SET } from '@/constants/Character'
 import { copy } from '@/utils'
 
-const bronzeHelmetProps = {
-	name: 'Bronze cuirass',
+const bronzeFullSet = {
+	name: 'Full Bronze Set',
 	size: CharacterSize.Medium,
 	type: ArmorType.Medium,
 	defence: 100,
@@ -50,32 +50,6 @@ const bronzeHelmetProps = {
 	]
 }
 
-const glove = new Armor({
-	name: 'Glove of wolf',
-	size: CharacterSize.Medium,
-	type: ArmorType.Light,
-	defence: 3,
-	slots: [ArmorSlot.Fingers, ArmorSlot.Wrist],
-	modifiers: {
-		moveDistance: +2,
-		evadeChance: 0,
-		defence: -1
-	}
-})
-
-const boots = new Armor({
-	name: 'Boots of kek',
-	size: CharacterSize.Small,
-	type: ArmorType.Light,
-	defence: 4,
-	slots: [ArmorSlot.Foot, ArmorSlot.Foot, ArmorSlot.Fingers, ArmorSlot.Fingers],
-	modifiers: {
-		moveDistance: +5,
-		evadeChance: 0.1,
-		defence: 1
-	}
-})
-
 const woodenSword = new Weapon({
 	name: 'Wooden Sword',
 	quality: WeaponQuality.Garbage,
@@ -106,7 +80,7 @@ const ivan = reactive(
 		size: CharacterSize.Medium,
 		slots: [ArmorSlot.Ears, ArmorSlot.TopHead, ArmorSlot.Nose],
 		weapon: [woodenSword],
-		armor: [new Armor(copy(bronzeHelmetProps))]
+		armor: [new Armor(copy(bronzeFullSet))]
 	})
 )
 
@@ -154,115 +128,71 @@ const ratLord = reactive(
 		size: CharacterSize.Small,
 		slots: [ArmorSlot.Ears, ArmorSlot.TopHead, ArmorSlot.Nose],
 		weapon: [fist, bow],
-		armor: [new Armor(copy(bronzeHelmetProps))]
+		armor: [new Armor(copy(bronzeFullSet))]
 	})
 )
 
-const bonus = ref(false)
-const penalty = ref(false)
+const range = ref(10)
 
-watch(bonus, value => {
-	ivan.setWeaponBonus(value)
-})
-
-watch(penalty, value => {
-	ivan.setWeaponPenalty(value)
+watch(range, value => {
+	ivan.currentDistance = value
+	ratLord.currentDistance = value
 })
 </script>
 
 <template>
 	<div class="big-container">
 		<CharacterComponent v-model="ivan" />
-
 		<CharacterComponent v-model="ratLord" />
-		<!--		<div class="container">-->
-		<!--			<details>-->
-		<!--				<summary>-->
-		<!--					{{ bronzeHelmet.name }}-->
-		<!--				</summary>-->
-		<!--				<p>Defence: {{ bronzeHelmet.baseDefence }} +{{ bronzeHelmet.bonusDefence }} = {{ bronzeHelmet.totalDefence }}</p>-->
-		<!--				<p>Evade chance: {{ bronzeHelmet.evadeChance }}</p>-->
-		<!--			</details>-->
-		<!--			<details>-->
-		<!--				<summary>-->
-		<!--					{{ glove.name }}-->
-		<!--				</summary>-->
-		<!--				<p>Defence: {{ glove.baseDefence }} {{ glove.bonusDefence }} = {{ bronzeHelmet.totalDefence }}</p>-->
-		<!--				<p>Evade chance: {{ glove.evadeChance }}</p>-->
-		<!--			</details>-->
-
-		<!--			<details>-->
-		<!--				<summary>-->
-		<!--					{{ woodenSword.name }}-->
-		<!--				</summary>-->
-		<!--				<p>Type: {{ woodenSword.type.name }}</p>-->
-		<!--				<p>Distance: {{ woodenSword.type.minDistance }} - {{ woodenSword.type.maxDistance }} ft</p>-->
-		<!--				<p>Damage: {{ woodenSword.stats(bonus, penalty).minDamage }} - {{ woodenSword.stats(bonus, penalty).maxDamage }}</p>-->
-		<!--				<p>-->
-		<!--					Effective Distance:-->
-		<!--					{{ woodenSword.type.getMinEffectiveDistance(bonus, penalty) }}-->
-		<!--					- -->
-		<!--					{{ woodenSword.type.getMaxEffectiveDistance(bonus, penalty) }} ft.-->
-		<!--				</p>-->
-		<!--				<label>-->
-		<!--					<input-->
-		<!--						v-model="bonus"-->
-		<!--						type="checkbox"-->
-		<!--					/>-->
-		<!--					Activate weapon bonus-->
-		<!--				</label>-->
-		<!--				<br />-->
-		<!--				<label>-->
-		<!--					<input-->
-		<!--						v-model="penalty"-->
-		<!--						type="checkbox"-->
-		<!--					/>-->
-		<!--					Activate weapon penalty-->
-		<!--				</label>-->
-		<!--				<p>{{ woodenSword.type.stats(bonus, penalty) }}</p>-->
-		<!--				<p>{{ woodenSword.stats(bonus, penalty) }}</p>-->
-		<!--			</details>-->
-
-		<!--			<div>-->
-		<!--				<h2>-->
-		<!--					{{ ivan.name }}-->
-		<!--				</h2>-->
-		<!--				<p>Weapon: {{ ivan.weapon.name }}</p>-->
-		<!--				<p>Armor: {{ ivan.armor.map(e => e.name).join(', ') }}</p>-->
-		<!--				<p>Max HP: {{ ivan.maxHealthPoints }}</p>-->
-		<!--				<p>Current HP: {{ ivan.currenHealthPoints }}</p>-->
-		<!--				<p>Damage: {{ Math.round(ivan.minDamage) }} - {{ Math.round(ivan.maxDamage) }}</p>-->
-		<!--				<p>Hit chance: {{ Math.round(ivan.hitChance * 100) }}%</p>-->
-		<!--				<p>Critical chance: {{ Math.round(ivan.criticalChance * 100) }}%</p>-->
-		<!--				<p>Critical multiplier: {{ Math.round(ivan.criticalMultiplier * 100) }}%</p>-->
-		<!--				<p>Evade chance: {{ Math.round(ivan.evadeChance * 100) }}%</p>-->
-		<!--				<p>Defence: {{ Math.round(ivan.defence) }} ({{ Math.round(ivan.block * 100) }}%)</p>-->
-		<!--				<p>Skills:</p>-->
-		<!--				<ul>-->
-		<!--					<li-->
-		<!--						v-for="skill in Object.keys(ivan.skills)"-->
-		<!--						:key="skill"-->
-		<!--					>-->
-		<!--						{{ skill }}: {{ ivan.skills[skill].level }}-->
-		<!--					</li>-->
-		<!--				</ul>-->
-		<!--			</div>-->
-
-		<!--		</div>-->
-		<!--		<SkillEditor v-model="ivan.skills" />-->
+	</div>
+	<div class="distance">
+		<label class="distance__label">
+			Distance
+			<input
+				v-model="range"
+				type="number"
+				min="0"
+				max="200"
+				step="1"
+			/>
+			<input
+				v-model="range"
+				type="range"
+				min="0"
+				max="200"
+				step="0.1"
+			/>
+		</label>
 	</div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .big-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 48px;
 }
 
-.container {
+.distance {
 	display: flex;
-	flex-direction: column;
+	justify-content: center;
 	align-items: center;
+	flex-direction: column;
+
+	&__label {
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+		gap: 8px;
+		font-size: 18px;
+
+		input {
+			background-color: transparent;
+			border: none;
+			border-bottom: 2px solid white;
+			color: white;
+			text-align: center;
+		}
+	}
 }
 </style>

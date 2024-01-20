@@ -10,11 +10,11 @@ export const Sword = new WeaponType({
 	maxDistance: 4,
 	damageMultiplier: 1,
 	hitChance: 0.9,
-	bonus: {
+	advantage: {
 		diceResult: 1,
 		maxDamage: 10
 	},
-	penalty: {
+	disadvantage: {
 		diceResult: -1
 	}
 })
@@ -28,8 +28,8 @@ export const Fist = new WeaponType({
 	minEffectiveDistance: 0,
 	maxEffectiveDistance: 2,
 	maxDistance: 3,
-	bonus: {},
-	penalty: {}
+	advantage: {},
+	disadvantage: {}
 })
 
 export const Bow = new WeaponType({
@@ -41,8 +41,8 @@ export const Bow = new WeaponType({
 	minEffectiveDistance: 10,
 	maxEffectiveDistance: 30,
 	maxDistance: 40,
-	bonus: {},
-	penalty: {}
+	advantage: {},
+	disadvantage: {}
 })
 
 export const ALL_WEAPON_TYPES = [Sword, Fist, Bow]

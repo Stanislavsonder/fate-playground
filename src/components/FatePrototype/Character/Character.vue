@@ -68,6 +68,24 @@ function healDamage() {
 			</label>
 		</nav>
 		<Stats :character="character" />
+		<p>
+			<label>
+				<input
+					v-model="character.isWeaponAdvantageApplied"
+					type="checkbox"
+				/>
+				Weapon advantage
+			</label>
+		</p>
+		<p>
+			<label>
+				<input
+					v-model="character.isWeaponDisadvantageApplied"
+					type="checkbox"
+				/>
+				Weapon disadvantage
+			</label>
+		</p>
 		<RollHit :character="character" />
 		<RollEvade :character="character" />
 		<RollAttack :character="character" />
