@@ -24,6 +24,7 @@ defineProps<{
 			/ {{ Math.round(character.maxHealthPoints) }}
 		</span>
 	</h3>
+	<p>Total XP: {{ character.getTotalExperience() }}</p>
 	<p>Armor: {{ character.armor.map(e => e.name).join(', ') }}</p>
 	<p>Weapon: {{ character.weapon.map(e => e.name).join(', ') }}</p>
 	<p>

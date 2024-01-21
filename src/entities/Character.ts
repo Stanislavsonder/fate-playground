@@ -232,19 +232,19 @@ export class Character implements ICharacter {
 		const totalExperience = this.getTotalExperience()
 		let tmpExperience = 0
 		for (let i = 0; i < CHARACTER_LEVEL_CUPS.length; i++) {
-			if (totalExperience <= tmpExperience) {
-				return Math.max(1, i - 5)
-			}
 			tmpExperience += CHARACTER_LEVEL_CUPS[i]
+			if (totalExperience < tmpExperience) {
+				return i
+			}
 		}
-		return Math.max(1, CHARACTER_LEVEL_CUPS.length - 5)
+		return CHARACTER_LEVEL_CUPS.length
 	}
 
 	get experience(): number {
-		return this.getTotalExperience() - CHARACTER_LEVEL_CUPS.slice(0, this.level - 1).reduce((a, b) => a + b, 0)
+		return this.getTotalExperience() - CHARACTER_LEVEL_CUPS.slice(0, this.level).reduce((a, b) => a + b, 0)
 	}
 
-	private getTotalExperience(): number {
+	public getTotalExperience(): number {
 		return Object.values(this.skills).reduce((a, b) => a + Character.GetSkillTotalExperience(b), 0)
 	}
 
