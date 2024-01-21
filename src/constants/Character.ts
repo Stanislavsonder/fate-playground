@@ -8,7 +8,7 @@ export const DICE_EVADE_MULTIPLIER = 0.1
 export const BASE_CHARACTER_CRITICAL_MULTIPLIER = 1.5
 export const SKILL_EXPERIENCE_CUP: SkillLevelModifiers = [20, 50, 90, 150, 250, 350, 450, 625, 825, 1000]
 export const CHARACTER_LEVEL_CUPS = [
-	0, 200, 233, 266, 300, 333, 366, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1075, 1150, 1225, 1300, 1375, 1450, 1525, 1600, 1675,
+	100, 150, 170, 225, 274, 1, 200, 233, 266, 300, 333, 366, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1075, 1150, 1225, 1300, 1375, 1450, 1525, 1600, 1675,
 	1750
 ]
 export const EMPTY_SKILL_SET: Skills = {
@@ -101,7 +101,7 @@ export const EMPTY_SKILL_SET: Skills = {
 export const SKILL_MODIFIERS: SkillModifiers = {
 	theft: {
 		criticalChance: [0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18, 0.2],
-		additionalTheftDistance: [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]
+		additionalTheftDistance: [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.1, 1.3, 1.5, 2.0]
 	},
 	perception: {
 		criticalChance: [0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18, 0.2],
@@ -109,8 +109,8 @@ export const SKILL_MODIFIERS: SkillModifiers = {
 		additionalViewRange: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
 	},
 	fight: {
-		meleeDamageMultiplier: [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0],
-		criticalMultiplier: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+		meleeDamageMultiplier: [0.1, 0.2, 0.3, 0.4, 0.5, 0.65, 0.7, 0.85, 1.0, 1.25],
+		criticalMultiplier: [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5],
 		additionalMaxHealth: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
 	},
 	knowledge: {
@@ -119,20 +119,20 @@ export const SKILL_MODIFIERS: SkillModifiers = {
 	agility: {
 		additionalMoveRange: [2.5, 5, 7.5, 10, 12.5, 15, 17.5, 20, 22.5, 25],
 		evadeChance: [0.02, 0.03, 0.05, 0.07, 0.1, 0.12, 0.15, 0.17, 0.2, 0.25],
-		criticalMultiplier: [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0]
+		criticalMultiplier: [0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 0.9, 1.1, 1.3, 1.5]
 	},
 	stealth: {
 		evadeChance: [0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18, 0.2]
 	},
 	shooting: {
 		additionalMaxHealth: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
-		rangeDamageMultiplier: [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0],
-		criticalMultiplier: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+		rangeDamageMultiplier: [0.1, 0.2, 0.3, 0.4, 0.5, 0.65, 0.7, 0.85, 1.0, 1.25],
+		criticalMultiplier: [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
 	},
 	constitution: {
 		additionalMaxHealth: [20, 40, 60, 80, 100, 120, 140, 160, 180, 200],
 		defenceMultiplier: [0.1, 0.2, 0.35, 0.45, 0.6, 0.8, 1.0, 1.1, 1.25, 1.5],
-		physicalDamageMultiplier: [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+		physicalDamageMultiplier: [0.02, 0.04, 0.06, 0.08, 0.1, 0.125, 0.15, 0.175, 0.2, 0.25]
 	},
 	lockpicking: {},
 	driving: {},
