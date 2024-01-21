@@ -1,6 +1,6 @@
-import { Skills, SkillModifiers, SkillLevelModifiers } from '@/types'
-import { ArmorSlot } from '@/constants/Armor'
-import { CharacterBody } from '@/entities/Character'
+import { CharacterBody, CharacterBodySize, SkillLevelModifiers, SkillModifiers, Skills } from '@/types'
+import eyeImage from '@/assets/bodyParts/eye.png'
+import noseImage from '@/assets/bodyParts/nose.png'
 
 export const BASE_CHARACTER_HEALTH_POINTS = 100
 export const DICE_HIT_MULTIPLIER = 0.1
@@ -149,42 +149,73 @@ export const SKILL_MODIFIERS: SkillModifiers = {
 	magic: {}
 }
 
-export const DEFAULT_HUMAN_BODY: CharacterBody = [
-	[ArmorSlot.TopHead, 0.035],
-	[ArmorSlot.Mask, 0.02],
-	[ArmorSlot.Ears, 0.005],
-	[ArmorSlot.Eye, 0.0025],
-	[ArmorSlot.Eye, 0.0025],
-	[ArmorSlot.Nose, 0.005],
-	[ArmorSlot.Neck, 0.02],
+export enum BodyPart {
+	TopHead,
+	Mask,
+	Ears,
+	Eyes,
+	Eye,
+	Nose,
+	Neck,
+	Shoulder,
+	TopArm,
+	Elbow,
+	LowArm,
+	Wrist,
+	Fingers,
+	Finger,
+	Chest,
+	Stomach,
+	Back,
+	Belt,
+	Groin,
+	TopLeg,
+	Knee,
+	LowLeg,
+	Foot,
+	Tail,
+	Wing
+}
 
-	[ArmorSlot.Shoulder, 0.01],
-	[ArmorSlot.TopArm, 0.03],
-	[ArmorSlot.Elbow, 0.005],
-	[ArmorSlot.LowArm, 0.03],
-	[ArmorSlot.Wrist, 0.01],
-	[ArmorSlot.Fingers, 0.005],
+export const DEFAULT_HUMAN_BODY: CharacterBody = {
+	size: CharacterBodySize.Medium,
+	parts: [
+		{ size: 0.035, part: 0, top: 16, left: 354, angle: 0 },
+		{ size: 0.02, part: 1, top: 181, left: 363, angle: 0 },
+		{ size: 0.0025, part: 4, top: 86, left: 308, angle: 0 },
+		{ size: 0.0025, part: 4, top: 90, left: 426, angle: 0 },
+		{ size: 0.005, part: 2, top: 27, left: 439, angle: 0 },
+		{ size: 0.005, part: 5, top: 112, left: 364, angle: 0 },
+		{ size: 0.02, part: 6, top: 250, left: 362, angle: 0 },
+		{ size: 0.01, part: 7, top: 241, left: 439, angle: 0 },
+		{ size: 0.01, part: 7, top: 244, left: 276, angle: 0 },
+		{ size: 0.03, part: 8, top: 264, left: 497, angle: 0 },
+		{ size: 0.03, part: 8, top: 275, left: 210, angle: 0 },
+		{ size: 0.005, part: 9, top: 346, left: 179, angle: 0 },
+		{ size: 0.005, part: 9, top: 336, left: 526, angle: 0 },
+		{ size: 0.03, part: 10, top: 396, left: 145, angle: 0 },
+		{ size: 0.03, part: 10, top: 386, left: 544, angle: 0 },
+		{ size: 0.01, part: 11, top: 455, left: 123, angle: 0 },
+		{ size: 0.01, part: 11, top: 437, left: 553, angle: 0 },
+		{ size: 0.005, part: 12, top: 483, left: 569, angle: 0 },
+		{ size: 0.005, part: 12, top: 505, left: 117, angle: 0 },
+		{ size: 0.06, part: 14, top: 318, left: 322, angle: 0 },
+		{ size: 0.06, part: 15, top: 382, left: 353, angle: 0 },
+		{ size: 0.18, part: 16, top: 298, left: 376, angle: 0 },
+		{ size: 0.03, part: 17, top: 460, left: 360, angle: 0 },
+		{ size: 0.03, part: 18, top: 533, left: 357, angle: 0 },
+		{ size: 0.08, part: 19, top: 493, left: 409, angle: 0 },
+		{ size: 0.08, part: 19, top: 492, left: 293, angle: 0 },
+		{ size: 0.015, part: 20, top: 571, left: 435, angle: 0 },
+		{ size: 0.015, part: 20, top: 573, left: 274, angle: 0 },
+		{ size: 0.07, part: 21, top: 631, left: 433, angle: 0 },
+		{ size: 0.07, part: 21, top: 643, left: 260, angle: 0 },
+		{ size: 0.02, part: 22, top: 708, left: 458, angle: 0 },
+		{ size: 0.02, part: 22, top: 723, left: 252, angle: 0 }
+	]
+}
 
-	[ArmorSlot.Shoulder, 0.01],
-	[ArmorSlot.TopArm, 0.03],
-	[ArmorSlot.Elbow, 0.005],
-	[ArmorSlot.LowArm, 0.03],
-	[ArmorSlot.Wrist, 0.01],
-	[ArmorSlot.Fingers, 0.005],
-
-	[ArmorSlot.Chest, 0.06],
-	[ArmorSlot.Stomach, 0.06],
-	[ArmorSlot.Back, 0.18],
-	[ArmorSlot.Belt, 0.03],
-	[ArmorSlot.Groin, 0.03],
-
-	[ArmorSlot.TopLeg, 0.08],
-	[ArmorSlot.Knee, 0.015],
-	[ArmorSlot.LowLeg, 0.07],
-	[ArmorSlot.Foot, 0.02],
-
-	[ArmorSlot.TopLeg, 0.08],
-	[ArmorSlot.Knee, 0.015],
-	[ArmorSlot.LowLeg, 0.07],
-	[ArmorSlot.Foot, 0.02]
-]
+export const BODY_PART_IMAGES: Record<BodyPart, string> = {
+	[BodyPart.Eye]: eyeImage,
+	[BodyPart.Nose]: noseImage
+}

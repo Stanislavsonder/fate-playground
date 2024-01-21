@@ -1,52 +1,52 @@
 <script setup lang="ts">
 import { Armor } from '@/entities/Armor'
-import { CharacterSize } from '@/types'
+import { CharacterBodySize } from '@/types'
 import { Weapon, WeaponQuality } from '@/entities/Weapon'
 import { Bow, Fist, Sword } from '@/constants/Weapons'
 import { reactive, ref, watch } from 'vue'
 import { Character } from '@/entities/Character'
 import CharacterComponent from './Character/Character.vue'
-import { ArmorSlot, ArmorType } from '@/constants/Armor'
-import { EMPTY_SKILL_SET } from '@/constants/Character'
+import { ArmorType } from '@/constants/Armor'
+import { BodyPart, EMPTY_SKILL_SET } from '@/constants/Character'
 import { copy } from '@/utils'
 
 const bronzeFullSet = {
 	name: 'Full Bronze Set',
-	size: CharacterSize.Medium,
+	size: CharacterBodySize.Medium,
 	type: ArmorType.Medium,
 	defence: 100,
 	slots: [
-		ArmorSlot.TopHead,
-		ArmorSlot.Mask,
-		ArmorSlot.Ears,
-		ArmorSlot.Eyes,
-		ArmorSlot.Nose,
-		ArmorSlot.Neck,
-		ArmorSlot.Shoulder,
-		ArmorSlot.Shoulder,
-		ArmorSlot.TopArm,
-		ArmorSlot.TopArm,
-		ArmorSlot.Elbow,
-		ArmorSlot.Elbow,
-		ArmorSlot.LowArm,
-		ArmorSlot.LowArm,
-		ArmorSlot.Wrist,
-		ArmorSlot.Wrist,
-		ArmorSlot.Fingers,
-		ArmorSlot.Fingers,
-		ArmorSlot.Chest,
-		ArmorSlot.Back,
-		ArmorSlot.Belt,
-		ArmorSlot.Groin,
-		ArmorSlot.Stomach,
-		ArmorSlot.TopLeg,
-		ArmorSlot.TopLeg,
-		ArmorSlot.Knee,
-		ArmorSlot.Knee,
-		ArmorSlot.LowLeg,
-		ArmorSlot.LowLeg,
-		ArmorSlot.Foot,
-		ArmorSlot.Foot
+		BodyPart.TopHead,
+		BodyPart.Mask,
+		BodyPart.Ears,
+		BodyPart.Eyes,
+		BodyPart.Nose,
+		BodyPart.Neck,
+		BodyPart.Shoulder,
+		BodyPart.Shoulder,
+		BodyPart.TopArm,
+		BodyPart.TopArm,
+		BodyPart.Elbow,
+		BodyPart.Elbow,
+		BodyPart.LowArm,
+		BodyPart.LowArm,
+		BodyPart.Wrist,
+		BodyPart.Wrist,
+		BodyPart.Fingers,
+		BodyPart.Fingers,
+		BodyPart.Chest,
+		BodyPart.Back,
+		BodyPart.Belt,
+		BodyPart.Groin,
+		BodyPart.Stomach,
+		BodyPart.TopLeg,
+		BodyPart.TopLeg,
+		BodyPart.Knee,
+		BodyPart.Knee,
+		BodyPart.LowLeg,
+		BodyPart.LowLeg,
+		BodyPart.Foot,
+		BodyPart.Foot
 	]
 }
 
@@ -77,8 +77,7 @@ const ivan = reactive(
 				constitution: { level: 2, experience: 0 }
 			}
 		},
-		size: CharacterSize.Medium,
-		slots: [ArmorSlot.Ears, ArmorSlot.TopHead, ArmorSlot.Nose],
+		slots: [BodyPart.Ears, BodyPart.TopHead, BodyPart.Nose],
 		weapon: [woodenSword],
 		armor: [new Armor(copy(bronzeFullSet))]
 	})
@@ -120,13 +119,12 @@ const ratLord = reactive(
 				theft: { level: 2, experience: 0 },
 				stealth: { level: 2, experience: 0 },
 				shooting: { level: 1, experience: 0 },
-				constitution: { level: 2, experience: 0 },
+				constitution: { level: 1, experience: 0 },
 				knowledge: { level: 1, experience: 0 },
 				will: { level: 1, experience: 0 }
 			}
 		},
-		size: CharacterSize.Small,
-		slots: [ArmorSlot.Ears, ArmorSlot.TopHead, ArmorSlot.Nose],
+		slots: [BodyPart.Ears, BodyPart.TopHead, BodyPart.Nose],
 		weapon: [fist, bow],
 		armor: [new Armor(copy(bronzeFullSet))]
 	})
@@ -152,14 +150,14 @@ watch(range, value => {
 				v-model="range"
 				type="number"
 				min="0"
-				max="200"
-				step="1"
+				max="60"
+				step="1.5"
 			/>
 			<input
 				v-model="range"
 				type="range"
 				min="0"
-				max="200"
+				max="60"
 				step="0.1"
 			/>
 		</label>

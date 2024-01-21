@@ -22,31 +22,3 @@ export enum ArmorType {
 	Medium,
 	Heavy
 }
-
-export enum ArmorSlot {
-	TopHead,
-	Mask,
-	Ears,
-	Eyes,
-	Eye,
-	Nose,
-	Neck,
-	Shoulder,
-	TopArm,
-	Elbow,
-	LowArm,
-	Wrist,
-	Fingers,
-	Finger,
-	Chest,
-	Stomach,
-	Back,
-	Belt,
-	Groin,
-	TopLeg,
-	Knee,
-	LowLeg,
-	Foot,
-	Tail,
-	Wing
-}

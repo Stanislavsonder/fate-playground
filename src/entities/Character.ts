@@ -1,10 +1,11 @@
-import { CharacterSize, Skill, Skills } from '@/types'
+import { CharacterBody, CharacterBodySize, Skill, Skills } from '@/types'
 import { Weapon, WeaponRange } from './Weapon'
 import { Armor } from './Armor'
 import { Wound } from './Wound'
 import {
 	BASE_CHARACTER_CRITICAL_MULTIPLIER,
 	BASE_CHARACTER_HEALTH_POINTS,
+	BodyPart,
 	CHARACTER_LEVEL_CUPS,
 	DEFAULT_HUMAN_BODY,
 	DICE_EVADE_MULTIPLIER,
@@ -13,21 +14,16 @@ import {
 	SKILL_EXPERIENCE_CUP
 } from '@/constants/Character'
 import { copy, getSkillBonus, getWoundsPenalty } from '@/utils'
-import { ArmorSlot } from '@/constants/Armor'
 import { DEFAULT_FIST_PROPS } from '@/constants/Weapon'
 import DiceService, { Dice } from '@/services/dice.service'
-
-type CharacterBodyPart = [ArmorSlot, number]
-export type CharacterBody = CharacterBodyPart[]
 
 interface ICharacter {
 	readonly name: string
 	readonly luck: number
-	readonly size: CharacterSize
 	readonly currenHealthPoints: number
 	readonly weapon: Weapon[]
 	readonly armor: Armor[]
-	readonly slots: ArmorSlot[]
+	readonly slots: BodyPart[]
 	readonly skills: Skills
 	readonly wounds: Wound[]
 	readonly body: CharacterBody
@@ -39,19 +35,18 @@ interface ICharacter {
 	readonly maxDamage: number
 }
 
-type CharacterProps = Partial<Pick<ICharacter, 'name' | 'luck' | 'size' | 'currenHealthPoints' | 'weapon' | 'armor' | 'slots' | 'skills' | 'wounds' | 'body'>>
+type CharacterProps = Partial<Pick<ICharacter, 'name' | 'luck' | 'currenHealthPoints' | 'weapon' | 'armor' | 'slots' | 'skills' | 'wounds' | 'body'>>
 
 export class Character implements ICharacter {
 	public readonly name: string
 	public readonly luck: number
-	public readonly size: CharacterSize
 	public currenHealthPoints: number
-	public readonly slots: ArmorSlot[]
+	public readonly slots: BodyPart[]
 	public skills: Skills
 	public weapon: Weapon[] = []
 	public armor: Armor[] = []
 	public wounds: Wound[] = []
-	public body: CharacterBody = []
+	public body: CharacterBody
 	public currentDistance: number = 0
 
 	public isWeaponAdvantageApplied = false
@@ -61,7 +56,6 @@ export class Character implements ICharacter {
 	constructor(props: CharacterProps) {
 		this.name = props.name || 'New character'
 		this.luck = props.luck || 0
-		this.size = props.size || CharacterSize.Medium
 		this.weapon = props.weapon || [new Weapon(copy(DEFAULT_FIST_PROPS))]
 		this.armor = props.armor || []
 		this.slots = props.slots || []

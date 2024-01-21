@@ -1,7 +1,8 @@
 import { WeaponType as WeaponTypeClass } from './entities/WeaponType'
 import { Wound } from './entities/Wound'
-// Common
-export enum CharacterSize {
+import { useMagicKeys } from '@vueuse/core'
+import { BodyPart } from '@/constants/Character'
+export enum CharacterBodySize {
 	Tiny, // Фея, кролик
 	Small, // Полурослик, гном, ребенок
 	Medium, // Взрослый человек, +-
@@ -9,6 +10,18 @@ export enum CharacterSize {
 	Giant // Огромные существа
 }
 
+export type CharacterBodyPart = {
+	part: BodyPart
+	size: number
+	top: number
+	left: number
+	angle: number
+	image?: string
+}
+export type CharacterBody = {
+	size: CharacterBodySize
+	parts: CharacterBodyPart[]
+}
 // Skills
 
 export type Skill = {

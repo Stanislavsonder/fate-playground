@@ -1,5 +1,5 @@
 import { SkillPenalty } from '@/types'
-import { ArmorSlot } from '@/constants/Armor'
+import { BodyPart } from '@/constants/Character'
 
 export enum WoundLevel {
 	Light,
@@ -16,7 +16,7 @@ export type WoundConsequence = {
 	minDamage?: number
 	maxDamage?: number
 	maxHealthPoints?: number
-	slotsDisabled?: ArmorSlot[]
+	slotsDisabled?: BodyPart[]
 }
 
 interface IWound {

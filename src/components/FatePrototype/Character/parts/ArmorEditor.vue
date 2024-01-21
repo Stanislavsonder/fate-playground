@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Armor } from '@/entities/Armor'
-import { CharacterSize } from '@/types'
+import { CharacterBodySize } from '@/types'
 import { ArmorType } from '@/constants/Armor'
 import ArmorComponent from '@/components/FatePrototype/Character/parts/ArmorComponent.vue'
 
@@ -13,7 +13,7 @@ function addNewArmor() {
 		new Armor({
 			name: 'Unknown armor',
 			defence: 0,
-			size: CharacterSize.Medium,
+			size: CharacterBodySize.Medium,
 			type: ArmorType.Medium,
 			slots: []
 		})

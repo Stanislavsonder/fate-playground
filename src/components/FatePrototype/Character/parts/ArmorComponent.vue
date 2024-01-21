@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Armor } from '@/entities/Armor'
-import { ArmorSlot, ArmorType } from '@/constants/Armor'
-import { CharacterSize } from '@/types'
+import { ArmorType } from '@/constants/Armor'
+import { CharacterBodySize } from '@/types'
+import { BodyPart } from '@/constants/Character'
 
 const armor = defineModel<Armor>({
 	required: true
@@ -62,14 +63,14 @@ function removeSlot(index: number) {
 					<td>
 						<select v-model="armor.size">
 							<template
-								v-for="armorSize in Object.values(CharacterSize)"
+								v-for="armorSize in Object.values(CharacterBodySize)"
 								:key="armorSize"
 							>
 								<option
 									v-if="Number(armorSize) >= 0"
 									:value="armorSize"
 								>
-									{{ CharacterSize[armorSize] }}
+									{{ CharacterBodySize[armorSize] }}
 								</option>
 							</template>
 						</select>
@@ -96,7 +97,7 @@ function removeSlot(index: number) {
 								:key="index"
 								@click="removeSlot(index)"
 							>
-								{{ ArmorSlot[slot] }}
+								{{ BodyPart[slot] }}
 							</button>
 						</p>
 
@@ -104,14 +105,14 @@ function removeSlot(index: number) {
 							<summary>Add slots</summary>
 							<div class="weapon__slots">
 								<template
-									v-for="slot in ArmorSlot"
+									v-for="slot in BodyPart"
 									:key="slot"
 								>
 									<button
 										v-if="Number(slot) >= 0"
 										@click="armor.slots.push(slot)"
 									>
-										{{ ArmorSlot[slot] }}
+										{{ BodyPart[slot] }}
 									</button>
 								</template>
 							</div>

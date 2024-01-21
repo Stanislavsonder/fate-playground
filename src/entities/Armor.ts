@@ -1,7 +1,7 @@
-import { CharacterSize } from '@/types'
-import { ArmorSlot, ArmorType, BLOCK_CONSTANT } from '@/constants/Armor'
+import { CharacterBody, CharacterBodySize } from '@/types'
+import { ArmorType, BLOCK_CONSTANT } from '@/constants/Armor'
 import { combineStats } from '@/utils'
-import { CharacterBody } from '@/entities/Character'
+import { BodyPart } from '@/constants/Character'
 
 export type ArmorStats = {
 	defence: number
@@ -25,16 +25,16 @@ export type ArmorModifier = DefenceModifiers &
 
 interface IArmor extends ArmorStats {
 	name: string
-	slots: ArmorSlot[]
-	size: CharacterSize
+	slots: BodyPart[]
+	size: CharacterBodySize
 	type: ArmorType
 	modifiers?: ArmorModifier
 }
 
 export class Armor implements IArmor {
 	public readonly name: string = ''
-	public slots: ArmorSlot[] = []
-	public readonly size: CharacterSize = CharacterSize.Medium
+	public slots: BodyPart[] = []
+	public readonly size: CharacterBodySize = CharacterBodySize.Medium
 	public readonly type: ArmorType = ArmorType.Cloth
 	public readonly defence: number = 0
 	public readonly modifiers: ArmorModifier = {}
@@ -68,7 +68,7 @@ export class Armor implements IArmor {
 	public static GetSlotMultiplier(armor: Armor, body: CharacterBody) {
 		let result = 0
 		for (const slot in armor.slots) {
-			result += (body.find(e => e[0] === armor.slots[slot]) || [0, 0])[1]
+			result += body.parts.find(e => e.part === armor.slots[slot])?.size || 0
 		}
 		return result
 	}
