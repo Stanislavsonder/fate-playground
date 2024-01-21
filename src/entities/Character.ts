@@ -6,6 +6,7 @@ import {
 	BASE_CHARACTER_CRITICAL_MULTIPLIER,
 	BASE_CHARACTER_HEALTH_POINTS,
 	BodyPart,
+	CHARACTER_LEVEL_ADDITIONAL_HP_BONUS,
 	CHARACTER_LEVEL_CUPS,
 	DEFAULT_HUMAN_BODY,
 	DICE_EVADE_MULTIPLIER,
@@ -87,7 +88,13 @@ export class Character implements ICharacter {
 	}
 
 	get maxHealthPoints(): number {
-		return Math.max(BASE_CHARACTER_HEALTH_POINTS + getSkillBonus('additionalMaxHealth', this.skills) + getWoundsPenalty('maxHealthPoints', this.wounds), 0)
+		return Math.max(
+			BASE_CHARACTER_HEALTH_POINTS +
+				CHARACTER_LEVEL_ADDITIONAL_HP_BONUS[this.level] +
+				getSkillBonus('additionalMaxHealth', this.skills) +
+				getWoundsPenalty('maxHealthPoints', this.wounds),
+			0
+		)
 	}
 
 	get minDamage(): number {
