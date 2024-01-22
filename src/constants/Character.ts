@@ -12,7 +12,7 @@ export const CHARACTER_LEVEL_CUPS = [
 	1750
 ]
 export const CHARACTER_LEVEL_ADDITIONAL_HP_BONUS = [
-	10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300
+	0, 15, 30, 50, 70, 90, 115, 140, 170, 200, 235, 275, 325, 375, 425, 500, 590, 690, 800, 930, 1130, 1300, 1500, 1750, 2000, 2100, 2200, 2300, 2400, 2500
 ]
 
 export const EMPTY_SKILL_SET: Skills = {
@@ -115,7 +115,7 @@ export const SKILL_MODIFIERS: SkillModifiers = {
 	fight: {
 		meleeDamageMultiplier: [0.1, 0.2, 0.3, 0.4, 0.5, 0.65, 0.7, 0.85, 1.0, 1.25],
 		criticalMultiplier: [0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.2, 0.25, 0.3, 0.35],
-		additionalMaxHealth: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+		additionalMaxHealth: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 	},
 	knowledge: {
 		criticalChance: [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1]
@@ -129,12 +129,12 @@ export const SKILL_MODIFIERS: SkillModifiers = {
 		evadeChance: [0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18, 0.2]
 	},
 	shooting: {
-		additionalMaxHealth: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
+		additionalMaxHealth: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		rangeDamageMultiplier: [0.1, 0.2, 0.3, 0.4, 0.5, 0.65, 0.7, 0.85, 1.0, 1.25],
 		criticalMultiplier: [0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.2, 0.25, 0.3, 0.35]
 	},
 	constitution: {
-		additionalMaxHealth: [15, 30, 45, 65, 100, 190, 250, 375, 575, 850],
+		additionalMaxHealth: [15, 30, 45, 65, 100, 190, 250, 400, 650, 1000],
 		defenceMultiplier: [0.1, 0.2, 0.35, 0.45, 0.6, 0.8, 1.0, 1.1, 1.25, 1.5],
 		physicalDamageMultiplier: [0.02, 0.04, 0.06, 0.08, 0.1, 0.125, 0.15, 0.175, 0.2, 0.25]
 	},
