@@ -26,9 +26,6 @@ export type WeaponDistancesModifier = {
 export type WeaponStats = {
 	minDamage: number
 	maxDamage: number
-	hitChance: number
-	criticalChance: number
-	criticalMultiplier: number
 }
 
 export type WeaponModifier = Partial<WeaponStats> &
@@ -37,6 +34,9 @@ export type WeaponModifier = Partial<WeaponStats> &
 		damageMultiplier?: number
 		evadeChance?: number
 		defence?: number
+		hitChance?: number
+		criticalChance?: number
+		criticalMultiplier?: number
 	}
 
 export type WeaponProps = WeaponStats & {
@@ -59,9 +59,6 @@ export class Weapon implements IWeapon {
 	public readonly quality: WeaponQuality
 	public readonly minDamage: number
 	public readonly maxDamage: number
-	public readonly hitChance: number
-	public readonly criticalChance: number
-	public readonly criticalMultiplier: number
 	public readonly modifiers: WeaponModifier = {}
 
 	constructor(props: WeaponProps) {
@@ -70,9 +67,6 @@ export class Weapon implements IWeapon {
 		this.quality = props.quality
 		this.minDamage = props.minDamage
 		this.maxDamage = props.maxDamage
-		this.hitChance = props.hitChance
-		this.criticalChance = props.criticalChance
-		this.criticalMultiplier = props.criticalMultiplier
 		this.modifiers = props.modifiers || {}
 	}
 
@@ -100,10 +94,7 @@ export class Weapon implements IWeapon {
 	public getStat(stat: keyof WeaponModifier, isAdvantageApplied = false, isDisadvantageApplied = false): number {
 		const stats: Partial<WeaponModifier> = {
 			minDamage: this.minDamage,
-			maxDamage: this.maxDamage,
-			hitChance: this.hitChance,
-			criticalChance: this.criticalChance,
-			criticalMultiplier: this.criticalMultiplier
+			maxDamage: this.maxDamage
 		}
 
 		return Weapon.CombineStats(stat, [(stats[stat] || 0) + (this.modifiers[stat] || 0), this.type.getStat(stat, isAdvantageApplied, isDisadvantageApplied)])

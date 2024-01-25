@@ -72,3 +72,22 @@ export function getArmorStat(stat: keyof ArmorModifier, armors: Armor[]): number
 	})
 	return result
 }
+
+export function getRandomInt(max: number): number {
+	return Math.floor(Math.random() * max)
+}
+
+export function getRandomWithChance<T>(values: [T, number][]): T {
+	if (!values.length) {
+		throw new Error('Unable to get random value: values not defined.')
+	}
+	const rand = Math.random()
+	let nextChance = 0
+	for (let i = 0; i < values.length; i++) {
+		nextChance += values[i][1]
+		if (rand <= nextChance) {
+			return values[i][0]
+		}
+	}
+	return values[values.length - 1][0]
+}

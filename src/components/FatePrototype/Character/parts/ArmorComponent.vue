@@ -138,6 +138,16 @@ function removeSlot(index: number) {
 					</td>
 				</tr>
 				<tr>
+					<td>Additional HP</td>
+					<td>
+						<input
+							v-model="armor.modifiers.additionalHealthPoints"
+							type="number"
+							step="1"
+						/>
+					</td>
+				</tr>
+				<tr>
 					<td>Defence multiplier</td>
 					<td>
 						<input

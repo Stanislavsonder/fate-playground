@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Weapon, WeaponQuality } from '@/entities/Weapon'
 import WeaponComponent from '@/components/FatePrototype/Character/parts/WeaponComponent.vue'
-import { Fist } from '@/constants/Weapons'
+import { Knuckles } from '@/constants/Weapons'
 
 const weapon = defineModel<Weapon[]>({
 	required: true
@@ -10,13 +10,10 @@ const weapon = defineModel<Weapon[]>({
 function addNewWeapon() {
 	weapon.value.push(
 		new Weapon({
-			name: 'Unknown weapon',
-			type: Fist,
+			name: 'Fists',
+			type: Knuckles,
 			minDamage: 0,
 			maxDamage: 0,
-			criticalChance: 0,
-			criticalMultiplier: 1,
-			hitChance: 0,
 			quality: WeaponQuality.Common
 		})
 	)
@@ -26,13 +23,10 @@ function deleteWeapon(index: number) {
 	if (weapon.value.length === 1) {
 		weapon.value = [
 			new Weapon({
-				name: 'Unknown weapon',
-				type: Fist,
+				name: 'Fists',
+				type: Knuckles,
 				minDamage: 0,
 				maxDamage: 0,
-				criticalChance: 0,
-				criticalMultiplier: 1,
-				hitChance: 0,
 				quality: WeaponQuality.Common
 			})
 		]

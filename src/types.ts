@@ -12,9 +12,10 @@ export enum CharacterBodySize {
 
 export type CharacterBodyPart = {
 	part: BodyPart
-	size: number
-	top: number
-	left: number
+	width: number
+	height: number
+	y: number
+	x: number
 	angle: number
 	image?: string
 }
@@ -75,4 +76,13 @@ export type SkillModifier = {
 
 export type SkillModifiers = {
 	[key in keyof Skills]: SkillModifier
+}
+
+export enum LootLevel {
+	Garbage,
+	Common,
+	Uncommon,
+	Rare,
+	Epic,
+	Legendary
 }

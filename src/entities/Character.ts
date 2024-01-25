@@ -1,4 +1,4 @@
-import { CharacterBody, CharacterBodySize, Skill, Skills } from '@/types'
+import { CharacterBody, Skill, Skills } from '@/types'
 import { Weapon, WeaponRange } from './Weapon'
 import { Armor } from './Armor'
 import { Wound } from './Wound'
@@ -91,6 +91,7 @@ export class Character implements ICharacter {
 		return Math.max(
 			BASE_CHARACTER_HEALTH_POINTS +
 				CHARACTER_LEVEL_ADDITIONAL_HP_BONUS[this.level] +
+				Armor.GetCombinedStats('additionalHealthPoints', this.armor) +
 				getSkillBonus('additionalMaxHealth', this.skills) +
 				getWoundsPenalty('maxHealthPoints', this.wounds),
 			0

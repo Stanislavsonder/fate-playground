@@ -2,7 +2,7 @@
 import { Armor } from '@/entities/Armor'
 import { CharacterBodySize } from '@/types'
 import { Weapon, WeaponQuality } from '@/entities/Weapon'
-import { Bow, Fist, Sword } from '@/constants/Weapons'
+import { Bow, Sword } from '@/constants/Weapons'
 import { reactive, ref, watch } from 'vue'
 import { Character } from '@/entities/Character'
 import CharacterComponent from './Character/Character.vue'
@@ -16,27 +16,23 @@ const bronzeFullSet = {
 	type: ArmorType.Medium,
 	defence: 100,
 	slots: [
-		BodyPart.TopHead,
-		BodyPart.Mask,
-		BodyPart.Ears,
+		BodyPart.Head,
+		BodyPart.Jaws,
 		BodyPart.Eyes,
-		BodyPart.Nose,
 		BodyPart.Neck,
 		BodyPart.Shoulder,
 		BodyPart.Shoulder,
-		BodyPart.TopArm,
-		BodyPart.TopArm,
+		BodyPart.UpperArm,
+		BodyPart.UpperArm,
 		BodyPart.Elbow,
 		BodyPart.Elbow,
-		BodyPart.LowArm,
-		BodyPart.LowArm,
+		BodyPart.LowerArm,
+		BodyPart.LowerArm,
 		BodyPart.Wrist,
 		BodyPart.Wrist,
 		BodyPart.Fingers,
 		BodyPart.Fingers,
 		BodyPart.Chest,
-		BodyPart.Back,
-		BodyPart.Belt,
 		BodyPart.Groin,
 		BodyPart.Stomach,
 		BodyPart.TopLeg,
@@ -54,15 +50,16 @@ const woodenSword = new Weapon({
 	name: 'Wooden Sword',
 	quality: WeaponQuality.Garbage,
 	type: Sword,
-	minDamage: 0,
-	maxDamage: 8,
-	criticalChance: 0.5,
-	criticalMultiplier: 0,
-	hitChance: 1,
-	modifiers: {
-		minDamage: 15,
-		maxDamage: 20
-	}
+	minDamage: 14,
+	maxDamage: 20
+})
+
+const bow = new Weapon({
+	name: 'Default bow',
+	type: Bow,
+	quality: WeaponQuality.Common,
+	minDamage: 16,
+	maxDamage: 24
 })
 
 const ivan = reactive(
@@ -70,72 +67,39 @@ const ivan = reactive(
 		name: 'Ivan',
 		luck: 1,
 		skills: {
-			...copy(EMPTY_SKILL_SET),
-			...{
-				fight: { level: 3, experience: 0 },
-				agility: { level: 1, experience: 0 },
-				constitution: { level: 2, experience: 0 }
-			}
+			...copy(EMPTY_SKILL_SET)
 		},
-		slots: [BodyPart.Ears, BodyPart.TopHead, BodyPart.Nose],
+		slots: [BodyPart.Head],
 		weapon: [woodenSword],
 		armor: [new Armor(copy(bronzeFullSet))]
 	})
 )
-
-const bow = new Weapon({
-	name: 'Default bow',
-	type: Bow,
-	minDamage: 10,
-	maxDamage: 20,
-	hitChance: 0,
-	criticalChance: 0.2,
-	criticalMultiplier: 0,
-	quality: WeaponQuality.Common
-})
-
-const fist = new Weapon({
-	name: 'Fist',
-	type: Fist,
-	minDamage: 0,
-	maxDamage: 3,
-	hitChance: 0,
-	criticalChance: 0.3,
-	criticalMultiplier: 0,
-	quality: WeaponQuality.Common
-})
 
 const ratLord = reactive(
 	new Character({
 		name: 'RatLord',
 		luck: 6,
 		skills: {
-			...copy(EMPTY_SKILL_SET),
-			...{
-				perception: { level: 4, experience: 0 },
-				agility: { level: 3, experience: 0 },
-				deceit: { level: 3, experience: 0 },
-				craft: { level: 2, experience: 0 },
-				theft: { level: 2, experience: 0 },
-				stealth: { level: 2, experience: 0 },
-				shooting: { level: 1, experience: 0 },
-				constitution: { level: 1, experience: 0 },
-				knowledge: { level: 1, experience: 0 },
-				will: { level: 1, experience: 0 }
-			}
+			...copy(EMPTY_SKILL_SET)
 		},
-		slots: [BodyPart.Ears, BodyPart.TopHead, BodyPart.Nose],
-		weapon: [fist, bow],
+		slots: [BodyPart.Head],
+		weapon: [bow],
 		armor: [new Armor(copy(bronzeFullSet))]
 	})
 )
 
 const range = ref(10)
 
-watch(range, value => {
-	ivan.currentDistance = value
-	ratLord.currentDistance = value
-})
+watch(
+	range,
+	value => {
+		ivan.currentDistance = value
+		ratLord.currentDistance = value
+	},
+	{
+		immediate: true
+	}
+)
 </script>
 
 <template>
@@ -150,15 +114,15 @@ watch(range, value => {
 				v-model="range"
 				type="number"
 				min="0"
-				max="60"
-				step="1.5"
+				max="40"
+				step="1"
 			/>
 			<input
 				v-model="range"
 				type="range"
 				min="0"
-				max="60"
-				step="0.1"
+				max="40"
+				step="1"
 			/>
 		</label>
 	</div>
@@ -183,6 +147,7 @@ watch(range, value => {
 		text-align: center;
 		gap: 8px;
 		font-size: 18px;
+		width: 100%;
 
 		input {
 			background-color: transparent;
@@ -190,6 +155,7 @@ watch(range, value => {
 			border-bottom: 2px solid white;
 			color: white;
 			text-align: center;
+			font-size: 24px;
 		}
 	}
 }

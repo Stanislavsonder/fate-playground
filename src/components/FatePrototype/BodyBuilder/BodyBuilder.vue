@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useMagicKeys } from '@vueuse/core'
 import { BODY_PART_IMAGES, BodyPart, DEFAULT_HUMAN_BODY } from '@/constants/Character'
-import { CharacterBody } from '@/types'
+import { CharacterBody, CharacterBodyPart } from '@/types'
 import { copy } from '@/utils'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const body = defineModel<CharacterBody>({
 	required: false,
@@ -12,53 +12,95 @@ const body = defineModel<CharacterBody>({
 
 const { current } = useMagicKeys()
 
-const percentage = computed(() => {
-	return body.value.parts.reduce((a, b) => a + b.size, 0)
-})
+const canvas = ref<HTMLCanvasElement | undefined>()
+const currentIndex = ref(-1)
+const isDragging = ref(false)
+const startX = ref(0)
+const startY = ref(0)
+
+draw()
 
 function clear() {
 	body.value.parts = []
 }
 
-function addBodyPart(slot: BodyPart) {
-	body.value.parts.push({
-		size: 0.1,
-		part: slot,
-		top: 50,
-		left: 50,
-		angle: 0
-	})
-}
-
-function startDragging(event: DragEvent, i: number) {
-	const style = window.getComputedStyle(event.target as HTMLElement)
-	event.dataTransfer?.setData(
-		'text/plain',
-		parseInt(style.getPropertyValue('left'), 10) - event.clientX + ',' + (parseInt(style.getPropertyValue('top'), 10) - event.clientY) + ',' + i
-	)
-}
-
-function stopDragging(event: DragEvent) {
-	const [x, y, index]: [string, string, string] = event.dataTransfer?.getData('text/plain').split(',') as unknown as [string, string, string]
-	body.value.parts[+index].left = event.clientX + parseInt(x, 10)
-	body.value.parts[+index].top = event.clientY + parseInt(y, 10)
-}
-
-function scrollElement(event: WheelEvent, index: number) {
-	if (current.has('control')) {
-		const value = current.has('shift') ? 30 : 1
-		const delta = event.deltaY <= 0 ? value : -value
-		body.value.parts[index].angle = (body.value.parts[index].angle + delta) % 360
-
+function draw() {
+	if (!canvas.value) {
 		return
 	}
-	const value = current.has('shift') ? 0.005 : 0.0005
-	const delta = event.deltaY <= 0 ? value : -value
-	body.value.parts[index].size = Math.max(Math.min(1, body.value.parts[index].size + delta), 0)
+	const ctx = canvas.value?.getContext('2d') as CanvasRenderingContext2D
+	ctx.clearRect(0, 0, canvas.value?.width || 0, canvas.value?.height || 0)
+
+	for (let bodyPart of body.value.parts) {
+		ctx.fillStyle = '#000000'
+		ctx.fillRect(bodyPart.x, bodyPart.y, bodyPart.width, bodyPart.height)
+	}
 }
 
-function remove(index: number) {
-	body.value.parts = body.value.parts.filter((_, i) => i !== index)
+function addBodyPart(slot: BodyPart) {
+	body.value.parts.push({
+		width: 50,
+		height: 50,
+		part: slot,
+		y: 0,
+		x: 0,
+		angle: 0
+	})
+	draw()
+}
+
+function isMouseOnThisBodyPart(x: number, y: number, part: CharacterBodyPart): boolean {
+	let left = part.x
+	let right = part.x + part.width
+	let top = part.y
+	let bottom = part.y + part.height
+
+	return x > left && x < right && y > top && y < bottom
+}
+
+function startDragging(e: MouseEvent) {
+	startX.value = e.offsetX
+	startY.value = e.offsetY
+	let index = 0
+	for (let bodyPart of body.value.parts) {
+		if (isMouseOnThisBodyPart(startX.value, startY.value, bodyPart)) {
+			currentIndex.value = index
+			isDragging.value = true
+			return
+		}
+		index++
+	}
+}
+
+function stopDragging(e: MouseEvent) {
+	if (!isDragging.value) {
+		return
+	}
+	isDragging.value = false
+}
+
+function drag(e: MouseEvent) {
+	if (!isDragging.value) {
+		return
+	}
+
+	let mouseX = e.offsetX
+	let mouseY = e.offsetY
+
+	let dx = mouseX - startX.value
+	let dy = mouseY - startY.value
+
+	if (currentIndex.value === -1) {
+		return
+	}
+
+	body.value.parts[currentIndex.value].x += dx
+	body.value.parts[currentIndex.value].y += dy
+
+	draw()
+
+	startX.value = mouseX
+	startY.value = mouseY
 }
 </script>
 
@@ -84,55 +126,26 @@ function remove(index: number) {
 			</template>
 		</div>
 	</div>
-	<p
-		class="builder__info"
-		:class="{
-			'builder__info--warn': Math.fround(percentage * 100) > 100
-		}"
-	>
-		{{ (percentage * 100).toFixed(2) }}%
-	</p>
-	<div
-		class="builder__body"
-		@dragover.prevent
-		@drop.prevent="stopDragging"
-	>
-		<div
-			v-for="(part, index) in body.parts"
-			:key="index"
-			draggable="true"
-			class="builder__body-part"
-			:style="{
-				top: part.top + 'px',
-				left: part.left + 'px',
-				padding: part.size * 100 + 'px',
-				backgroundImage: `url(${BODY_PART_IMAGES[part.part]})`,
-				rotate: part.angle + 'deg'
-			}"
-			@dragstart="e => startDragging(e, index)"
-			@wheel.prevent="e => scrollElement(e, index)"
-			@dblclick="remove(index)"
-		>
-			<span
-				draggable="false"
-				:style="{
-					rotate: -part.angle + 'deg'
-				}"
-			>
-				{{ BodyPart[part.part] }}
-				<br />
-				{{ (part.size * 100).toFixed(2) }}%
-				<br />
-				{{ part.angle % 360 }} deg.
-			</span>
-		</div>
+	<div class="builder__body">
+		<canvas
+			ref="canvas"
+			class="builder__canvas"
+			@mouseup="stopDragging"
+			@mousedown="startDragging"
+			@mouseout="stopDragging"
+			@mousemove="drag"
+		/>
 	</div>
-	<p>{{ body }}</p>
 </template>
 
 <style scoped lang="scss">
 .builder {
 	padding: 24px;
+
+	&__canvas {
+		height: 500px;
+		background: #919191;
+	}
 
 	&__buttons {
 		padding: 24px;
@@ -164,25 +177,25 @@ function remove(index: number) {
 		}
 	}
 
-	&__body {
-		position: relative;
-		background-color: rgba(131, 131, 131, 0.49);
-		height: 1000px;
-	}
-
 	&__body-part {
 		position: absolute;
 		display: grid;
 		place-content: center;
-		max-width: 500px;
-		min-width: 40px;
 		color: white;
-		padding: 8px;
-		aspect-ratio: 1;
 		background-size: contain;
 		background-repeat: no-repeat;
+		border: 2px solid white;
+		background: rgba(0, 0, 0, 0.85);
+		width: 100px;
+		height: 100px;
+		border-radius: 100%;
+
+		img {
+			pointer-events: none;
+		}
 
 		span {
+			pointer-events: none;
 			text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
 		}
 	}

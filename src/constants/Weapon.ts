@@ -1,13 +1,10 @@
 import { WeaponProps, WeaponQuality } from '../entities/Weapon'
-import { Fist } from './Weapons'
+import { Knuckles } from '@/constants/Weapons'
 
 export const DEFAULT_FIST_PROPS: WeaponProps = {
 	name: 'Fist',
-	type: Fist,
+	type: Knuckles,
 	minDamage: 0,
-	maxDamage: 4,
-	criticalChance: 0.2,
-	criticalMultiplier: 1.5,
-	hitChance: 1,
+	maxDamage: 2,
 	quality: WeaponQuality.Common
 }

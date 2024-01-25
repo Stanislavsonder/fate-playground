@@ -14,7 +14,8 @@ export const SUMMED_MODIFIERS: (keyof WeaponModifier | keyof ArmorModifier)[] = 
 	'moveDistanceMultiplier',
 	'damageMultiplier',
 	'moveDistance',
-	'defenceMultiplier'
+	'defenceMultiplier',
+	'additionalHealthPoints'
 ]
 
 export const MULTIPLIED_LIMITED_MODIFIERS: (keyof WeaponModifier | keyof ArmorModifier)[] = ['evadeChance', 'hitChance', 'criticalChance']

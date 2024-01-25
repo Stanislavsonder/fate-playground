@@ -16,6 +16,7 @@ export type DefenceModifiers = {
 	defence?: number
 	defenceMultiplier?: number
 	diceResult?: number
+	additionalHealthPoints?: number
 }
 
 export type ArmorModifier = DefenceModifiers &
@@ -56,6 +57,13 @@ export class Armor implements IArmor {
 	}
 
 	public static CombineStats = combineStats<keyof ArmorModifier>
+
+	public static GetCombinedStats(stat: keyof ArmorModifier, armor: Armor[]): number {
+		return Armor.CombineStats(
+			stat,
+			armor.map(e => e.getStat(stat))
+		)
+	}
 
 	public static GetDefence(armor: Armor[], body: CharacterBody) {
 		return armor.reduce((a, b) => a + b.getStat('defence') * Armor.GetSlotMultiplier(b, body), 0)
