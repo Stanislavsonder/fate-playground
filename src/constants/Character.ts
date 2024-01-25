@@ -164,9 +164,9 @@ export enum BodyPart {
 	Chest,
 	Stomach,
 	Groin,
-	TopLeg,
+	UpperLeg,
 	Knee,
-	LowLeg,
+	LowerLeg,
 	Foot,
 	Tail,
 	Wing
@@ -174,5 +174,33 @@ export enum BodyPart {
 
 export const DEFAULT_HUMAN_BODY: CharacterBody = {
 	size: CharacterBodySize.Medium,
-	parts: []
+	parts: [
+		{ size: 0.05, part: BodyPart.Head },
+		{ size: 0.05, part: BodyPart.Jaws },
+		{ size: 0.01, part: BodyPart.Eyes },
+		{ size: 0.02, part: BodyPart.Neck },
+		{ size: 0.02, part: BodyPart.Shoulder },
+		{ size: 0.02, part: BodyPart.Shoulder },
+		{ size: 0.05, part: BodyPart.UpperArm },
+		{ size: 0.05, part: BodyPart.UpperArm },
+		{ size: 0.01, part: BodyPart.Elbow },
+		{ size: 0.01, part: BodyPart.Elbow },
+		{ size: 0.05, part: BodyPart.LowerArm },
+		{ size: 0.05, part: BodyPart.LowerArm },
+		{ size: 0.015, part: BodyPart.Wrist },
+		{ size: 0.015, part: BodyPart.Wrist },
+		{ size: 0.01, part: BodyPart.Fingers },
+		{ size: 0.01, part: BodyPart.Fingers },
+		{ size: 0.18, part: BodyPart.Stomach },
+		{ size: 0.03, part: BodyPart.Chest },
+		{ size: 0.03, part: BodyPart.Groin },
+		{ size: 0.07, part: BodyPart.UpperLeg },
+		{ size: 0.07, part: BodyPart.UpperLeg },
+		{ size: 0.01, part: BodyPart.Knee },
+		{ size: 0.01, part: BodyPart.Knee },
+		{ size: 0.06, part: BodyPart.LowerLeg },
+		{ size: 0.06, part: BodyPart.LowerLeg },
+		{ size: 0.02, part: BodyPart.Foot },
+		{ size: 0.02, part: BodyPart.Foot }
+	]
 }

@@ -3,10 +3,12 @@ import { Weapon, WeaponDistancesModifier, WeaponModifier, WeaponRange } from './
 interface IWeaponType extends WeaponDistancesModifier {
 	name: string
 	range: WeaponRange
-	damageMultiplier: number
 	hitChance: number
 	advantage: WeaponModifier
 	disadvantage: WeaponModifier
+	generationData: {
+		damageMultiplier: number
+	}
 }
 
 export class WeaponType implements IWeaponType {
@@ -19,7 +21,7 @@ export class WeaponType implements IWeaponType {
 	public readonly advantage: WeaponModifier
 	public readonly disadvantage: WeaponModifier
 	public readonly hitChance: number
-	public readonly damageMultiplier: number
+	public readonly generationData
 
 	constructor(props: IWeaponType) {
 		this.name = props.name
@@ -28,10 +30,10 @@ export class WeaponType implements IWeaponType {
 		this.minEffectiveDistance = props.minEffectiveDistance
 		this.maxEffectiveDistance = props.maxEffectiveDistance
 		this.maxDistance = props.maxDistance
-		this.damageMultiplier = props.damageMultiplier
 		this.hitChance = props.hitChance
 		this.advantage = props.advantage
 		this.disadvantage = props.disadvantage
+		this.generationData = props.generationData
 	}
 
 	getStat(stat: keyof WeaponModifier, isAdvantageApplied = false, isDisadvantageApplied = false): number {
@@ -40,7 +42,6 @@ export class WeaponType implements IWeaponType {
 			maxDistance: this.maxDistance,
 			minEffectiveDistance: this.minEffectiveDistance,
 			maxEffectiveDistance: this.maxEffectiveDistance,
-			damageMultiplier: this.damageMultiplier,
 			hitChance: this.hitChance
 		}
 

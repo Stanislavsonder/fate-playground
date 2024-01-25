@@ -35,12 +35,12 @@ const bronzeFullSet = {
 		BodyPart.Chest,
 		BodyPart.Groin,
 		BodyPart.Stomach,
-		BodyPart.TopLeg,
-		BodyPart.TopLeg,
+		BodyPart.UpperLeg,
+		BodyPart.UpperLeg,
 		BodyPart.Knee,
 		BodyPart.Knee,
-		BodyPart.LowLeg,
-		BodyPart.LowLeg,
+		BodyPart.LowerLeg,
+		BodyPart.LowerLeg,
 		BodyPart.Foot,
 		BodyPart.Foot
 	]
@@ -50,8 +50,8 @@ const woodenSword = new Weapon({
 	name: 'Wooden Sword',
 	quality: WeaponQuality.Garbage,
 	type: Sword,
-	minDamage: 14,
-	maxDamage: 20
+	minDamage: 100,
+	maxDamage: 100
 })
 
 const bow = new Weapon({

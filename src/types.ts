@@ -12,12 +12,7 @@ export enum CharacterBodySize {
 
 export type CharacterBodyPart = {
 	part: BodyPart
-	width: number
-	height: number
-	y: number
-	x: number
-	angle: number
-	image?: string
+	size: number
 }
 export type CharacterBody = {
 	size: CharacterBodySize

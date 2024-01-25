@@ -9,7 +9,9 @@ export const Rifle = new WeaponType({
 	maxEffectiveDistance: 60,
 	maxDistance: 300,
 	hitChance: 0.75,
-	damageMultiplier: 1.3,
+	generationData: {
+		damageMultiplier: 1.3
+	},
 	advantage: {
 		diceResult: +1
 	},
@@ -26,7 +28,9 @@ export const Pistol = new WeaponType({
 	maxEffectiveDistance: 30,
 	maxDistance: 60,
 	hitChance: 0.7,
-	damageMultiplier: 1.2,
+	generationData: {
+		damageMultiplier: 1.2
+	},
 	advantage: {
 		diceResult: +1
 	},
@@ -43,7 +47,9 @@ export const Crossbow = new WeaponType({
 	maxEffectiveDistance: 30,
 	maxDistance: 60,
 	hitChance: 0.7,
-	damageMultiplier: 1.1,
+	generationData: {
+		damageMultiplier: 1.1
+	},
 	advantage: {
 		diceResult: +1
 	},
@@ -58,7 +64,9 @@ export const Bow = new WeaponType({
 	maxEffectiveDistance: 30,
 	maxDistance: 40,
 	hitChance: 0.7,
-	damageMultiplier: 1,
+	generationData: {
+		damageMultiplier: 1
+	},
 	advantage: {
 		diceResult: +1
 	},
@@ -75,7 +83,9 @@ export const ThrowingKnife = new WeaponType({
 	maxEffectiveDistance: 20,
 	maxDistance: 25,
 	hitChance: 0.7,
-	damageMultiplier: 0.95,
+	generationData: {
+		damageMultiplier: 0.95
+	},
 	advantage: {
 		diceResult: +1
 	},
@@ -90,7 +100,9 @@ export const Whip = new WeaponType({
 	maxEffectiveDistance: 15,
 	maxDistance: 17,
 	hitChance: 0.66,
-	damageMultiplier: 0.4,
+	generationData: {
+		damageMultiplier: 0.4
+	},
 	advantage: {},
 	disadvantage: {}
 })
@@ -102,7 +114,9 @@ export const Longsword = new WeaponType({
 	minEffectiveDistance: 4,
 	maxEffectiveDistance: 6,
 	maxDistance: 7,
-	damageMultiplier: 1.3,
+	generationData: {
+		damageMultiplier: 1.3
+	},
 	hitChance: 0.65,
 	advantage: {
 		diceResult: 1
@@ -120,7 +134,9 @@ export const Spear = new WeaponType({
 	maxEffectiveDistance: 6,
 	maxDistance: 6,
 	hitChance: 0.85,
-	damageMultiplier: 1,
+	generationData: {
+		damageMultiplier: 1
+	},
 	advantage: {
 		diceResult: 1
 	},
@@ -137,7 +153,9 @@ export const Scythe = new WeaponType({
 	maxEffectiveDistance: 6,
 	maxDistance: 6,
 	hitChance: 0.7,
-	damageMultiplier: 1.2,
+	generationData: {
+		damageMultiplier: 1.2
+	},
 	advantage: {},
 	disadvantage: {}
 })
@@ -150,7 +168,9 @@ export const Pitchfork = new WeaponType({
 	maxEffectiveDistance: 6,
 	maxDistance: 6,
 	hitChance: 0.9,
-	damageMultiplier: 0.9,
+	generationData: {
+		damageMultiplier: 0.9
+	},
 	advantage: {
 		diceResult: 1
 	},
@@ -167,7 +187,9 @@ export const Battleaxe = new WeaponType({
 	maxEffectiveDistance: 5,
 	maxDistance: 6,
 	hitChance: 0.6,
-	damageMultiplier: 1.45,
+	generationData: {
+		damageMultiplier: 1.45
+	},
 	advantage: {
 		diceResult: 1
 	},
@@ -184,7 +206,9 @@ export const BattleHammer = new WeaponType({
 	maxEffectiveDistance: 5,
 	maxDistance: 5,
 	hitChance: 0.7,
-	damageMultiplier: 1.4,
+	generationData: {
+		damageMultiplier: 1.4
+	},
 	advantage: {
 		diceResult: 1
 	},
@@ -201,7 +225,9 @@ export const Flail = new WeaponType({
 	maxEffectiveDistance: 4,
 	maxDistance: 5,
 	hitChance: 0.78,
-	damageMultiplier: 1.1,
+	generationData: {
+		damageMultiplier: 1.1
+	},
 	advantage: {},
 	disadvantage: {
 		diceResult: -1
@@ -216,7 +242,9 @@ export const Mace = new WeaponType({
 	maxEffectiveDistance: 4,
 	maxDistance: 4,
 	hitChance: 0.85,
-	damageMultiplier: 1,
+	generationData: {
+		damageMultiplier: 1
+	},
 	advantage: {},
 	disadvantage: {
 		diceResult: -1
@@ -231,7 +259,9 @@ export const Sword = new WeaponType({
 	maxEffectiveDistance: 3,
 	maxDistance: 4,
 	hitChance: 0.9,
-	damageMultiplier: 1,
+	generationData: {
+		damageMultiplier: 1
+	},
 	advantage: {
 		diceResult: 1
 	},
@@ -248,7 +278,9 @@ export const Saber = new WeaponType({
 	maxEffectiveDistance: 3,
 	maxDistance: 4,
 	hitChance: 0.9,
-	damageMultiplier: 1,
+	generationData: {
+		damageMultiplier: 1
+	},
 	advantage: {
 		diceResult: 1
 	},
@@ -265,7 +297,9 @@ export const Axe = new WeaponType({
 	maxEffectiveDistance: 3,
 	maxDistance: 3,
 	hitChance: 0.85,
-	damageMultiplier: 1.1,
+	generationData: {
+		damageMultiplier: 1.1
+	},
 	advantage: {
 		diceResult: 1
 	},
@@ -282,7 +316,9 @@ export const Club = new WeaponType({
 	maxEffectiveDistance: 3,
 	maxDistance: 3,
 	hitChance: 1,
-	damageMultiplier: 0.7,
+	generationData: {
+		damageMultiplier: 0.7
+	},
 	advantage: {
 		diceResult: 1
 	},
@@ -297,7 +333,9 @@ export const Katar = new WeaponType({
 	maxEffectiveDistance: 2,
 	maxDistance: 3,
 	hitChance: 0.9,
-	damageMultiplier: 1.1,
+	generationData: {
+		damageMultiplier: 1.1
+	},
 	advantage: {
 		diceResult: 1
 	},
@@ -312,7 +350,9 @@ export const Dagger = new WeaponType({
 	maxEffectiveDistance: 2,
 	maxDistance: 2,
 	hitChance: 1,
-	damageMultiplier: 0.9,
+	generationData: {
+		damageMultiplier: 0.9
+	},
 	advantage: {
 		diceResult: 1
 	},
@@ -329,7 +369,9 @@ export const Shield = new WeaponType({
 	maxEffectiveDistance: 1,
 	maxDistance: 1,
 	hitChance: 0.65,
-	damageMultiplier: 0.65,
+	generationData: {
+		damageMultiplier: 0.65
+	},
 	advantage: {
 		diceResult: 1
 	},
@@ -346,12 +388,14 @@ export const Knuckles = new WeaponType({
 	maxEffectiveDistance: 1,
 	maxDistance: 1,
 	hitChance: 1,
-	damageMultiplier: 0.8,
 	advantage: {
 		diceResult: 1
 	},
 	disadvantage: {
 		diceResult: -1
+	},
+	generationData: {
+		damageMultiplier: 0.8
 	}
 })
 export const ALL_WEAPON_TYPES = [
