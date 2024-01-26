@@ -132,8 +132,8 @@ export const SKILL_MODIFIERS: SkillModifiers = {
 		criticalMultiplier: [0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.2, 0.25, 0.3, 0.35]
 	},
 	constitution: {
-		additionalMaxHealth: [15, 30, 45, 65, 100, 190, 250, 400, 650, 1000],
-		defenceMultiplier: [0.1, 0.2, 0.35, 0.45, 0.6, 0.8, 1.0, 1.1, 1.25, 1.5],
+		additionalMaxHealth: [20, 35, 60, 75, 115, 200, 300, 400, 650, 1000],
+		//defenceMultiplier: [0.1, 0.2, 0.35, 0.45, 0.6, 0.8, 1.0, 1.1, 1.25, 1.5],
 		physicalDamageMultiplier: [0.02, 0.04, 0.06, 0.08, 0.1, 0.125, 0.15, 0.175, 0.2, 0.25]
 	},
 	lockpicking: {},
