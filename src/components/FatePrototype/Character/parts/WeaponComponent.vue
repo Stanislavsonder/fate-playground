@@ -56,26 +56,6 @@ const weapon = defineModel<Weapon>({
 					</td>
 				</tr>
 				<tr>
-					<td>Critical Chance</td>
-					<td>
-						<input
-							v-model="weapon.criticalChance"
-							type="number"
-							step="0.1"
-						/>
-					</td>
-				</tr>
-				<tr>
-					<td>Critical Multiplier</td>
-					<td>
-						<input
-							v-model="weapon.criticalMultiplier"
-							type="number"
-							step="0.1"
-						/>
-					</td>
-				</tr>
-				<tr>
 					<td
 						colspan="2"
 						align="center"
@@ -114,10 +94,40 @@ const weapon = defineModel<Weapon>({
 					</td>
 				</tr>
 				<tr>
+					<td>Critical Chance</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.criticalChance"
+							type="number"
+							step="0.1"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Critical Multiplier</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.criticalMultiplier"
+							type="number"
+							step="0.1"
+						/>
+					</td>
+				</tr>
+				<tr>
 					<td>Damage Multiplier</td>
 					<td>
 						<input
 							v-model="weapon.modifiers.damageMultiplier"
+							type="number"
+							step="0.1"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Hit Chance</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.hitChance"
 							type="number"
 							step="0.1"
 						/>

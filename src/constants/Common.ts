@@ -4,9 +4,7 @@ import { ArmorModifier } from '@/entities/Armor'
 export const SUMMED_MODIFIERS: (keyof WeaponModifier | keyof ArmorModifier)[] = [
 	'minDamage',
 	'maxDamage',
-	'minDistance',
 	'maxDistance',
-	'minEffectiveDistance',
 	'maxEffectiveDistance',
 	'defence',
 	'diceResult',
@@ -19,3 +17,5 @@ export const SUMMED_MODIFIERS: (keyof WeaponModifier | keyof ArmorModifier)[] = 
 ]
 
 export const MULTIPLIED_LIMITED_MODIFIERS: (keyof WeaponModifier | keyof ArmorModifier)[] = ['evadeChance', 'hitChance', 'criticalChance']
+
+export const SUBTRACTIVE_MODIFIERS: (keyof WeaponModifier | keyof ArmorModifier)[] = ['minEffectiveDistance', 'minDistance']

@@ -1,6 +1,6 @@
 import { WeaponType } from './WeaponType'
 import { MULTIPLIED_LIMITED_MODIFIERS, SUMMED_MODIFIERS } from '@/constants/Common'
-import { combineStats } from '@/utils'
+import { combineStats, copy } from '@/utils'
 
 export enum WeaponQuality {
 	Garbage,
@@ -90,6 +90,13 @@ export class Weapon implements IWeapon {
 	}
 
 	public static CombineStats = combineStats<keyof WeaponModifier>
+
+	public static Copy(weapon: Weapon): Weapon {
+		return new Weapon({
+			...copy(weapon),
+			type: weapon.type
+		})
+	}
 
 	public getStat(stat: keyof WeaponModifier, isAdvantageApplied = false, isDisadvantageApplied = false): number {
 		const stats: Partial<WeaponModifier> = {

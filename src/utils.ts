@@ -2,7 +2,7 @@ import { Skills, SkillModifier } from './types'
 import { SKILL_MODIFIERS } from './constants/Character'
 import { Armor, ArmorModifier } from './entities/Armor'
 import { Wound, WoundConsequence } from './entities/Wound'
-import { MULTIPLIED_LIMITED_MODIFIERS, SUMMED_MODIFIERS } from '@/constants/Common'
+import { MULTIPLIED_LIMITED_MODIFIERS, SUBTRACTIVE_MODIFIERS, SUMMED_MODIFIERS } from '@/constants/Common'
 import { WeaponModifier } from '@/entities/Weapon'
 
 export function copy<T>(data: T): T {
@@ -16,6 +16,10 @@ export function combineStats<T extends keyof WeaponModifier | keyof ArmorModifie
 
 	if (MULTIPLIED_LIMITED_MODIFIERS.includes(stat)) {
 		return Math.min(values.reduce((a, b) => (a || 0) + (b || 0), 0) || 0, 1)
+	}
+
+	if (SUBTRACTIVE_MODIFIERS.includes(stat)) {
+		return values.reduce((a, b) => (a || 0) - (b || 0), 0) || 0
 	}
 
 	console.error('Unknown stat for combination: ', stat)
