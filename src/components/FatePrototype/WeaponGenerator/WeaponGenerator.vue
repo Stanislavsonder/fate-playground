@@ -21,7 +21,7 @@ function generate() {
 	<label>
 		Level ({{ level }})
 		<input
-			v-model="level"
+			v-model.number="level"
 			type="range"
 			min="1"
 			max="30"
