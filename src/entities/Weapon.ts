@@ -42,6 +42,7 @@ export type WeaponModifier = Partial<WeaponStats> &
 export type WeaponProps = WeaponStats & {
 	name: string
 	type: WeaponType
+	level: number
 	quality: WeaponQuality
 	modifiers?: WeaponModifier
 }
@@ -51,6 +52,7 @@ interface IWeapon extends WeaponStats {
 	type: WeaponType
 	quality: WeaponQuality
 	modifiers: WeaponModifier
+	level: number
 }
 
 export class Weapon implements IWeapon {
@@ -60,6 +62,7 @@ export class Weapon implements IWeapon {
 	public readonly minDamage: number
 	public readonly maxDamage: number
 	public readonly modifiers: WeaponModifier = {}
+	public readonly level: number
 
 	constructor(props: WeaponProps) {
 		this.name = props.name
@@ -68,6 +71,7 @@ export class Weapon implements IWeapon {
 		this.minDamage = props.minDamage
 		this.maxDamage = props.maxDamage
 		this.modifiers = props.modifiers || {}
+		this.level = props.level
 	}
 
 	public static GetDamage(min: number, max: number, rollResult: number): number {
@@ -90,6 +94,19 @@ export class Weapon implements IWeapon {
 	}
 
 	public static CombineStats = combineStats<keyof WeaponModifier>
+
+	public static CombineModifiers(...modifiers: WeaponModifier[]): WeaponModifier {
+		const result: WeaponModifier = {}
+
+		for (let modifier of modifiers) {
+			for (let k in modifier) {
+				const key = k as keyof WeaponModifier
+				result[key] = Weapon.CombineStats(key, [modifier[key], result[key]])
+			}
+		}
+
+		return Object.fromEntries(Object.entries(result).filter(value => Boolean(value[1])))
+	}
 
 	public static Copy(weapon: Weapon): Weapon {
 		return new Weapon({

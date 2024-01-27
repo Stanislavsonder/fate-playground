@@ -1,19 +1,28 @@
 <script setup lang="ts">
 import { Weapon } from '@/entities/Weapon'
 import { ref } from 'vue'
-import { generateWeapon } from '@/components/FatePrototype/WeaponGenerator/WeaponGenerator'
 import { LootLevel } from '@/types'
 import WeaponCard from '@/components/FatePrototype/Character/parts/WeaponCard.vue'
 import { AppStore } from '@/store/app.store'
+import WeaponGeneratorService from '@/services/weaponGenerator.service'
 
 const appStore = AppStore()
 
 const level = ref(1)
 const rarity = ref(LootLevel.Common)
-const weapons = ref<Weapon[]>([generateWeapon(level.value, rarity.value), generateWeapon(level.value, rarity.value), generateWeapon(level.value, rarity.value)])
+const generator = new WeaponGeneratorService({
+	level: level.value,
+	lootLevel: rarity.value
+})
+const weapons = ref<Weapon[]>([generator.generate(), generator.generate(), generator.generate()])
 
 function generate() {
-	weapons.value = [generateWeapon(level.value, rarity.value), generateWeapon(level.value, rarity.value), generateWeapon(level.value, rarity.value)]
+	const generator = new WeaponGeneratorService({
+		level: level.value,
+		lootLevel: rarity.value
+	})
+
+	weapons.value = [generator.generate(), generator.generate(), generator.generate()]
 }
 </script>
 

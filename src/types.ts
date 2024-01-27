@@ -81,3 +81,6 @@ export enum LootLevel {
 	Epic,
 	Legendary
 }
+
+export type ChanceSheet<T> = [T, number][]
+export type WeightSheet<T> = ChanceSheet<T>

@@ -11,7 +11,7 @@ const emit = defineEmits<{
 }>()
 
 function formatValue(key: keyof WeaponModifier, value: number): string {
-	if (['hitChance', 'criticalMultiplier', 'criticalChance'].includes(key)) {
+	if (['hitChance', 'criticalMultiplier', 'criticalChance', 'evadeChance'].includes(key)) {
 		return (value > 0 ? '+' : '') + (value * 100).toFixed(2) + '%'
 	}
 	if (['maxDistance', 'maxEffectiveDistance'].includes(key)) {
@@ -31,7 +31,7 @@ function formatValue(key: keyof WeaponModifier, value: number): string {
 		:class="`weapon--${WeaponQuality[weapon.quality]}`"
 	>
 		<h2>{{ weapon.name }}</h2>
-		<p>{{ weapon.type.name }}</p>
+		<p>{{ weapon.type.name }} ({{ weapon.level }} level)</p>
 		<p class="weapon__modifier">
 			<span class="weapon__modifier-key"> Damage: </span>
 			<span class="weapon__modifier-value"> {{ weapon.minDamage }} - {{ weapon.maxDamage }} </span>

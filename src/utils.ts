@@ -1,9 +1,9 @@
-import { Skills, SkillModifier } from './types'
+import { Skills, SkillModifier, ChanceSheet, WeightSheet } from './types'
 import { SKILL_MODIFIERS } from './constants/Character'
 import { Armor, ArmorModifier } from './entities/Armor'
 import { Wound, WoundConsequence } from './entities/Wound'
 import { MULTIPLIED_LIMITED_MODIFIERS, SUBTRACTIVE_MODIFIERS, SUMMED_MODIFIERS } from '@/constants/Common'
-import { WeaponModifier } from '@/entities/Weapon'
+import { Weapon, WeaponModifier } from '@/entities/Weapon'
 
 export function copy<T>(data: T): T {
 	return JSON.parse(JSON.stringify(data))
@@ -81,7 +81,7 @@ export function getRandomInt(max: number): number {
 	return Math.floor(Math.random() * max)
 }
 
-export function getRandomWithChance<T>(values: [T, number][]): T {
+export function getRandomWithChance<T>(values: ChanceSheet<T>): T {
 	if (!values.length) {
 		throw new Error('Unable to get random value: values not defined.')
 	}
@@ -94,4 +94,33 @@ export function getRandomWithChance<T>(values: [T, number][]): T {
 		}
 	}
 	return values[values.length - 1][0]
+}
+
+export function weightSheetToChances<T>(weightSheet: WeightSheet<T>): ChanceSheet<T> {
+	const entries = new Map<T, number>()
+	let sum = 0
+	weightSheet.forEach(element => {
+		sum += element[1]
+		const value = entries.get(element[0])
+		if (value) {
+			entries.set(element[0], value + element[1])
+			return
+		}
+		entries.set(element[0], element[1])
+	})
+
+	return [...entries.entries()].map(e => {
+		return [e[0], e[1] / sum]
+	})
+}
+
+export function invertModifiers(modifiers: WeaponModifier): WeaponModifier {
+	const result = copy(modifiers)
+
+	for (let k in result) {
+		const key = k as keyof WeaponModifier
+		result[key] = -(result[key] || 0)
+	}
+
+	return result
 }
