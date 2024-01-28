@@ -137,3 +137,13 @@ export function decreaseModifierChance<T>(pool: WeightSheet<T>, modifier: T, div
 		element[1] /= divider
 	}
 }
+
+export function enumKeys<T extends Record<string, any>>(obj: T): (keyof T)[] {
+	const keys: (keyof T)[] = []
+	for (const key in obj) {
+		if (isNaN(Number(key))) {
+			keys.push(key)
+		}
+	}
+	return keys
+}

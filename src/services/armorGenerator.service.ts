@@ -150,7 +150,7 @@ export default class ArmorGeneratorService {
 	}
 
 	private getName(preset: ArmorPreset, quality: LootQuality, type: ArmorType): string {
-		return `${ArmorType[type]} ${LootQuality[quality]} ${preset.name}`
+		return `${LootQuality[quality]} ${ArmorType[type]} ${preset.name}`
 	}
 
 	private getRandomCharacterBody(): CharacterBody {

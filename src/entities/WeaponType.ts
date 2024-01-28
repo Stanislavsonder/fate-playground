@@ -1,4 +1,5 @@
 import { Weapon, WeaponDistancesModifier, WeaponModifier, WeaponRange } from './Weapon'
+import { copy } from '@/components/helpers/utils'
 
 interface IWeaponType extends WeaponDistancesModifier {
 	name: string
@@ -34,6 +35,12 @@ export class WeaponType implements IWeaponType {
 		this.advantage = props.advantage
 		this.disadvantage = props.disadvantage
 		this.generationData = props.generationData
+	}
+
+	public static Copy(weaponType: WeaponType): WeaponType {
+		return new WeaponType({
+			...copy(weaponType)
+		})
 	}
 
 	getStat(stat: keyof WeaponModifier, isAdvantageApplied = false, isDisadvantageApplied = false): number {

@@ -1,16 +1,32 @@
 <script setup lang="ts">
 import FightWindow from '@/components/FatePrototype/FightWindow.vue'
-import WeaponGenerator from '@/components/FatePrototype/WeaponGenerator/WeaponGenerator.vue'
-import ArmorGenerator from '@/components/FatePrototype/ArmorGenerator/ArmorGenerator.vue'
+import LootGenerator from '@/components/FatePrototype/LootGenerator/LootGenerator.vue'
 </script>
 
 <template>
-	<WeaponGenerator />
-	<ArmorGenerator />
-	<FightWindow />
+	<details>
+		<summary>Loot generator (Armors / Weapons)</summary>
+		<LootGenerator />
+	</details>
+	<details open>
+		<summary>Fight window</summary>
+		<FightWindow />
+	</details>
 </template>
 
 <style lang="scss">
+button {
+	cursor: pointer;
+}
+
+ul,
+ol,
+li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
 .weapon-editor {
 	&__list {
 		display: flex;

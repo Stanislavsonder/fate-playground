@@ -5,6 +5,7 @@ import { Knuckles } from '@/constants/Weapons'
 import { AppStore } from '@/store/app.store'
 import { storeToRefs } from 'pinia'
 import WeaponCard from '@/components/FatePrototype/Character/parts/WeaponCard.vue'
+import LootCard from '@/components/FatePrototype/LootGenerator/LootCard.vue'
 
 const weapon = defineModel<Weapon[]>({
 	required: true
@@ -47,10 +48,11 @@ function deleteWeapon(index: number) {
 		<div>
 			Favorites:
 			<div class="weapon-editor__weapons">
-				<WeaponCard
+				<LootCard
 					v-for="w in savedWeapon"
 					:key="w"
-					:weapon="w"
+					:value="w"
+					mode="remove"
 					action-text="Add to inventory"
 					@click="addNewWeapon(Weapon.Copy(w))"
 				/>

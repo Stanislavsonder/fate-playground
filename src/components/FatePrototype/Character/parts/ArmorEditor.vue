@@ -6,6 +6,8 @@ import ArmorComponent from '@/components/FatePrototype/Character/parts/ArmorComp
 import { storeToRefs } from 'pinia'
 import { AppStore } from '@/store/app.store'
 import ArmorCard from '@/components/FatePrototype/Character/parts/ArmorCard.vue'
+import { Weapon } from '@/entities/Weapon'
+import LootCard from '@/components/FatePrototype/LootGenerator/LootCard.vue'
 
 const armor = defineModel<Armor[]>({
 	required: true
@@ -35,12 +37,13 @@ function deleteArmor(index: number) {
 		<div>
 			Favorites:
 			<div class="weapon-editor__weapons">
-				<ArmorCard
-					v-for="a in savedArmor"
-					:key="a"
-					:armor="a"
+				<LootCard
+					v-for="w in savedArmor"
+					:key="w"
+					:value="w"
+					mode="remove"
 					action-text="Add to inventory"
-					@click="addNewArmor(Armor.Copy(a))"
+					@click="addNewArmor(Armor.Copy(w))"
 				/>
 			</div>
 		</div>

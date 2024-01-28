@@ -28,13 +28,13 @@ onClickOutside(modal, event => {
 <style scoped lang="scss">
 .modal-window {
 	position: fixed;
-	bottom: 0;
+	top: 50%;
 	left: 50%;
-	translate: -50%;
+	translate: -50% -50%;
 	background-color: black;
 	padding: 48px 24px 24px;
-	width: 100%;
-	height: 50%;
+	width: 80%;
+	height: 80%;
 	overflow: auto;
 
 	&__close {

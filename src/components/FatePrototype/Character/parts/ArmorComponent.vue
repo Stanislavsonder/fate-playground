@@ -148,16 +148,6 @@ function removeSlot(index: number) {
 					</td>
 				</tr>
 				<tr>
-					<td>Defence multiplier</td>
-					<td>
-						<input
-							v-model="armor.modifiers.defenceMultiplier"
-							type="number"
-							step="0.1"
-						/>
-					</td>
-				</tr>
-				<tr>
 					<td>Evade chance</td>
 					<td>
 						<input
@@ -174,16 +164,6 @@ function removeSlot(index: number) {
 							v-model="armor.modifiers.moveDistance"
 							type="number"
 							step="0.5"
-						/>
-					</td>
-				</tr>
-				<tr>
-					<td>Move distance multiplier</td>
-					<td>
-						<input
-							v-model="armor.modifiers.moveDistanceMultiplier"
-							type="number"
-							step="0.1"
 						/>
 					</td>
 				</tr>

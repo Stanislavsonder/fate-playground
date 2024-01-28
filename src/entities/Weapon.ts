@@ -111,7 +111,7 @@ export class Weapon implements IWeapon {
 	public static Copy(weapon: Weapon): Weapon {
 		return new Weapon({
 			...copy(weapon),
-			type: weapon.type
+			type: WeaponType.Copy(weapon.type)
 		})
 	}
 
