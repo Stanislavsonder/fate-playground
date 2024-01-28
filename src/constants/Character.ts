@@ -1,5 +1,7 @@
 import { CharacterBody, CharacterBodySize, SkillLevelModifiers, SkillModifiers, Skills } from '@/types'
 
+export const MAX_CHARACTER_LEVEL = 30
+
 export const BASE_CHARACTER_HEALTH_POINTS = 100
 export const DICE_HIT_MULTIPLIER = 0.1
 export const DICE_EVADE_MULTIPLIER = 0.1
@@ -155,16 +157,16 @@ export enum BodyPart {
 	Head,
 	Jaws,
 	Eyes,
-		Neck,
+	Neck,
 	Shoulder,
 	UpperArm,
 	Elbow,
 	LowerArm,
 	Wrist,
 	Fingers,
-		Chest,
+	Chest,
 	Stomach,
-		Groin,
+	Groin,
 	UpperLeg,
 	Knee,
 	LowerLeg,

@@ -1,143 +1,144 @@
 import { ALL_WEAPON_TYPES, Shield } from '@/constants/Weapons'
-import { WeaponQuality, WeaponRange } from '@/entities/Weapon'
+import { LootQuality, WeaponRange } from '@/entities/Weapon'
 import { ChanceSheet, LootLevel, WeightSheet } from '@/types'
 import { WeaponType } from '@/entities/WeaponType'
 import { WeaponGeneratorModifier } from '@/services/weaponGenerator.service'
+import { weightSheetToChances } from '@/components/helpers/utils'
 
 export const ALL_DEFENCE_WEAPON = [Shield]
 export const ALL_RANGED_WEAPONS = ALL_WEAPON_TYPES.filter(weapon => weapon.range === WeaponRange.Ranged)
 export const ALL_MELEE_WEAPONS = ALL_WEAPON_TYPES.filter(weapon => weapon.range === WeaponRange.Melee)
 
-export const LEVEL_RISE_CHANCES: ChanceSheet<number> = [
-	[-2, 0.05],
-	[-1, 0.2],
-	[0, 0.5],
-	[+1, 0.2],
-	[+2, 0.05]
-]
+export const LEVEL_RISE_CHANCES: ChanceSheet<number> = weightSheetToChances([
+	[-2, 5],
+	[-1, 20],
+	[0, 50],
+	[+1, 20],
+	[+2, 5]
+])
 
-export const QUALITY_CHANCES: Record<LootLevel, ChanceSheet<WeaponQuality>> = {
-	[LootLevel.Garbage]: [
-		[WeaponQuality.Garbage, 0.85],
-		[WeaponQuality.Common, 0.12],
-		[WeaponQuality.Good, 0.02],
-		[WeaponQuality.Skillful, 0.007],
-		[WeaponQuality.Perfect, 0.002],
-		[WeaponQuality.Legendary, 0.001]
-	],
+export const QUALITY_CHANCES: Record<LootLevel, ChanceSheet<LootQuality>> = {
+	[LootLevel.Garbage]: weightSheetToChances([
+		[LootQuality.Garbage, 0.85],
+		[LootQuality.Common, 0.12],
+		[LootQuality.Good, 0.02],
+		[LootQuality.Skillful, 0.007],
+		[LootQuality.Perfect, 0.002],
+		[LootQuality.Legendary, 0.001]
+	]),
 
-	[LootLevel.Common]: [
-		[WeaponQuality.Garbage, 0.2],
-		[WeaponQuality.Common, 0.45],
-		[WeaponQuality.Good, 0.2],
-		[WeaponQuality.Skillful, 0.1],
-		[WeaponQuality.Perfect, 0.05],
-		[WeaponQuality.Legendary, 0]
-	],
-	[LootLevel.Uncommon]: [
-		[WeaponQuality.Garbage, 0.1],
-		[WeaponQuality.Common, 0.3],
-		[WeaponQuality.Good, 0.35],
-		[WeaponQuality.Skillful, 0.17],
-		[WeaponQuality.Perfect, 0.08],
-		[WeaponQuality.Legendary, 0]
-	],
+	[LootLevel.Common]: weightSheetToChances([
+		[LootQuality.Garbage, 0.2],
+		[LootQuality.Common, 0.45],
+		[LootQuality.Good, 0.2],
+		[LootQuality.Skillful, 0.1],
+		[LootQuality.Perfect, 0.05],
+		[LootQuality.Legendary, 0]
+	]),
+	[LootLevel.Uncommon]: weightSheetToChances([
+		[LootQuality.Garbage, 0.1],
+		[LootQuality.Common, 0.3],
+		[LootQuality.Good, 0.35],
+		[LootQuality.Skillful, 0.17],
+		[LootQuality.Perfect, 0.08],
+		[LootQuality.Legendary, 0]
+	]),
 
-	[LootLevel.Rare]: [
-		[WeaponQuality.Garbage, 0.05],
-		[WeaponQuality.Common, 0.2],
-		[WeaponQuality.Good, 0.3],
-		[WeaponQuality.Skillful, 0.3],
-		[WeaponQuality.Perfect, 0.15],
-		[WeaponQuality.Legendary, 0]
-	],
+	[LootLevel.Rare]: weightSheetToChances([
+		[LootQuality.Garbage, 0.05],
+		[LootQuality.Common, 0.2],
+		[LootQuality.Good, 0.3],
+		[LootQuality.Skillful, 0.3],
+		[LootQuality.Perfect, 0.15],
+		[LootQuality.Legendary, 0]
+	]),
 
-	[LootLevel.Epic]: [
-		[WeaponQuality.Garbage, 0],
-		[WeaponQuality.Common, 0.075],
-		[WeaponQuality.Good, 0.2],
-		[WeaponQuality.Skillful, 0.375],
-		[WeaponQuality.Perfect, 0.35],
-		[WeaponQuality.Legendary, 0]
-	],
+	[LootLevel.Epic]: weightSheetToChances([
+		[LootQuality.Garbage, 0],
+		[LootQuality.Common, 7.5],
+		[LootQuality.Good, 20],
+		[LootQuality.Skillful, 37.5],
+		[LootQuality.Perfect, 35],
+		[LootQuality.Legendary, 0]
+	]),
 
-	[LootLevel.Legendary]: [
-		[WeaponQuality.Garbage, 0],
-		[WeaponQuality.Common, 0],
-		[WeaponQuality.Good, 0.15],
-		[WeaponQuality.Skillful, 0.35],
-		[WeaponQuality.Perfect, 0.5],
-		[WeaponQuality.Legendary, 0]
-	]
+	[LootLevel.Legendary]: weightSheetToChances([
+		[LootQuality.Garbage, 0],
+		[LootQuality.Common, 0],
+		[LootQuality.Good, 15],
+		[LootQuality.Skillful, 35],
+		[LootQuality.Perfect, 50],
+		[LootQuality.Legendary, 0]
+	])
 }
 
-export const AMOUNT_OF_NEGATIVE_MODIFIERS_CHANCES: Record<WeaponQuality, ChanceSheet<number>> = {
-	[WeaponQuality.Garbage]: [
+export const AMOUNT_OF_NEGATIVE_MODIFIERS_CHANCES: Record<LootQuality, ChanceSheet<number>> = {
+	[LootQuality.Garbage]: weightSheetToChances([
 		[1, 0.05],
 		[2, 0.3],
 		[3, 0.45],
 		[4, 0.2]
-	],
-	[WeaponQuality.Common]: [
+	]),
+	[LootQuality.Common]: weightSheetToChances([
 		[0, 0.6],
 		[1, 0.27],
 		[2, 0.08],
 		[3, 0.05]
-	],
-	[WeaponQuality.Good]: [
+	]),
+	[LootQuality.Good]: weightSheetToChances([
 		[0, 0.85],
 		[1, 0.1],
 		[2, 0.05]
-	],
-	[WeaponQuality.Skillful]: [
+	]),
+	[LootQuality.Skillful]: weightSheetToChances([
 		[0, 0.95],
 		[1, 0.05]
-	],
-	[WeaponQuality.Perfect]: [
+	]),
+	[LootQuality.Perfect]: weightSheetToChances([
 		[0, 0.99],
 		[1, 0.01]
-	],
-	[WeaponQuality.Legendary]: [[0, 1]]
+	]),
+	[LootQuality.Legendary]: weightSheetToChances([[0, 1]])
 }
 
-export const AMOUNT_OF_POSITIVE_MODIFIERS_CHANCES: Record<WeaponQuality, ChanceSheet<number>> = {
-	[WeaponQuality.Garbage]: [
+export const AMOUNT_OF_POSITIVE_MODIFIERS_CHANCES: Record<LootQuality, ChanceSheet<number>> = {
+	[LootQuality.Garbage]: weightSheetToChances([
 		[0, 0.85],
 		[1, 0.15]
-	],
-	[WeaponQuality.Common]: [
+	]),
+	[LootQuality.Common]: weightSheetToChances([
 		[0, 0.45],
 		[1, 0.3],
 		[2, 0.2],
 		[3, 0.05]
-	],
-	[WeaponQuality.Good]: [
+	]),
+	[LootQuality.Good]: weightSheetToChances([
 		[2, 0.55],
 		[3, 0.33],
 		[4, 0.12]
-	],
-	[WeaponQuality.Skillful]: [
+	]),
+	[LootQuality.Skillful]: weightSheetToChances([
 		[2, 0.1],
 		[3, 0.55],
 		[4, 0.25],
 		[5, 0.1]
-	],
-	[WeaponQuality.Perfect]: [
+	]),
+	[LootQuality.Perfect]: weightSheetToChances([
 		[3, 0.05],
 		[4, 0.55],
 		[5, 0.4]
-	],
-	[WeaponQuality.Legendary]: [
+	]),
+	[LootQuality.Legendary]: weightSheetToChances([
 		[4, 0.35],
 		[5, 0.4],
 		[6, 0.25]
-	]
+	])
 }
 
-export const WEAPON_TYPE_CHANCES: ChanceSheet<WeaponType[]> = [
-	[ALL_MELEE_WEAPONS, 0.5],
-	[ALL_RANGED_WEAPONS, 0.5]
-]
+export const WEAPON_TYPE_CHANCES: ChanceSheet<WeaponType[]> = weightSheetToChances([
+	[ALL_MELEE_WEAPONS, 50],
+	[ALL_RANGED_WEAPONS, 50]
+])
 
 // Weight
 export const ADDITIONAL_SHIELD_DEFENCE_WEIGHT = 60
@@ -155,12 +156,12 @@ export const MODIFIER_WEIGHT_SHEET: WeightSheet<WeaponGeneratorModifier> = [
 	['evadeChance', 10]
 ]
 
-export const MODIFIER_DECREATION_DIVIDER = 2
+export const MODIFIER_DECREATION_DIVIDER = 1.5
 
 // Damage calculation
-export const DAMAGE_SPREAD = 0.33
-export const DAMAGE_SPREAD_AFFECT = 0.5
-export const DAMAGE_LEVEL_COEFFICIENT = 2.5
-export const BASE_DAMAGE_VALUE = 10
-export const WEAPON_TYPE_MULTIPLIER_AFFECT = 0.6
-export const DAMAGE_RANDOM_AFFECT = 0.5
+export const DAMAGE_SPREAD = 0.33 // 0 - 1
+export const DAMAGE_SPREAD_AFFECT = 0.5 // 0 - 1
+export const DAMAGE_LEVEL_COEFFICIENT = 2.5 // 1++
+export const BASE_DAMAGE_VALUE = 10 // 0++
+export const WEAPON_TYPE_MULTIPLIER_AFFECT = 0.6 // 0 - 1
+export const DAMAGE_RANDOM_AFFECT = 0.5 // 0 - 1

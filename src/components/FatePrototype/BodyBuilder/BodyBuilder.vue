@@ -2,7 +2,7 @@
 import { useMagicKeys } from '@vueuse/core'
 import { BODY_PART_IMAGES, BodyPart, DEFAULT_HUMAN_BODY } from '@/constants/Character'
 import { CharacterBody, CharacterBodyPart } from '@/types'
-import { copy } from '@/utils'
+import { copy } from '@/components/helpers/utils'
 import { computed, ref } from 'vue'
 
 const body = defineModel<CharacterBody>({

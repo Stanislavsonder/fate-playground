@@ -1,6 +1,6 @@
 import { ChanceSheet, LootLevel, WeightSheet } from '@/types'
-import { Weapon, WeaponModifier, WeaponQuality, WeaponRange, WeaponStats } from '@/entities/Weapon'
-import { copy, getRandomInt, getRandomWithChance, invertModifiers, weightSheetToChances } from '@/utils'
+import { Weapon, WeaponModifier, LootQuality, WeaponRange, WeaponStats } from '@/entities/Weapon'
+import { copy, decreaseModifierChance, getRandomInt, getRandomWithChance, invertModifiers, weightSheetToChances } from '@/components/helpers/utils'
 import {
 	ADDITIONAL_MELEE_DAMAGE_WEIGHT,
 	ADDITIONAL_RANGE_DISTANCE_WEIGHT,
@@ -23,27 +23,29 @@ import {
 	WEAPON_TYPE_MULTIPLIER_AFFECT
 } from '@/constants/WeaponGenerator'
 import { WeaponType } from '@/entities/WeaponType'
+import { MAX_CHARACTER_LEVEL } from '@/constants/Character'
 
 export type WeaponGeneratorModifier = Omit<keyof WeaponModifier, 'maxDamage' | 'minDamage' | 'minEffectiveDistance' | 'maxEffectiveDistance'> | 'damage'
 
 type Props = Partial<{
 	level: number
 	lootLevel: LootLevel
-	amountOfPositiveModifiersChances: Record<WeaponQuality, ChanceSheet<number>>
-	amountOfNegativeModifiersChances: Record<WeaponQuality, ChanceSheet<number>>
+	amountOfPositiveModifiersChances: Record<LootQuality, ChanceSheet<number>>
+	amountOfNegativeModifiersChances: Record<LootQuality, ChanceSheet<number>>
 	typeChances: ChanceSheet<WeaponType[]>
-	qualityChances: Record<LootLevel, ChanceSheet<WeaponQuality>>
+	qualityChances: Record<LootLevel, ChanceSheet<LootQuality>>
 	levelChangesChances: ChanceSheet<number>
 	modifierWeights: WeightSheet<WeaponGeneratorModifier>
 }>
 
 export default class WeaponGeneratorService {
-	private readonly level: number = 1
+	private readonly baseLevel: number = 1
+	private level: number = 1
 	private readonly lootLevel: LootLevel = LootLevel.Common
-	private readonly amountOfPositiveModifiersChances: Record<WeaponQuality, ChanceSheet<number>> = copy(AMOUNT_OF_POSITIVE_MODIFIERS_CHANCES)
-	private readonly amountOfNegativeModifiersChances: Record<WeaponQuality, ChanceSheet<number>> = copy(AMOUNT_OF_NEGATIVE_MODIFIERS_CHANCES)
+	private readonly amountOfPositiveModifiersChances: Record<LootQuality, ChanceSheet<number>> = copy(AMOUNT_OF_POSITIVE_MODIFIERS_CHANCES)
+	private readonly amountOfNegativeModifiersChances: Record<LootQuality, ChanceSheet<number>> = copy(AMOUNT_OF_NEGATIVE_MODIFIERS_CHANCES)
 	private readonly typeChances: ChanceSheet<WeaponType[]> = copy(WEAPON_TYPE_CHANCES)
-	private readonly qualityChances: Record<LootLevel, ChanceSheet<WeaponQuality>> = copy(QUALITY_CHANCES)
+	private readonly qualityChances: Record<LootLevel, ChanceSheet<LootQuality>> = copy(QUALITY_CHANCES)
 	private readonly levelChangesChances: ChanceSheet<number> = copy(LEVEL_RISE_CHANCES)
 	private readonly modifierWeights: WeightSheet<WeaponGeneratorModifier> = copy(MODIFIER_WEIGHT_SHEET)
 
@@ -55,7 +57,7 @@ export default class WeaponGeneratorService {
 	private readonly DAMAGE_RANDOM_AFFECT = DAMAGE_RANDOM_AFFECT
 
 	constructor(props: Props) {
-		this.level = props.level ?? this.level
+		this.baseLevel = props.level ?? this.level
 		this.lootLevel = props.lootLevel ?? this.lootLevel
 		this.amountOfNegativeModifiersChances = props.amountOfNegativeModifiersChances ?? this.amountOfNegativeModifiersChances
 		this.typeChances = props.typeChances ?? this.typeChances
@@ -63,7 +65,7 @@ export default class WeaponGeneratorService {
 	}
 
 	public generate(): Weapon {
-		const level = this.getLevel()
+		this.level = this.getLevel()
 		const type = this.getType()
 		const quality = this.getQuality()
 		const damage = this.getDamage(type)
@@ -72,7 +74,7 @@ export default class WeaponGeneratorService {
 
 		return new Weapon({
 			name,
-			level,
+			level: this.level,
 			quality,
 			type,
 			...damage,
@@ -83,7 +85,7 @@ export default class WeaponGeneratorService {
 	// Stats
 
 	private getLevel(): number {
-		return Math.max(this.level + getRandomWithChance(this.levelChangesChances), 1)
+		return Math.min(Math.max(this.baseLevel + getRandomWithChance(this.levelChangesChances), 1), MAX_CHARACTER_LEVEL)
 	}
 
 	private getType(): WeaponType {
@@ -91,7 +93,7 @@ export default class WeaponGeneratorService {
 		return types[getRandomInt(types.length)]
 	}
 
-	private getQuality(): WeaponQuality {
+	private getQuality(): LootQuality {
 		return getRandomWithChance(this.qualityChances[this.lootLevel])
 	}
 
@@ -111,7 +113,7 @@ export default class WeaponGeneratorService {
 		}
 	}
 
-	private getModifiers(type: WeaponType, quality: WeaponQuality): WeaponModifier {
+	private getModifiers(type: WeaponType, quality: LootQuality): WeaponModifier {
 		const positiveAmount = getRandomWithChance(this.amountOfPositiveModifiersChances[quality])
 		const positive = this.getModifiersSet(type, positiveAmount)
 
@@ -121,8 +123,8 @@ export default class WeaponGeneratorService {
 		return Weapon.CombineModifiers(positive, negative)
 	}
 
-	private getName(type: WeaponType, quality: WeaponQuality): string {
-		return `${WeaponQuality[quality]} ${type.name}`
+	private getName(type: WeaponType, quality: LootQuality): string {
+		return `${LootQuality[quality]} ${type.name}`
 	}
 
 	// Modifier helpers
@@ -135,7 +137,7 @@ export default class WeaponGeneratorService {
 			const sheet = weightSheetToChances(pool)
 			const modifierType = getRandomWithChance(sheet)
 			const modifier = this.getModifier(modifierType, type)
-			this.decreaseModifierChance(pool, modifierType)
+			decreaseModifierChance(pool, modifierType)
 			modifiers = Weapon.CombineModifiers(modifiers, modifier)
 		}
 
@@ -182,14 +184,6 @@ export default class WeaponGeneratorService {
 		}
 
 		return pool
-	}
-
-	private decreaseModifierChance<T>(pool: WeightSheet<T>, modifier: T, divider = MODIFIER_DECREATION_DIVIDER): void {
-		const element = pool.find(e => e[0] === modifier)
-
-		if (element) {
-			element[1] /= divider
-		}
 	}
 
 	// Modifiers generators

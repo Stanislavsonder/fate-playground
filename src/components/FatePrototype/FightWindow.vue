@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { Armor } from '@/entities/Armor'
 import { CharacterBodySize } from '@/types'
-import { Weapon, WeaponQuality } from '@/entities/Weapon'
+import { Weapon, LootQuality } from '@/entities/Weapon'
 import { Bow, Sword } from '@/constants/Weapons'
 import { reactive, ref, watch } from 'vue'
 import { Character } from '@/entities/Character'
 import CharacterComponent from './Character/Character.vue'
 import { ArmorType } from '@/constants/Armor'
 import { BodyPart, EMPTY_SKILL_SET } from '@/constants/Character'
-import { copy } from '@/utils'
+import { copy } from '@/components/helpers/utils'
 
 const bronzeFullSet = {
 	name: 'Full Bronze Set',
@@ -48,7 +48,7 @@ const bronzeFullSet = {
 
 const woodenSword = new Weapon({
 	name: 'Wooden Sword',
-	quality: WeaponQuality.Garbage,
+	quality: LootQuality.Garbage,
 	type: Sword,
 	minDamage: 100,
 	maxDamage: 100
@@ -57,7 +57,7 @@ const woodenSword = new Weapon({
 const bow = new Weapon({
 	name: 'Default bow',
 	type: Bow,
-	quality: WeaponQuality.Common,
+	quality: LootQuality.Common,
 	minDamage: 16,
 	maxDamage: 24
 })

@@ -1,7 +1,8 @@
 import { CharacterBody, CharacterBodySize } from '@/types'
 import { ArmorType, BLOCK_CONSTANT } from '@/constants/Armor'
-import { combineStats } from '@/utils'
+import { combineStats, copy } from '@/components/helpers/utils'
 import { BodyPart } from '@/constants/Character'
+import { LootQuality } from '@/entities/Weapon'
 
 export type ArmorStats = {
 	defence: number
@@ -9,12 +10,10 @@ export type ArmorStats = {
 
 export type MovementModifiers = {
 	moveDistance?: number
-	moveDistanceMultiplier?: number
 }
 
 export type DefenceModifiers = {
 	defence?: number
-	defenceMultiplier?: number
 	diceResult?: number
 	additionalHealthPoints?: number
 }
@@ -22,19 +21,24 @@ export type DefenceModifiers = {
 export type ArmorModifier = DefenceModifiers &
 	MovementModifiers & {
 		evadeChance?: number
+		damage?: number
 	}
 
-interface IArmor extends ArmorStats {
+type ArmorProps = ArmorStats & {
 	name: string
-	slots: BodyPart[]
-	size: CharacterBodySize
-	type: ArmorType
+	level?: number
+	slots?: BodyPart[]
+	size?: CharacterBodySize
+	type?: ArmorType
+	quality?: LootQuality
 	modifiers?: ArmorModifier
 }
 
-export class Armor implements IArmor {
+export class Armor {
 	public readonly name: string = ''
 	public slots: BodyPart[] = []
+	public readonly level: number = 1
+	public readonly quality: LootQuality = LootQuality.Common
 	public readonly size: CharacterBodySize = CharacterBodySize.Medium
 	public readonly type: ArmorType = ArmorType.Cloth
 	public readonly defence: number = 0
@@ -42,13 +46,15 @@ export class Armor implements IArmor {
 
 	public isDisabled: boolean = false
 
-	constructor(props: IArmor) {
+	constructor(props: ArmorProps) {
 		this.name = props.name
-		this.slots = props.slots
-		this.size = props.size
-		this.type = props.type
 		this.defence = props.defence
-		this.modifiers = props.modifiers || {}
+		this.level = props.level ?? this.level
+		this.slots = props.slots ?? this.slots
+		this.size = props.size ?? this.size
+		this.type = props.type ?? this.type
+		this.quality = props.quality ?? this.quality
+		this.modifiers = props.modifiers ?? this.modifiers
 	}
 
 	private static BLOCK_CONSTANT = BLOCK_CONSTANT
@@ -79,6 +85,25 @@ export class Armor implements IArmor {
 			result += body.parts.find(e => e.part === armor.slots[slot])?.size || 0
 		}
 		return result
+	}
+
+	public static Copy(armor: Armor): Armor {
+		return new Armor({
+			...copy(armor)
+		})
+	}
+
+	public static CombineModifiers(...modifiers: ArmorModifier[]): ArmorModifier {
+		const result: ArmorModifier = {}
+
+		for (let modifier of modifiers) {
+			for (let k in modifier) {
+				const key = k as keyof ArmorModifier
+				result[key] = Armor.CombineStats(key, [modifier[key], result[key]])
+			}
+		}
+
+		return Object.fromEntries(Object.entries(result).filter(value => Boolean(value[1])))
 	}
 
 	public getStat(stat: keyof ArmorModifier) {

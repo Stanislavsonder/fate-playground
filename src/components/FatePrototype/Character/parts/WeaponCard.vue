@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Weapon, WeaponModifier, WeaponQuality } from '@/entities/Weapon'
+import { Weapon, WeaponModifier, LootQuality } from '@/entities/Weapon'
 
 const { weapon } = defineProps<{
 	weapon: Weapon
@@ -28,7 +28,7 @@ function formatValue(key: keyof WeaponModifier, value: number): string {
 <template>
 	<article
 		class="weapon"
-		:class="`weapon--${WeaponQuality[weapon.quality]}`"
+		:class="`weapon--${LootQuality[weapon.quality]}`"
 	>
 		<h2>{{ weapon.name }}</h2>
 		<p>{{ weapon.type.name }} ({{ weapon.level }} level)</p>
@@ -90,13 +90,13 @@ function formatValue(key: keyof WeaponModifier, value: number): string {
 	}
 
 	&--Good {
-		background-color: #1863af;
+		background-color: #469813;
 		color: white;
 	}
 
 	&--Skillful {
 		color: white;
-		background-color: #469813;
+		background-color: #1863af;
 	}
 
 	&--Perfect {

@@ -1,9 +1,10 @@
-import { Skills, SkillModifier, ChanceSheet, WeightSheet } from './types'
-import { SKILL_MODIFIERS } from './constants/Character'
-import { Armor, ArmorModifier } from './entities/Armor'
-import { Wound, WoundConsequence } from './entities/Wound'
+import { Skills, SkillModifier, ChanceSheet, WeightSheet } from '@/types'
+import { SKILL_MODIFIERS } from '@/constants/Character'
+import { Armor, ArmorModifier } from '@/entities/Armor'
+import { Wound, WoundConsequence } from '@/entities/Wound'
 import { MULTIPLIED_LIMITED_MODIFIERS, SUBTRACTIVE_MODIFIERS, SUMMED_MODIFIERS } from '@/constants/Common'
-import { Weapon, WeaponModifier } from '@/entities/Weapon'
+import { WeaponModifier } from '@/entities/Weapon'
+import { MODIFIER_DECREATION_DIVIDER } from '@/constants/WeaponGenerator'
 
 export function copy<T>(data: T): T {
 	return JSON.parse(JSON.stringify(data))
@@ -110,6 +111,10 @@ export function weightSheetToChances<T>(weightSheet: WeightSheet<T>): ChanceShee
 	})
 
 	return [...entries.entries()].map(e => {
+		if (e[1] < 0) {
+			e[1] = 0
+		}
+
 		return [e[0], e[1] / sum]
 	})
 }
@@ -123,4 +128,12 @@ export function invertModifiers(modifiers: WeaponModifier): WeaponModifier {
 	}
 
 	return result
+}
+
+export function decreaseModifierChance<T>(pool: WeightSheet<T>, modifier: T, divider = MODIFIER_DECREATION_DIVIDER): void {
+	const element = pool.find(e => e[0] === modifier)
+
+	if (element) {
+		element[1] /= divider
+	}
 }

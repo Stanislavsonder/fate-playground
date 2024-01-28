@@ -1,8 +1,8 @@
 import { WeaponType } from './WeaponType'
 import { MULTIPLIED_LIMITED_MODIFIERS, SUMMED_MODIFIERS } from '@/constants/Common'
-import { combineStats, copy } from '@/utils'
+import { combineStats, copy } from '@/components/helpers/utils'
 
-export enum WeaponQuality {
+export enum LootQuality {
 	Garbage,
 	Common,
 	Good,
@@ -42,15 +42,15 @@ export type WeaponModifier = Partial<WeaponStats> &
 export type WeaponProps = WeaponStats & {
 	name: string
 	type: WeaponType
-	level: number
-	quality: WeaponQuality
+	level?: number
+	quality?: LootQuality
 	modifiers?: WeaponModifier
 }
 
 interface IWeapon extends WeaponStats {
 	name: string
 	type: WeaponType
-	quality: WeaponQuality
+	quality: LootQuality
 	modifiers: WeaponModifier
 	level: number
 }
@@ -58,20 +58,20 @@ interface IWeapon extends WeaponStats {
 export class Weapon implements IWeapon {
 	public readonly name: string
 	public readonly type: WeaponType
-	public readonly quality: WeaponQuality
 	public readonly minDamage: number
 	public readonly maxDamage: number
+	public readonly quality: LootQuality = LootQuality.Common
 	public readonly modifiers: WeaponModifier = {}
-	public readonly level: number
+	public readonly level: number = 1
 
 	constructor(props: WeaponProps) {
 		this.name = props.name
 		this.type = props.type
-		this.quality = props.quality
+		this.quality = props.quality ?? this.quality
 		this.minDamage = props.minDamage
 		this.maxDamage = props.maxDamage
 		this.modifiers = props.modifiers || {}
-		this.level = props.level
+		this.level = props.level ?? this.level
 	}
 
 	public static GetDamage(min: number, max: number, rollResult: number): number {

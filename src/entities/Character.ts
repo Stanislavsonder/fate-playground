@@ -14,7 +14,7 @@ import {
 	EMPTY_SKILL_SET,
 	SKILL_EXPERIENCE_CUP
 } from '@/constants/Character'
-import { copy, getSkillBonus, getWoundsPenalty } from '@/utils'
+import { copy, getSkillBonus, getWoundsPenalty } from '@/components/helpers/utils'
 import { DEFAULT_FIST_PROPS } from '@/constants/Weapon'
 import DiceService, { Dice } from '@/services/dice.service'
 
