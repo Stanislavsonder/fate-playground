@@ -1,5 +1,5 @@
-import { ChanceSheet, LootLevel, WeightSheet } from '@/types'
-import { Weapon, WeaponModifier, LootQuality, WeaponRange, WeaponStats } from '@/entities/Weapon'
+import { ChanceSheet, LootLevel, LootQuality, WeaponModifier, WeaponRange, WeaponStats, WeightSheet } from '@/types'
+import { Weapon } from '@/entities/Weapon'
 import { copy, decreaseModifierChance, getRandomInt, getRandomWithChance, invertModifiers, weightSheetToChances } from '@/components/helpers/utils'
 import {
 	ADDITIONAL_MELEE_DAMAGE_WEIGHT,
@@ -16,7 +16,6 @@ import {
 	DAMAGE_SPREAD,
 	DAMAGE_SPREAD_AFFECT,
 	LEVEL_RISE_CHANCES,
-	MODIFIER_DECREATION_DIVIDER,
 	MODIFIER_WEIGHT_SHEET,
 	QUALITY_CHANCES,
 	WEAPON_TYPE_CHANCES,
@@ -44,7 +43,7 @@ export default class WeaponGeneratorService {
 	private readonly lootLevel: LootLevel = LootLevel.Common
 	private readonly amountOfPositiveModifiersChances: Record<LootQuality, ChanceSheet<number>> = copy(AMOUNT_OF_POSITIVE_MODIFIERS_CHANCES)
 	private readonly amountOfNegativeModifiersChances: Record<LootQuality, ChanceSheet<number>> = copy(AMOUNT_OF_NEGATIVE_MODIFIERS_CHANCES)
-	private readonly typeChances: ChanceSheet<WeaponType[]> = copy(WEAPON_TYPE_CHANCES)
+	private readonly typeChances: ChanceSheet<WeaponType[]> = WEAPON_TYPE_CHANCES
 	private readonly qualityChances: Record<LootLevel, ChanceSheet<LootQuality>> = copy(QUALITY_CHANCES)
 	private readonly levelChangesChances: ChanceSheet<number> = copy(LEVEL_RISE_CHANCES)
 	private readonly modifierWeights: WeightSheet<WeaponGeneratorModifier> = copy(MODIFIER_WEIGHT_SHEET)

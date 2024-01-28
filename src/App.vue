@@ -14,7 +14,19 @@ import LootGenerator from '@/components/FatePrototype/LootGenerator/LootGenerato
 	</details>
 </template>
 
+<style lang="scss" scoped>
+details {
+	summary {
+		text-align: center;
+		font-size: 24px;
+	}
+}
+</style>
+
 <style lang="scss">
+body {
+	overflow-y: scroll;
+}
 button {
 	cursor: pointer;
 }

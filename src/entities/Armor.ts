@@ -1,8 +1,7 @@
-import { CharacterBody, CharacterBodySize } from '@/types'
+import { CharacterBody, CharacterBodySize, LootQuality } from '@/types'
 import { ArmorType, BLOCK_CONSTANT } from '@/constants/Armor'
 import { combineStats, copy } from '@/components/helpers/utils'
 import { BodyPart } from '@/constants/Character'
-import { LootQuality } from '@/entities/Weapon'
 
 export type ArmorStats = {
 	defence: number
@@ -82,7 +81,7 @@ export class Armor {
 	public static GetSlotMultiplier(armor: Armor, body: CharacterBody) {
 		let result = 0
 		for (const slot in armor.slots) {
-			result += body.parts.find(e => e.part === armor.slots[slot])?.size || 0
+			result += body.armorSlots.find(e => e.part === armor.slots[slot])?.size || 0
 		}
 		return result
 	}

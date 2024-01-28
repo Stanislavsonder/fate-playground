@@ -26,7 +26,6 @@ function generateLoot() {
 
 <template>
 	<section class="loot-generator">
-		<h2 class="loot-generator__title">Loot generator</h2>
 		<div class="loot-generator__settings">
 			<div>
 				<label class="loot-generator__level">

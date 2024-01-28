@@ -1,4 +1,4 @@
-import { CharacterBody, CharacterBodySize, SkillLevelModifiers, SkillModifiers, Skills } from '@/types'
+import { CharacterBody, CharacterBodySize, SkillLevelModifiers, SkillModifiers, Skills, WeaponSlot } from '@/types'
 
 export const MAX_CHARACTER_LEVEL = 30
 
@@ -177,7 +177,7 @@ export enum BodyPart {
 
 export const DEFAULT_HUMAN_BODY: CharacterBody = {
 	size: CharacterBodySize.Medium,
-	parts: [
+	armorSlots: [
 		{ size: 0.05, part: BodyPart.Head },
 		{ size: 0.05, part: BodyPart.Jaws },
 		{ size: 0.01, part: BodyPart.Eyes },
@@ -205,5 +205,6 @@ export const DEFAULT_HUMAN_BODY: CharacterBody = {
 		{ size: 0.06, part: BodyPart.LowerLeg },
 		{ size: 0.02, part: BodyPart.Foot },
 		{ size: 0.02, part: BodyPart.Foot }
-	]
+	],
+	weaponSlots: [WeaponSlot.Hand, WeaponSlot.Hand]
 }

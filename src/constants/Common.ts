@@ -1,5 +1,5 @@
-import { WeaponModifier } from '@/entities/Weapon'
 import { ArmorModifier } from '@/entities/Armor'
+import { WeaponModifier } from '@/types'
 
 export const SUMMED_MODIFIERS: (keyof WeaponModifier | keyof ArmorModifier)[] = [
 	'minDamage',
@@ -9,10 +9,8 @@ export const SUMMED_MODIFIERS: (keyof WeaponModifier | keyof ArmorModifier)[] = 
 	'defence',
 	'diceResult',
 	'criticalMultiplier',
-	'moveDistanceMultiplier',
 	'damageMultiplier',
 	'moveDistance',
-	'defenceMultiplier',
 	'additionalHealthPoints'
 ]
 

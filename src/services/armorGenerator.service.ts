@@ -1,17 +1,6 @@
-import { ChanceSheet, CharacterBody, CharacterBodySize, LootLevel, WeightSheet } from '@/types'
-import { LootQuality, Weapon, WeaponModifier } from '@/entities/Weapon'
+import { ChanceSheet, CharacterBody, CharacterBodySize, LootLevel, LootQuality, WeightSheet } from '@/types'
 import { Armor, ArmorModifier } from '@/entities/Armor'
-import {
-	ADDITIONAL_MELEE_DAMAGE_WEIGHT,
-	ADDITIONAL_RANGE_DISTANCE_WEIGHT,
-	ADDITIONAL_SHIELD_DEFENCE_WEIGHT,
-	ALL_MELEE_WEAPONS,
-	ALL_RANGED_WEAPONS,
-	AMOUNT_OF_NEGATIVE_MODIFIERS_CHANCES,
-	AMOUNT_OF_POSITIVE_MODIFIERS_CHANCES,
-	LEVEL_RISE_CHANCES,
-	QUALITY_CHANCES
-} from '@/constants/WeaponGenerator'
+import { AMOUNT_OF_NEGATIVE_MODIFIERS_CHANCES, AMOUNT_OF_POSITIVE_MODIFIERS_CHANCES, LEVEL_RISE_CHANCES, QUALITY_CHANCES } from '@/constants/WeaponGenerator'
 import { copy, decreaseModifierChance, getRandomInt, getRandomWithChance, invertModifiers, weightSheetToChances } from '@/components/helpers/utils'
 import {
 	ADDITIONAL_BODY_SIZE_WEIGHT,
@@ -170,7 +159,7 @@ export default class ArmorGeneratorService {
 	}
 
 	private getValidPresets(characterBody: CharacterBody, type: ArmorType, size: CharacterBodySize): ArmorPreset[] {
-		const bodyParts = characterBody.parts.map(e => e.part)
+		const bodyParts = characterBody.armorSlots.map(e => e.part)
 
 		const isValidSetting = (preset: ArmorPreset): boolean => {
 			return preset.worldSettings.some(setting => this.worldSettings.includes(setting))
@@ -212,9 +201,9 @@ export default class ArmorGeneratorService {
 	private getSlotsMultiplier(slots: BodyPart[], body: CharacterBody): number {
 		let multiplier = 0
 		for (let i = 0; i < slots.length; i++) {
-			for (let j = 0; j < body.parts.length; j++) {
-				if (body.parts[j].part === slots[i]) {
-					multiplier += body.parts[j].size
+			for (let j = 0; j < body.armorSlots.length; j++) {
+				if (body.armorSlots[j].part === slots[i]) {
+					multiplier += body.armorSlots[j].size
 				}
 			}
 		}

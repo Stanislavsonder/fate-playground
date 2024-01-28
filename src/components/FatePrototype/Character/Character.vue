@@ -7,19 +7,15 @@ import RollEvade from '@/components/FatePrototype/Character/parts/RollEvade.vue'
 import { ref } from 'vue'
 import SkillEditor from '@/components/FatePrototype/Character/parts/SkillEditor.vue'
 import ModalWindow from '@/components/FatePrototype/ModalWindow.vue'
-import WeaponEditor from '@/components/FatePrototype/Character/parts/WeaponEditor.vue'
-import ArmorEditor from '@/components/FatePrototype/Character/parts/ArmorEditor.vue'
+import { BodyPart } from '@/constants/Character'
+import Inventory from '@/components/FatePrototype/Character/parts/Inventory.vue'
 
 const character = defineModel<Character>({
-	required: false,
-	default: () => new Character({ name: 'Unknown character' })
+	required: true
 })
 
 const hp = ref(0)
-
 const isSkillsOpen = ref(false)
-const isWeaponOpen = ref(false)
-const isArmorOpen = ref(false)
 
 function healDamage() {
 	if (hp.value >= 0) {
@@ -31,12 +27,6 @@ function healDamage() {
 </script>
 
 <template>
-	<ModalWindow v-model="isWeaponOpen">
-		<WeaponEditor v-model="character.weapon" />
-	</ModalWindow>
-	<ModalWindow v-model="isArmorOpen">
-		<ArmorEditor v-model="character.armor" />
-	</ModalWindow>
 	<section class="character">
 		<nav class="character__edit-buttons">
 			<button
@@ -45,20 +35,6 @@ function healDamage() {
 			>
 				Edit skills
 			</button>
-			<button
-				class="character__edit-button"
-				@click="isWeaponOpen = true"
-			>
-				Edit weapons
-			</button>
-			<button
-				class="character__edit-button"
-				@click="isArmorOpen = true"
-			>
-				Edit armor
-			</button>
-		</nav>
-		<nav>
 			<label>
 				<input
 					v-model="hp"
@@ -86,9 +62,20 @@ function healDamage() {
 				Weapon disadvantage
 			</label>
 		</p>
+		<p>
+			<span class="character__slots character__slots--free">
+				{{ character.freeArmorSlots.map(e => BodyPart[e]).join(', ') }}
+			</span>
+			<br />
+			<span class="character__slots character__slots--occupied">
+				{{ character.occupiedArmorSlots.map(e => BodyPart[e]).join(', ') }}
+			</span>
+		</p>
 		<RollHit :character="character" />
 		<RollEvade :character="character" />
 		<RollAttack :character="character" />
+		<Inventory v-model="character" />
+
 		<ModalWindow v-model="isSkillsOpen">
 			<SkillEditor v-model="character.skills" />
 		</ModalWindow>
@@ -97,9 +84,19 @@ function healDamage() {
 
 <style scoped lang="scss">
 .character {
+	background-color: rgba(255, 255, 255, 0.1);
+	padding: 16px;
+	border-radius: 8px;
+
 	&__edit-buttons {
 		display: flex;
 		gap: 8px;
+	}
+
+	&__slots {
+		&--occupied {
+			color: red;
+		}
 	}
 }
 </style>

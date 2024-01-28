@@ -1,6 +1,3 @@
-import { WeaponType as WeaponTypeClass } from './entities/WeaponType'
-import { Wound } from './entities/Wound'
-import { useMagicKeys } from '@vueuse/core'
 import { BodyPart } from '@/constants/Character'
 export enum CharacterBodySize {
 	Tiny, // Фея, кролик
@@ -10,13 +7,19 @@ export enum CharacterBodySize {
 	Giant // Огромные существа
 }
 
-export type CharacterBodyPart = {
+export type ArmorSlot = {
 	part: BodyPart
 	size: number
 }
+
+export enum WeaponSlot {
+	Hand
+}
+
 export type CharacterBody = {
 	size: CharacterBodySize
-	parts: CharacterBodyPart[]
+	armorSlots: ArmorSlot[]
+	weaponSlots: WeaponSlot[]
 }
 // Skills
 
@@ -84,3 +87,40 @@ export enum LootLevel {
 
 export type ChanceSheet<T> = [T, number][]
 export type WeightSheet<T> = ChanceSheet<T>
+
+export enum LootQuality {
+	Garbage,
+	Common,
+	Good,
+	Skillful,
+	Perfect,
+	Legendary
+}
+
+export enum WeaponRange {
+	Melee,
+	Ranged
+}
+
+export type WeaponDistancesModifier = {
+	minDistance: number
+	minEffectiveDistance: number
+	maxEffectiveDistance: number
+	maxDistance: number
+}
+
+export type WeaponStats = {
+	minDamage: number
+	maxDamage: number
+}
+
+export type WeaponModifier = Partial<WeaponStats> &
+	Partial<WeaponDistancesModifier> & {
+		diceResult?: number
+		damageMultiplier?: number
+		evadeChance?: number
+		defence?: number
+		hitChance?: number
+		criticalChance?: number
+		criticalMultiplier?: number
+	}

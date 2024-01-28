@@ -1,7 +1,7 @@
-import { Weapon, WeaponDistancesModifier, WeaponModifier, WeaponRange } from './Weapon'
-import { copy } from '@/components/helpers/utils'
+import { WeaponDistancesModifier, WeaponModifier, WeaponRange, WeaponSlot } from '@/types'
+import { Weapon } from '@/entities/Weapon'
 
-interface IWeaponType extends WeaponDistancesModifier {
+type WeaponTypeProps = WeaponDistancesModifier & {
 	name: string
 	range: WeaponRange
 	hitChance: number
@@ -10,9 +10,10 @@ interface IWeaponType extends WeaponDistancesModifier {
 	generationData: {
 		damageMultiplier: number
 	}
+	weaponSlots: WeaponSlot[]
 }
 
-export class WeaponType implements IWeaponType {
+export class WeaponType {
 	public readonly name: string
 	public readonly range: WeaponRange
 	public readonly minDistance: number
@@ -23,8 +24,9 @@ export class WeaponType implements IWeaponType {
 	public readonly disadvantage: WeaponModifier
 	public readonly hitChance: number
 	public readonly generationData
+	public readonly weaponSlots: WeaponSlot[] = []
 
-	constructor(props: IWeaponType) {
+	constructor(props: WeaponTypeProps) {
 		this.name = props.name
 		this.range = props.range
 		this.minDistance = props.minDistance
@@ -35,12 +37,7 @@ export class WeaponType implements IWeaponType {
 		this.advantage = props.advantage
 		this.disadvantage = props.disadvantage
 		this.generationData = props.generationData
-	}
-
-	public static Copy(weaponType: WeaponType): WeaponType {
-		return new WeaponType({
-			...copy(weaponType)
-		})
+		this.weaponSlots = props.weaponSlots
 	}
 
 	getStat(stat: keyof WeaponModifier, isAdvantageApplied = false, isDisadvantageApplied = false): number {

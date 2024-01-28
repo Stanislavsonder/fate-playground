@@ -3,7 +3,6 @@ import { weightSheetToChances } from '@/components/helpers/utils'
 import { ArmorPreset } from '@/entities/ArmorPreset'
 import { BodyPart } from '@/constants/Character'
 import { ArmorType } from '@/constants/Armor'
-import { WeaponGeneratorModifier } from '@/services/weaponGenerator.service'
 import { ArmorGeneratorModifier } from '@/services/armorGenerator.service'
 type ArmorTypeMultipliers = {
 	evadeChance: number
@@ -17,23 +16,23 @@ export const BASE_DEFENCE_VALUE = 10
 
 export const ARMOR_TYPE_MULTIPLIERS: Record<ArmorType, ArmorTypeMultipliers> = {
 	[ArmorType.Cloth]: {
-		evadeChance: 1,
+		evadeChance: 1.25,
 		defenceMultiplier: 0,
 		distanceModifier: 1
 	},
 	[ArmorType.Light]: {
-		evadeChance: 0.95,
-		defenceMultiplier: 0.5,
-		distanceModifier: 0.9
+		evadeChance: 1.1,
+		defenceMultiplier: 0.75,
+		distanceModifier: 1
 	},
 	[ArmorType.Medium]: {
 		evadeChance: 0.9,
-		defenceMultiplier: 1,
-		distanceModifier: 0.8
+		defenceMultiplier: 1.25,
+		distanceModifier: 0.9
 	},
 	[ArmorType.Heavy]: {
-		evadeChance: 0.75,
-		defenceMultiplier: 2.25,
+		evadeChance: 0.65,
+		defenceMultiplier: 2,
 		distanceModifier: 0.65
 	}
 }

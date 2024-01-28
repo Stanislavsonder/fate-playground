@@ -1,43 +1,6 @@
 import { WeaponType } from './WeaponType'
-import { MULTIPLIED_LIMITED_MODIFIERS, SUMMED_MODIFIERS } from '@/constants/Common'
 import { combineStats, copy } from '@/components/helpers/utils'
-
-export enum LootQuality {
-	Garbage,
-	Common,
-	Good,
-	Skillful,
-	Perfect,
-	Legendary
-}
-
-export enum WeaponRange {
-	Melee,
-	Ranged
-}
-
-export type WeaponDistancesModifier = {
-	minDistance: number
-	minEffectiveDistance: number
-	maxEffectiveDistance: number
-	maxDistance: number
-}
-
-export type WeaponStats = {
-	minDamage: number
-	maxDamage: number
-}
-
-export type WeaponModifier = Partial<WeaponStats> &
-	Partial<WeaponDistancesModifier> & {
-		diceResult?: number
-		damageMultiplier?: number
-		evadeChance?: number
-		defence?: number
-		hitChance?: number
-		criticalChance?: number
-		criticalMultiplier?: number
-	}
+import { LootQuality, WeaponModifier, WeaponStats } from '@/types'
 
 export type WeaponProps = WeaponStats & {
 	name: string
@@ -90,7 +53,7 @@ export class Weapon implements IWeapon {
 		weapons.forEach((weapon, index) => {
 			result += weapon.getStat(stat, index === activeIndex && isAdvantageApplied, index === activeIndex && isDisadvantageApplied)
 		})
-		return result / weapons.length
+		return result / (weapons.length || 1)
 	}
 
 	public static CombineStats = combineStats<keyof WeaponModifier>
@@ -111,7 +74,7 @@ export class Weapon implements IWeapon {
 	public static Copy(weapon: Weapon): Weapon {
 		return new Weapon({
 			...copy(weapon),
-			type: WeaponType.Copy(weapon.type)
+			type: weapon.type
 		})
 	}
 

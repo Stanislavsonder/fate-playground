@@ -1,90 +1,19 @@
 <script setup lang="ts">
-import { Armor } from '@/entities/Armor'
-import { CharacterBodySize } from '@/types'
-import { Weapon, LootQuality } from '@/entities/Weapon'
-import { Bow, Sword } from '@/constants/Weapons'
 import { reactive, ref, watch } from 'vue'
 import { Character } from '@/entities/Character'
 import CharacterComponent from './Character/Character.vue'
-import { ArmorType } from '@/constants/Armor'
-import { BodyPart, EMPTY_SKILL_SET } from '@/constants/Character'
-import { copy } from '@/components/helpers/utils'
-
-const bronzeFullSet = {
-	name: 'Full Bronze Set',
-	size: CharacterBodySize.Medium,
-	type: ArmorType.Medium,
-	defence: 100,
-	slots: [
-		BodyPart.Head,
-		BodyPart.Jaws,
-		BodyPart.Eyes,
-		BodyPart.Neck,
-		BodyPart.Shoulder,
-		BodyPart.Shoulder,
-		BodyPart.UpperArm,
-		BodyPart.UpperArm,
-		BodyPart.Elbow,
-		BodyPart.Elbow,
-		BodyPart.LowerArm,
-		BodyPart.LowerArm,
-		BodyPart.Wrist,
-		BodyPart.Wrist,
-		BodyPart.Fingers,
-		BodyPart.Fingers,
-		BodyPart.Chest,
-		BodyPart.Groin,
-		BodyPart.Stomach,
-		BodyPart.UpperLeg,
-		BodyPart.UpperLeg,
-		BodyPart.Knee,
-		BodyPart.Knee,
-		BodyPart.LowerLeg,
-		BodyPart.LowerLeg,
-		BodyPart.Foot,
-		BodyPart.Foot
-	]
-}
-
-const woodenSword = new Weapon({
-	name: 'Wooden Sword',
-	quality: LootQuality.Garbage,
-	type: Sword,
-	minDamage: 100,
-	maxDamage: 100
-})
-
-const bow = new Weapon({
-	name: 'Default bow',
-	type: Bow,
-	quality: LootQuality.Common,
-	minDamage: 16,
-	maxDamage: 24
-})
 
 const ivan = reactive(
 	new Character({
 		name: 'Ivan',
-		luck: 1,
-		skills: {
-			...copy(EMPTY_SKILL_SET)
-		},
-		slots: [BodyPart.Head],
-		weapon: [woodenSword],
-		armor: [new Armor(copy(bronzeFullSet))]
+		luck: 1
 	})
 )
 
 const ratLord = reactive(
 	new Character({
 		name: 'RatLord',
-		luck: 6,
-		skills: {
-			...copy(EMPTY_SKILL_SET)
-		},
-		slots: [BodyPart.Head],
-		weapon: [bow],
-		armor: [new Armor(copy(bronzeFullSet))]
+		luck: 4
 	})
 )
 
@@ -103,10 +32,6 @@ watch(
 </script>
 
 <template>
-	<div class="big-container">
-		<CharacterComponent v-model="ivan" />
-		<CharacterComponent v-model="ratLord" />
-	</div>
 	<div class="distance">
 		<label class="distance__label">
 			Distance
@@ -126,6 +51,10 @@ watch(
 			/>
 		</label>
 	</div>
+	<div class="big-container">
+		<CharacterComponent v-model="ivan" />
+		<CharacterComponent v-model="ratLord" />
+	</div>
 </template>
 
 <style scoped lang="scss">
@@ -140,6 +69,7 @@ watch(
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
+	margin-bottom: 16px;
 
 	&__label {
 		display: flex;

@@ -1,77 +1,218 @@
 <script setup lang="ts">
-import { Weapon, LootQuality } from '@/entities/Weapon'
-import WeaponComponent from '@/components/FatePrototype/Character/parts/WeaponComponent.vue'
-import { Knuckles } from '@/constants/Weapons'
-import { AppStore } from '@/store/app.store'
-import { storeToRefs } from 'pinia'
-import WeaponCard from '@/components/FatePrototype/Character/parts/WeaponCard.vue'
-import LootCard from '@/components/FatePrototype/LootGenerator/LootCard.vue'
+import { Weapon, WeaponRange } from '@/entities/Weapon'
+import { ALL_WEAPON_TYPES } from '@/constants/Weapons'
 
-const weapon = defineModel<Weapon[]>({
+const weapon = defineModel<Weapon>({
 	required: true
 })
-
-const { savedWeapon } = storeToRefs(AppStore())
-
-function addNewWeapon(w?: Weapon) {
-	weapon.value.push(
-		w ||
-			new Weapon({
-				name: 'Fists',
-				type: Knuckles,
-				minDamage: 0,
-				maxDamage: 0,
-				quality: LootQuality.Common
-			})
-	)
-}
-
-function deleteWeapon(index: number) {
-	if (weapon.value.length === 1) {
-		weapon.value = [
-			new Weapon({
-				name: 'Fists',
-				type: Knuckles,
-				minDamage: 0,
-				maxDamage: 0,
-				quality: LootQuality.Common
-			})
-		]
-		return
-	}
-	weapon.value = weapon.value.filter((e, i) => i !== index)
-}
 </script>
 
 <template>
-	<div class="weapon-editor">
-		<div>
-			Favorites:
-			<div class="weapon-editor__weapons">
-				<LootCard
-					v-for="w in savedWeapon"
-					:key="w"
-					:value="w"
-					mode="remove"
-					action-text="Add to inventory"
-					@click="addNewWeapon(Weapon.Copy(w))"
-				/>
-			</div>
-		</div>
-		<div class="weapon-editor__list">
-			<div
-				v-for="(w, i) in weapon"
-				:key="w"
-				class="weapon-editor__weapon"
-			>
-				<WeaponComponent :model-value="w" />
-				<button
-					class="weapon-editor__delete"
-					@click="deleteWeapon(i)"
-				>
-					Delete
-				</button>
-			</div>
-		</div>
+	<div class="weapon">
+		<table>
+			<thead>
+				<tr>
+					<td>Name</td>
+					<td>
+						<input
+							v-model="weapon.name"
+							type="text"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Type</td>
+					<td>
+						<select v-model="weapon.type">
+							<option
+								v-for="weaponType in ALL_WEAPON_TYPES"
+								:key="weaponType.name"
+								:value="weaponType"
+							>
+								{{ weaponType.name }}
+								({{ weaponType.range === WeaponRange.Ranged ? 'ranged' : 'melee' }})
+							</option>
+						</select>
+					</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Min Damage</td>
+					<td>
+						<input
+							v-model="weapon.minDamage"
+							type="number"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Max Damage</td>
+					<td>
+						<input
+							v-model="weapon.maxDamage"
+							type="number"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td
+						colspan="2"
+						align="center"
+					>
+						<strong> BONUSES / PENALTY </strong>
+					</td>
+				</tr>
+				<tr>
+					<td>Dice Result</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.diceResult"
+							type="number"
+							step="1"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Min Damage</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.minDamage"
+							type="number"
+							step="1"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Max Damage</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.maxDamage"
+							type="number"
+							step="1"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Critical Chance</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.criticalChance"
+							type="number"
+							step="0.1"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Critical Multiplier</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.criticalMultiplier"
+							type="number"
+							step="0.1"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Damage Multiplier</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.damageMultiplier"
+							type="number"
+							step="0.1"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Hit Chance</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.hitChance"
+							type="number"
+							step="0.1"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Evade Chance</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.evadeChance"
+							type="number"
+							step="0.1"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Defence</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.defence"
+							type="number"
+							step="0.1"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Min distance</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.minDistance"
+							type="number"
+							step="0.5"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Min effective distance</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.minEffectiveDistance"
+							type="number"
+							step="0.5"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Max effective distance</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.maxEffectiveDistance"
+							type="number"
+							step="0.5"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td>Max distance</td>
+					<td>
+						<input
+							v-model="weapon.modifiers.maxDistance"
+							type="number"
+							step="0.5"
+						/>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </template>
+
+<style scoped lang="scss">
+.weapon {
+	border: 1px solid white;
+	padding: 16px;
+	border-radius: 16px;
+	background-color: #ffffff;
+	color: black;
+}
+table,
+td,
+td {
+	padding: 4px;
+}
+
+strong {
+	font-weight: bold;
+}
+</style>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useMagicKeys } from '@vueuse/core'
-import { BODY_PART_IMAGES, BodyPart, DEFAULT_HUMAN_BODY } from '@/constants/Character'
-import { CharacterBody, CharacterBodyPart } from '@/types'
+import { BodyPart, DEFAULT_HUMAN_BODY } from '@/constants/Character'
+import { CharacterBody, ArmorSlot } from '@/types'
 import { copy } from '@/components/helpers/utils'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 
 const body = defineModel<CharacterBody>({
 	required: false,
@@ -21,7 +21,7 @@ const startY = ref(0)
 draw()
 
 function clear() {
-	body.value.parts = []
+	body.value.armorSlots = []
 }
 
 function draw() {
@@ -31,14 +31,14 @@ function draw() {
 	const ctx = canvas.value?.getContext('2d') as CanvasRenderingContext2D
 	ctx.clearRect(0, 0, canvas.value?.width || 0, canvas.value?.height || 0)
 
-	for (let bodyPart of body.value.parts) {
+	for (let bodyPart of body.value.armorSlots) {
 		ctx.fillStyle = '#000000'
 		ctx.fillRect(bodyPart.x, bodyPart.y, bodyPart.width, bodyPart.height)
 	}
 }
 
 function addBodyPart(slot: BodyPart) {
-	body.value.parts.push({
+	body.value.armorSlots.push({
 		width: 50,
 		height: 50,
 		part: slot,
@@ -49,7 +49,7 @@ function addBodyPart(slot: BodyPart) {
 	draw()
 }
 
-function isMouseOnThisBodyPart(x: number, y: number, part: CharacterBodyPart): boolean {
+function isMouseOnThisBodyPart(x: number, y: number, part: ArmorSlot): boolean {
 	let left = part.x
 	let right = part.x + part.width
 	let top = part.y
@@ -62,7 +62,7 @@ function startDragging(e: MouseEvent) {
 	startX.value = e.offsetX
 	startY.value = e.offsetY
 	let index = 0
-	for (let bodyPart of body.value.parts) {
+	for (let bodyPart of body.value.armorSlots) {
 		if (isMouseOnThisBodyPart(startX.value, startY.value, bodyPart)) {
 			currentIndex.value = index
 			isDragging.value = true
@@ -94,8 +94,8 @@ function drag(e: MouseEvent) {
 		return
 	}
 
-	body.value.parts[currentIndex.value].x += dx
-	body.value.parts[currentIndex.value].y += dy
+	body.value.armorSlots[currentIndex.value].x += dx
+	body.value.armorSlots[currentIndex.value].y += dy
 
 	draw()
 

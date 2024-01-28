@@ -1,34 +1,22 @@
 <script setup lang="ts">
 import { Armor } from '@/entities/Armor'
-import { CharacterBodySize } from '@/types'
-import { ArmorType } from '@/constants/Armor'
 import ArmorComponent from '@/components/FatePrototype/Character/parts/ArmorComponent.vue'
 import { storeToRefs } from 'pinia'
 import { AppStore } from '@/store/app.store'
-import ArmorCard from '@/components/FatePrototype/Character/parts/ArmorCard.vue'
-import { Weapon } from '@/entities/Weapon'
 import LootCard from '@/components/FatePrototype/LootGenerator/LootCard.vue'
+import { Character } from '@/entities/Character'
 
-const armor = defineModel<Armor[]>({
+const character = defineModel<Character>({
 	required: true
 })
 const { savedArmor } = storeToRefs(AppStore())
 
-function addNewArmor(a?: Armor) {
-	armor.value.push(
-		a ||
-			new Armor({
-				name: 'Unknown armor',
-				defence: 0,
-				size: CharacterBodySize.Medium,
-				type: ArmorType.Medium,
-				slots: []
-			})
-	)
+function addNewArmor(a: Armor) {
+	character.value.armor.push(a)
 }
 
 function deleteArmor(index: number) {
-	armor.value = armor.value.filter((e, i) => i !== index)
+	character.value.armor = character.value.armor.filter((e, i) => i !== index)
 }
 </script>
 
@@ -41,15 +29,16 @@ function deleteArmor(index: number) {
 					v-for="w in savedArmor"
 					:key="w"
 					:value="w"
+					:disabled="!character.isArmorApliable(w)"
 					mode="remove"
-					action-text="Add to inventory"
+					:action-text="character.isArmorApliable(w) ? 'Add to inventory' : 'Slot is occupied'"
 					@click="addNewArmor(Armor.Copy(w))"
 				/>
 			</div>
 		</div>
 		<div class="weapon-editor__list">
 			<div
-				v-for="(w, i) in armor"
+				v-for="(w, i) in character.armor"
 				:key="w"
 				class="weapon-editor__weapon"
 			>
@@ -62,6 +51,5 @@ function deleteArmor(index: number) {
 				</button>
 			</div>
 		</div>
-		<button @click="addNewArmor">NEW ARMOR</button>
 	</div>
 </template>

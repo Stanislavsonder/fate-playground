@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import { Armor } from '@/entities/Armor'
-import { LootQuality, Weapon, WeaponRange } from '@/entities/Weapon'
+import { Weapon } from '@/entities/Weapon'
 import { computed } from 'vue'
 import { ArmorType } from '../../../constants/Armor'
 import { BodyPart } from '../../../constants/Character'
 import { AppStore } from '@/store/app.store'
+import { LootQuality, WeaponRange } from '@/types'
 
-const { value, mode = 'save' } = defineProps<{
+const {
+	value,
+	mode,
+	disabled = false
+} = defineProps<{
 	value: Armor | Weapon
 	actionText?: string
 	mode?: 'remove' | 'save'
+	disabled?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -86,6 +92,7 @@ function toggleFavorite() {
 		:class="`card--${LootQuality[value.quality]}`"
 	>
 		<button
+			v-if="mode"
 			class="card__favorite"
 			:class="{ 'card__favorite--enabled': isFavorite }"
 			@click="toggleFavorite"
@@ -114,7 +121,7 @@ function toggleFavorite() {
 					{{ formatSigned(value.modifiers.defence) }}
 				</span>
 			</template>
-			<template v-else>
+			<template v-if="value instanceof Weapon">
 				Damage:
 				<span class="card__stat">
 					{{ value.minDamage }}
@@ -206,6 +213,7 @@ function toggleFavorite() {
 		<button
 			v-if="actionText"
 			class="card__action"
+			:disabled="disabled"
 			@click="emit('click')"
 		>
 			{{ actionText }}

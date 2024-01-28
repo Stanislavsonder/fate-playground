@@ -1,6 +1,5 @@
 import { ALL_WEAPON_TYPES, Shield } from '@/constants/Weapons'
-import { LootQuality, WeaponRange } from '@/entities/Weapon'
-import { ChanceSheet, LootLevel, WeightSheet } from '@/types'
+import { ChanceSheet, LootLevel, LootQuality, WeaponRange, WeightSheet } from '@/types'
 import { WeaponType } from '@/entities/WeaponType'
 import { WeaponGeneratorModifier } from '@/services/weaponGenerator.service'
 import { weightSheetToChances } from '@/components/helpers/utils'
