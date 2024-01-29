@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { Character } from '@/entities/Character'
 import CharacterComponent from './Character/Character.vue'
 
-const ivan = reactive(
+const player1 = ref(
 	new Character({
-		name: 'Ivan',
+		name: 'Player 1',
 		luck: 1
 	})
 )
 
-const ratLord = reactive(
+const player2 = ref(
 	new Character({
-		name: 'RatLord',
-		luck: 4
+		name: 'Player 2',
+		luck: 1
 	})
 )
 
@@ -22,8 +22,8 @@ const range = ref(10)
 watch(
 	range,
 	value => {
-		ivan.currentDistance = value
-		ratLord.currentDistance = value
+		player1.value.currentDistance = value
+		player2.value.currentDistance = value
 	},
 	{
 		immediate: true
@@ -52,8 +52,8 @@ watch(
 		</label>
 	</div>
 	<div class="big-container">
-		<CharacterComponent v-model="ivan" />
-		<CharacterComponent v-model="ratLord" />
+		<CharacterComponent v-model="player1" />
+		<CharacterComponent v-model="player2" />
 	</div>
 </template>
 

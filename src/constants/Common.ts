@@ -7,6 +7,7 @@ export const SUMMED_MODIFIERS: (keyof WeaponModifier | keyof ArmorModifier)[] = 
 	'maxDistance',
 	'maxEffectiveDistance',
 	'defence',
+	'damage',
 	'diceResult',
 	'criticalMultiplier',
 	'damageMultiplier',

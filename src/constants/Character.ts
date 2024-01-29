@@ -21,10 +21,6 @@ export const EMPTY_SKILL_SET: Skills = {
 		level: 0,
 		experience: 0
 	},
-	alchemy: {
-		level: 0,
-		experience: 0
-	},
 	charisma: {
 		level: 0,
 		experience: 0
@@ -62,10 +58,6 @@ export const EMPTY_SKILL_SET: Skills = {
 		experience: 0
 	},
 	lockpicking: {
-		level: 0,
-		experience: 0
-	},
-	magic: {
 		level: 0,
 		experience: 0
 	},
@@ -147,10 +139,8 @@ export const SKILL_MODIFIERS: SkillModifiers = {
 	provocation: {},
 	resources: {},
 	charisma: {},
-	alchemy: {},
 	contacts: {},
-	craft: {},
-	magic: {}
+	craft: {}
 }
 
 export enum BodyPart {
@@ -171,6 +161,7 @@ export enum BodyPart {
 	Knee,
 	LowerLeg,
 	Foot,
+	Back,
 	Tail,
 	Wing
 }
@@ -188,23 +179,24 @@ export const DEFAULT_HUMAN_BODY: CharacterBody = {
 		{ size: 0.05, part: BodyPart.UpperArm },
 		{ size: 0.01, part: BodyPart.Elbow },
 		{ size: 0.01, part: BodyPart.Elbow },
-		{ size: 0.05, part: BodyPart.LowerArm },
-		{ size: 0.05, part: BodyPart.LowerArm },
+		{ size: 0.045, part: BodyPart.LowerArm },
+		{ size: 0.045, part: BodyPart.LowerArm },
 		{ size: 0.015, part: BodyPart.Wrist },
 		{ size: 0.015, part: BodyPart.Wrist },
 		{ size: 0.01, part: BodyPart.Fingers },
 		{ size: 0.01, part: BodyPart.Fingers },
-		{ size: 0.18, part: BodyPart.Stomach },
-		{ size: 0.03, part: BodyPart.Chest },
+		{ size: 0.09, part: BodyPart.Stomach },
+		{ size: 0.09, part: BodyPart.Chest },
 		{ size: 0.03, part: BodyPart.Groin },
 		{ size: 0.07, part: BodyPart.UpperLeg },
 		{ size: 0.07, part: BodyPart.UpperLeg },
 		{ size: 0.01, part: BodyPart.Knee },
 		{ size: 0.01, part: BodyPart.Knee },
-		{ size: 0.06, part: BodyPart.LowerLeg },
-		{ size: 0.06, part: BodyPart.LowerLeg },
+		{ size: 0.055, part: BodyPart.LowerLeg },
+		{ size: 0.055, part: BodyPart.LowerLeg },
 		{ size: 0.02, part: BodyPart.Foot },
-		{ size: 0.02, part: BodyPart.Foot }
+		{ size: 0.02, part: BodyPart.Foot },
+		{ size: 0.05, part: BodyPart.Back }
 	],
 	weaponSlots: [WeaponSlot.Hand, WeaponSlot.Hand]
 }

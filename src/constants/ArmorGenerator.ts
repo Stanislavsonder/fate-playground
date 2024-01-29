@@ -4,6 +4,7 @@ import { ArmorPreset } from '@/entities/ArmorPreset'
 import { BodyPart } from '@/constants/Character'
 import { ArmorType } from '@/constants/Armor'
 import { ArmorGeneratorModifier } from '@/services/armorGenerator.service'
+
 type ArmorTypeMultipliers = {
 	evadeChance: number
 	defenceMultiplier: number
@@ -91,6 +92,18 @@ export const ARMOR_PRESETS: ArmorPreset[] = [
 	new ArmorPreset({
 		name: 'Great Helm',
 		bodyParts: [BodyPart.Head, BodyPart.Eyes, BodyPart.Jaws, BodyPart.Neck],
+		possibleArmorTypes: [ArmorType.Heavy],
+		worldSettings: ['medieval']
+	}),
+	new ArmorPreset({
+		name: 'Gorget',
+		bodyParts: [BodyPart.Neck],
+		possibleArmorTypes: [ArmorType.Heavy, ArmorType.Medium, ArmorType.Light],
+		worldSettings: ['medieval']
+	}),
+	new ArmorPreset({
+		name: 'Bevor',
+		bodyParts: [BodyPart.Neck],
 		possibleArmorTypes: [ArmorType.Heavy],
 		worldSettings: ['medieval']
 	}),
@@ -255,7 +268,7 @@ export const ARMOR_PRESETS: ArmorPreset[] = [
 	}),
 	new ArmorPreset({
 		name: 'Mantle',
-		bodyParts: [],
+		bodyParts: [BodyPart.Back],
 		possibleArmorTypes: [ArmorType.Light, ArmorType.Cloth],
 		worldSettings: ['magic', 'medieval', 'modern', 'sci-fi']
 	}),

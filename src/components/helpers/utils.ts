@@ -1,9 +1,8 @@
-import { Skills, SkillModifier, ChanceSheet, WeightSheet } from '@/types'
+import { Skills, SkillModifier, ChanceSheet, WeightSheet, WeaponModifier } from '@/types'
 import { SKILL_MODIFIERS } from '@/constants/Character'
 import { Armor, ArmorModifier } from '@/entities/Armor'
 import { Wound, WoundConsequence } from '@/entities/Wound'
 import { MULTIPLIED_LIMITED_MODIFIERS, SUBTRACTIVE_MODIFIERS, SUMMED_MODIFIERS } from '@/constants/Common'
-import { WeaponModifier } from '@/entities/Weapon'
 import { MODIFIER_DECREATION_DIVIDER } from '@/constants/WeaponGenerator'
 
 export function copy<T>(data: T): T {

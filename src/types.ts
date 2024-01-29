@@ -30,7 +30,6 @@ export type Skill = {
 
 export type Skills = {
 	agility: Skill
-	alchemy: Skill
 	charisma: Skill
 	constitution: Skill
 	contacts: Skill
@@ -41,7 +40,6 @@ export type Skills = {
 	fight: Skill
 	knowledge: Skill
 	lockpicking: Skill
-	magic: Skill
 	medicine: Skill
 	perception: Skill
 	provocation: Skill

@@ -9,6 +9,7 @@ import SkillEditor from '@/components/FatePrototype/Character/parts/SkillEditor.
 import ModalWindow from '@/components/FatePrototype/ModalWindow.vue'
 import { BodyPart } from '@/constants/Character'
 import Inventory from '@/components/FatePrototype/Character/parts/Inventory.vue'
+import CharacterGenerator from '@/components/FatePrototype/Character/parts/CharacterGenerator.vue'
 
 const character = defineModel<Character>({
 	required: true
@@ -16,6 +17,7 @@ const character = defineModel<Character>({
 
 const hp = ref(0)
 const isSkillsOpen = ref(false)
+const randomOpen = ref(false)
 
 function healDamage() {
 	if (hp.value >= 0) {
@@ -24,11 +26,17 @@ function healDamage() {
 		character.value.hit(-hp.value)
 	}
 }
+
+function setCharacter(char: Character) {
+	randomOpen.value = false
+	character.value = char
+}
 </script>
 
 <template>
 	<section class="character">
 		<nav class="character__edit-buttons">
+			<button @click="randomOpen = true">Random character</button>
 			<button
 				class="character__edit-button"
 				@click="isSkillsOpen = true"
@@ -78,6 +86,9 @@ function healDamage() {
 
 		<ModalWindow v-model="isSkillsOpen">
 			<SkillEditor v-model="character.skills" />
+		</ModalWindow>
+		<ModalWindow v-model="randomOpen">
+			<CharacterGenerator @generate="setCharacter" />
 		</ModalWindow>
 	</section>
 </template>
