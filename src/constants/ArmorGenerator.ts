@@ -75,7 +75,7 @@ export const ARMOR_MODIFIER_WEIGHT_SHEET: WeightSheet<ArmorGeneratorModifier> = 
 	['damage', 0],
 	['additionalHealthPoints', 100],
 	['moveDistance', 20],
-	['diceResult', 5],
+	['diceResult', 0],
 	['defence', 100],
 	['evadeChance', 20]
 ]

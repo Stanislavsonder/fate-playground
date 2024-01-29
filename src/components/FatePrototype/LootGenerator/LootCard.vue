@@ -6,6 +6,7 @@ import { ArmorType } from '../../../constants/Armor'
 import { BodyPart } from '../../../constants/Character'
 import { AppStore } from '@/store/app.store'
 import { LootQuality, WeaponRange } from '@/types'
+import { splitCamelCase } from '../../helpers/utils'
 
 const {
 	value,
@@ -36,14 +37,6 @@ const displayableModifiers = computed(() => {
 
 function formatSigned(value: number): string {
 	return ' ' + (value > 0 ? '+' + value : String(value))
-}
-
-function splitCamelCase(str: string): string {
-	return capitalizeFirstLetter(str.replace(/([a-z])([A-Z])/g, '$1 $2'))
-}
-
-function capitalizeFirstLetter(str: string): string {
-	return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
 function formatPercent(value: number, signs = 2): string {

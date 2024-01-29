@@ -4,7 +4,6 @@ import { copy, getRandomInt, getRandomWithChance, weightSheetToChances } from '@
 import { BODY_SIZE_WEIGHT } from '@/constants/ArmorGenerator'
 import WeaponGeneratorService from '@/services/weaponGenerator.service'
 import ArmorGeneratorService from '@/services/armorGenerator.service'
-import { Weapon } from '@/entities/Weapon'
 import { DEFAULT_HUMAN_BODY, EMPTY_SKILL_SET } from '@/constants/Character'
 import { ArmorType } from '@/constants/Armor'
 
@@ -46,17 +45,16 @@ export default class CharacterGeneratorService {
 		const name = this.getName()
 		const luck = this.getLuck()
 		const body = this.getBody()
-		const weapon = this.getWeapon()
 		const skills = this.getSkills()
 
 		const character = new Character({
 			name,
 			luck,
 			body,
-			weapon,
 			skills
 		})
 
+		this.generateWeapon(character)
 		this.generateFullArmorSet(character)
 
 		return character
@@ -82,10 +80,6 @@ export default class CharacterGeneratorService {
 		}
 	}
 
-	private getWeapon(): Weapon[] {
-		return [this.weaponGenerator.generate()]
-	}
-
 	private getSkills(): Skills {
 		const skillNames = Object.keys(EMPTY_SKILL_SET) as (keyof Skills)[]
 		const skills: Skills = copy(EMPTY_SKILL_SET)
@@ -106,6 +100,14 @@ export default class CharacterGeneratorService {
 				character.equipArmor(armor)
 			}
 			generations++
+		}
+	}
+
+	private generateWeapon(character: Character) {
+		const weapon = this.weaponGenerator.generate()
+		if (character.isWeaponApliable(weapon)) {
+			character.addToInventory(weapon)
+			character.equipWeapon(weapon)
 		}
 	}
 }

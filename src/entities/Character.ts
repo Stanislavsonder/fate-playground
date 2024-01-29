@@ -74,7 +74,8 @@ export class Character {
 	}
 
 	get activeWeapon(): Weapon | undefined {
-		return this.weapon[this.activeWeaponIndex]
+		console.log(this)
+		return this.weapon[0] || undefined
 	}
 
 	get maxHealthPoints(): number {
@@ -90,6 +91,7 @@ export class Character {
 
 	get minDamage(): number {
 		if (!this.activeWeapon) {
+			console.log('ZERO')
 			return 0
 		}
 		const damageTypeMultiplier = getSkillBonus('physicalDamageMultiplier', this.skills)

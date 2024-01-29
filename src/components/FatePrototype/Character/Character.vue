@@ -79,10 +79,22 @@ function setCharacter(char: Character) {
 				{{ character.occupiedArmorSlots.map(e => BodyPart[e]).join(', ') }}
 			</span>
 		</p>
-		<RollHit :character="character" />
-		<RollEvade :character="character" />
-		<RollAttack :character="character" />
-		<Inventory v-model="character" />
+		<RollHit
+			:key="character"
+			:character="character"
+		/>
+		<RollEvade
+			:key="character"
+			:character="character"
+		/>
+		<RollAttack
+			:key="character"
+			:character="character"
+		/>
+		<Inventory
+			:key="character"
+			v-model="character"
+		/>
 
 		<ModalWindow v-model="isSkillsOpen">
 			<SkillEditor v-model="character.skills" />
@@ -95,6 +107,7 @@ function setCharacter(char: Character) {
 
 <style scoped lang="scss">
 .character {
+	position: relative;
 	background-color: rgba(255, 255, 255, 0.1);
 	padding: 16px;
 	border-radius: 8px;

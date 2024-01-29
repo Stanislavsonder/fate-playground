@@ -20,7 +20,7 @@ const weight = defineModel<WeightSheet<T>>({
 			<label for="weight">{{ enumType ? enumType[value[0]] : value[0] }}</label>
 			<input
 				id="weight"
-				v-model="value[1]"
+				v-model.number="value[1]"
 				type="range"
 				min="0"
 				max="100"

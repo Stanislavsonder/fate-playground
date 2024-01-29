@@ -147,7 +147,7 @@ export const MODIFIER_WEIGHT_SHEET: WeightSheet<WeaponGeneratorModifier> = [
 	['damage', 35],
 	['maxDistance', 20],
 	['minDistance', 20],
-	['diceResult', 10],
+	['diceResult', 2],
 	['hitChance', 15],
 	['criticalMultiplier', 20],
 	['criticalChance', 20],

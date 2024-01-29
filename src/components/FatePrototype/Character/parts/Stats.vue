@@ -2,6 +2,7 @@
 import { Character } from '@/entities/Character'
 import { CHARACTER_LEVEL_CUPS } from '@/constants/Character'
 import { Armor } from '@/entities/Armor'
+import SkillList from '@/components/FatePrototype/Character/parts/SkillList.vue'
 defineProps<{
 	character: Character
 }>()
@@ -25,8 +26,8 @@ defineProps<{
 		</span>
 	</h3>
 	<p>Total XP: {{ character.getTotalExperience() }}</p>
-	<p>Armor: {{ character.armor.map(e => e.name).join(', ') }}</p>
-	<p>Weapon: {{ character.weapon.map(e => e.name).join(', ') }}</p>
+	<p class="stats__half">Armor: {{ character.armor.map(e => e.name).join(', ') }}</p>
+	<p class="stats__half">Weapon: {{ character.weapon.map(e => e.name).join(', ') }}</p>
 	<p>
 		Damage:
 		<span class="stats__value"> {{ Math.round(character.minDamage) }} - {{ Math.round(character.maxDamage) }} </span>
@@ -78,6 +79,7 @@ defineProps<{
 			{{ Math.round(character.criticalMultiplier * 100) }}%
 		</span>
 	</p>
+	<SkillList :skills="character.skills" />
 </template>
 
 <style scoped lang="scss">
@@ -97,6 +99,10 @@ defineProps<{
 		&--negative {
 			color: #752d2d;
 		}
+	}
+
+	&__half {
+		width: 50%;
 	}
 }
 </style>

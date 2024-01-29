@@ -124,7 +124,6 @@ export default class ArmorGeneratorService {
 
 	private getPreset(size: CharacterBodySize, type: ArmorType, characterBody: CharacterBody): ArmorPreset {
 		const validPresets = this.getValidPresets(characterBody, type, size)
-		//console.log(validPresets, characterBody, ArmorType[type], CharacterBodySize[size])
 		// TODO: Добавить логики и парные предметы
 		return validPresets[getRandomInt(validPresets.length)]
 	}
@@ -133,9 +132,9 @@ export default class ArmorGeneratorService {
 		const base = this.BASE_DEFENCE_VALUE
 		const typeMultiplier = ARMOR_TYPE_MULTIPLIERS[type].defenceMultiplier
 		const randomSeed = 1 - Math.random() * this.DEFENCE_RANDOM_AFFECT
-		const defence = this.level ** this.DEFENCE_LEVEL_COEFFICIENT * typeMultiplier * randomSeed
+		const defence = this.level ** this.DEFENCE_LEVEL_COEFFICIENT * randomSeed
 		const slotsMultiplier = this.getSlotsMultiplier(preset.bodyParts, characterBody)
-		return Math.round((base + defence) * slotsMultiplier)
+		return Math.round((base + defence) * slotsMultiplier * typeMultiplier)
 	}
 
 	private getName(preset: ArmorPreset, quality: LootQuality, type: ArmorType): string {

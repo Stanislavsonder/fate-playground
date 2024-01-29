@@ -36,6 +36,7 @@ onClickOutside(modal, event => {
 	width: 80%;
 	height: 80%;
 	overflow: auto;
+	z-index: 100;
 
 	&__close {
 		position: absolute;

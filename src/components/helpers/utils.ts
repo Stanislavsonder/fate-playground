@@ -146,3 +146,11 @@ export function enumKeys<T extends Record<string, any>>(obj: T): (keyof T)[] {
 	}
 	return keys
 }
+
+export function splitCamelCase(str: string): string {
+	return capitalizeFirstLetter(str.replace(/([a-z])([A-Z])/g, '$1 $2'))
+}
+
+export function capitalizeFirstLetter(str: string): string {
+	return str.charAt(0).toUpperCase() + str.slice(1)
+}
