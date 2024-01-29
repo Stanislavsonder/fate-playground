@@ -11,8 +11,8 @@ type ArmorTypeMultipliers = {
 	distanceModifier: number
 }
 
-export const DEFENCE_LEVEL_COEFFICIENT = 2
-export const DEFENCE_RANDOM_AFFECT = 0.5
+export const DEFENCE_LEVEL_COEFFICIENT = 1.5
+export const DEFENCE_RANDOM_AFFECT = 0.4
 export const BASE_DEFENCE_VALUE = 10
 
 export const ARMOR_TYPE_MULTIPLIERS: Record<ArmorType, ArmorTypeMultipliers> = {

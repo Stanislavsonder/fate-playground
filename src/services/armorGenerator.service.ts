@@ -88,7 +88,7 @@ export default class ArmorGeneratorService {
 		const type = this.getType()
 		const preset = this.getPreset(size, type, characterBody)
 		const defence = this.getDefence(type, preset, characterBody)
-		const modifiers = this.getModifiers(preset, quality, type, characterBody)
+		const modifiers = this.getModifiers(preset, quality, type, characterBody, defence)
 		const name = this.getName(preset, quality, type)
 
 		return new Armor({
@@ -209,24 +209,24 @@ export default class ArmorGeneratorService {
 		return multiplier
 	}
 
-	private getModifiers(preset: ArmorPreset, quality: LootQuality, type: ArmorType, characterBody: CharacterBody): ArmorModifier {
+	private getModifiers(preset: ArmorPreset, quality: LootQuality, type: ArmorType, characterBody: CharacterBody, defence: number): ArmorModifier {
 		const sizeMultiplier = this.getSlotsMultiplier(preset.bodyParts, characterBody)
 		const positiveAmount = getRandomWithChance(this.amountOfPositiveModifiersChances[quality])
-		const positive = this.getModifiersSet(preset, type, positiveAmount, sizeMultiplier)
+		const positive = this.getModifiersSet(preset, type, positiveAmount, sizeMultiplier, defence)
 
 		const negativeAmount = getRandomWithChance(this.amountOfNegativeModifiersChances[quality])
-		const negative = invertModifiers(this.getModifiersSet(preset, type, negativeAmount, sizeMultiplier))
+		const negative = invertModifiers(this.getModifiersSet(preset, type, negativeAmount, sizeMultiplier, defence))
 		return Armor.CombineModifiers(positive, negative)
 	}
 
-	private getModifiersSet(preset: ArmorPreset, type: ArmorType, amount: number, sizeMultiplier: number): ArmorModifier {
+	private getModifiersSet(preset: ArmorPreset, type: ArmorType, amount: number, sizeMultiplier: number, defence: number): ArmorModifier {
 		let pool = this.createModifiersWeightSheet(type, preset)
 		let modifiers: ArmorModifier = {}
 
 		for (let i = 0; i < amount; i++) {
 			const sheet = weightSheetToChances(pool)
 			const modifierType = getRandomWithChance(sheet)
-			const modifier = this.getModifier(modifierType, type, sizeMultiplier)
+			const modifier = this.getModifier(modifierType, type, sizeMultiplier, defence)
 			decreaseModifierChance(pool, modifierType)
 			modifiers = Armor.CombineModifiers(modifiers, modifier)
 		}
@@ -276,14 +276,14 @@ export default class ArmorGeneratorService {
 		return pool
 	}
 
-	private getModifier(modifierType: ArmorGeneratorModifier, type: ArmorType, sizeMultiplier: number): ArmorModifier {
+	private getModifier(modifierType: ArmorGeneratorModifier, type: ArmorType, sizeMultiplier: number, defence: number): ArmorModifier {
 		switch (modifierType) {
 			case 'damage':
 				return this.generateDamageModifier(sizeMultiplier)
 			case 'additionalHealthPoints':
 				return this.generateAdditionalHealthPointsModifier(sizeMultiplier)
 			case 'defence':
-				return this.generateDefenceModifier(sizeMultiplier)
+				return this.generateDefenceModifier(defence)
 			case 'diceResult':
 				return this.generateDiceResultModifier()
 			case 'evadeChance':
@@ -307,9 +307,9 @@ export default class ArmorGeneratorService {
 		}
 	}
 
-	private generateDefenceModifier(sizeMultiplier: number): ArmorModifier {
+	private generateDefenceModifier(defence: number): ArmorModifier {
 		return {
-			defence: Math.round(this.level ** 2 * (1 - Math.random() / 2) * sizeMultiplier)
+			defence: Math.round((defence * Math.random()) / 2)
 		}
 	}
 

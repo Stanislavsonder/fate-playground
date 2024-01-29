@@ -71,7 +71,7 @@ export class Armor {
 	}
 
 	public static GetDefence(armor: Armor[], body: CharacterBody) {
-		return armor.reduce((a, b) => a + b.getStat('defence') * Armor.GetSlotMultiplier(b, body), 0)
+		return armor.reduce((a, b) => a + b.getStat('defence'), 0)
 	}
 
 	public static GetEvadeChance(armor: Armor[], body: CharacterBody) {
