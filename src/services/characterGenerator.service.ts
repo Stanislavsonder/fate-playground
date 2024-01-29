@@ -86,6 +86,10 @@ export default class CharacterGeneratorService {
 		const skillsAmount = 20 + this.baseLevel ** 1.3
 		for (let i = 0; i < skillsAmount; i++) {
 			const skill = skillNames[getRandomInt(skillNames.length)]
+			if (skills[skill].level === 10) {
+				i--
+				continue
+			}
 			skills[skill].level++
 		}
 		return skills
