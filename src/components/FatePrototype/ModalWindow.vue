@@ -11,7 +11,7 @@ onClickOutside(modal, event => {
 
 <template>
 	<div
-		v-if="isOpen"
+		v-show="isOpen"
 		ref="modal"
 		class="modal-window"
 	>

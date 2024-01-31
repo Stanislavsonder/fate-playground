@@ -16,7 +16,6 @@ import {
 } from '@/constants/Character'
 import { copy, getSkillBonus, getWoundsPenalty } from '@/components/helpers/utils'
 import DiceService, { Dice } from '@/services/dice.service'
-import { DEFAULT_FIST_PROPS } from '@/constants/Weapon'
 
 type CharacterProps = {
 	name?: string

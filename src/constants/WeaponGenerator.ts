@@ -158,9 +158,10 @@ export const MODIFIER_WEIGHT_SHEET: WeightSheet<WeaponGeneratorModifier> = [
 export const MODIFIER_DECREATION_DIVIDER = 1.5
 
 // Damage calculation
-export const DAMAGE_SPREAD = 0.33 // 0 - 1
-export const DAMAGE_SPREAD_AFFECT = 0.5 // 0 - 1
-export const DAMAGE_LEVEL_COEFFICIENT = 2.5 // 1++
-export const BASE_DAMAGE_VALUE = 10 // 0++
-export const WEAPON_TYPE_MULTIPLIER_AFFECT = 0.6 // 0 - 1
-export const DAMAGE_RANDOM_AFFECT = 0.5 // 0 - 1
+export const DAMAGE_SPREAD = 0.6 // 0 - 1
+export const DAMAGE_SPREAD_AFFECT = 0.3 // 0 - 1
+export const DAMAGE_LEVEL_COEFFICIENT = 2.55 // 1++
+export const BASE_DAMAGE_VALUE = 40 // 0++
+export const WEAPON_TYPE_MULTIPLIER_AFFECT = 0.3 // 0 - 1
+export const DAMAGE_RANDOM_AFFECT = 0.2 // 0 - 1
+export const ADDITIONAL_DAMAGE_COEFFICIENT = 0.15 // 0 - 1

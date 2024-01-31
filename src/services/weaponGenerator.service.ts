@@ -2,6 +2,7 @@ import { ChanceSheet, LootLevel, LootQuality, WeaponModifier, WeaponRange, Weapo
 import { Weapon } from '@/entities/Weapon'
 import { copy, decreaseModifierChance, getRandomInt, getRandomWithChance, invertModifiers, weightSheetToChances } from '@/components/helpers/utils'
 import {
+	ADDITIONAL_DAMAGE_COEFFICIENT,
 	ADDITIONAL_MELEE_DAMAGE_WEIGHT,
 	ADDITIONAL_RANGE_DISTANCE_WEIGHT,
 	ADDITIONAL_SHIELD_DEFENCE_WEIGHT,
@@ -68,7 +69,7 @@ export default class WeaponGeneratorService {
 		const type = this.getType()
 		const quality = this.getQuality()
 		const damage = this.getDamage(type)
-		const modifiers = this.getModifiers(type, quality)
+		const modifiers = this.getModifiers(type, quality, (damage.minDamage + damage.maxDamage) / 2)
 		const name = this.getName(type, quality)
 
 		return new Weapon({
@@ -112,12 +113,12 @@ export default class WeaponGeneratorService {
 		}
 	}
 
-	private getModifiers(type: WeaponType, quality: LootQuality): WeaponModifier {
+	private getModifiers(type: WeaponType, quality: LootQuality, damage: number): WeaponModifier {
 		const positiveAmount = getRandomWithChance(this.amountOfPositiveModifiersChances[quality])
-		const positive = this.getModifiersSet(type, positiveAmount)
+		const positive = this.getModifiersSet(type, positiveAmount, damage)
 
 		const negativeAmount = getRandomWithChance(this.amountOfNegativeModifiersChances[quality])
-		const negative = invertModifiers(this.getModifiersSet(type, negativeAmount))
+		const negative = invertModifiers(this.getModifiersSet(type, negativeAmount, damage))
 
 		return Weapon.CombineModifiers(positive, negative)
 	}
@@ -128,14 +129,14 @@ export default class WeaponGeneratorService {
 
 	// Modifier helpers
 
-	private getModifiersSet(type: WeaponType, amount: number): WeaponModifier {
+	private getModifiersSet(type: WeaponType, amount: number, damage: number): WeaponModifier {
 		let pool = this.createModifiersWeightSheet(type)
 		let modifiers: WeaponModifier = {}
 
 		for (let i = 0; i < amount; i++) {
 			const sheet = weightSheetToChances(pool)
 			const modifierType = getRandomWithChance(sheet)
-			const modifier = this.getModifier(modifierType, type)
+			const modifier = this.getModifier(modifierType, type, damage)
 			decreaseModifierChance(pool, modifierType)
 			modifiers = Weapon.CombineModifiers(modifiers, modifier)
 		}
@@ -143,10 +144,10 @@ export default class WeaponGeneratorService {
 		return modifiers
 	}
 
-	private getModifier(modifierType: WeaponGeneratorModifier, weaponType: WeaponType): WeaponModifier {
+	private getModifier(modifierType: WeaponGeneratorModifier, weaponType: WeaponType, damage: number): WeaponModifier {
 		switch (modifierType) {
 			case 'damage':
-				return this.generateDamageModifier()
+				return this.generateDamageModifier(damage)
 			case 'maxDistance':
 			case 'minDistance':
 				return this.generateDistanceModifier(modifierType, weaponType)
@@ -187,8 +188,8 @@ export default class WeaponGeneratorService {
 
 	// Modifiers generators
 
-	private generateDamageModifier(): WeaponModifier {
-		const damage = Math.round(this.level ** 1.5 * (1 - Math.random() / 2))
+	private generateDamageModifier(damage: number): WeaponModifier {
+		damage = Math.round(damage * ADDITIONAL_DAMAGE_COEFFICIENT)
 		return {
 			minDamage: damage,
 			maxDamage: damage

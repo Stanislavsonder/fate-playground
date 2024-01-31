@@ -11,7 +11,7 @@ type ArmorTypeMultipliers = {
 	distanceModifier: number
 }
 
-export const DEFENCE_LEVEL_COEFFICIENT = 1.5
+export const DEFENCE_LEVEL_COEFFICIENT = 1.6
 export const DEFENCE_RANDOM_AFFECT = 0.4
 export const BASE_DEFENCE_VALUE = 10
 
@@ -63,10 +63,10 @@ export const ADDITIONAL_CLOTH_ARMOR_EVADE = 150
 export const ADDITIONAL_CLOTH_ARMOR_MOVEMENT = 75
 
 export const ADDITIONAL_LIGHT_ARMOR_EVADE = 100
-export const ADDITIONAL_LIGHT_ARMOR_MOVEMENT = 100
+export const ADDITIONAL_LIGHT_ARMOR_MOVEMENT = 50
 
 export const ADDITIONAL_MEDIUM_ARMOR_EVADE = 50
-export const ADDITIONAL_MEDIUM_ARMOR_MOVEMENT = 50
+export const ADDITIONAL_MEDIUM_ARMOR_MOVEMENT = 25
 
 export const ADDITIONAL_HEAVY_ARMOR_HEALTH_POINTS = 100
 export const ADDITIONAL_HEAVY_ARMOR_EVADE = -20
@@ -74,11 +74,13 @@ export const ADDITIONAL_HEAVY_ARMOR_EVADE = -20
 export const ARMOR_MODIFIER_WEIGHT_SHEET: WeightSheet<ArmorGeneratorModifier> = [
 	['damage', 0],
 	['additionalHealthPoints', 100],
-	['moveDistance', 20],
+	['moveDistance', 0],
 	['diceResult', 0],
 	['defence', 100],
 	['evadeChance', 20]
 ]
+
+export const ADDITIONAL_DEFENCE_COEFFICIENT = 0.15 // 0 - 1
 
 export const ARMOR_PRESETS: ArmorPreset[] = [
 	// Helmets:

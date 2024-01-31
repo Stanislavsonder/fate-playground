@@ -6,7 +6,7 @@ import {
 	ADDITIONAL_BODY_SIZE_WEIGHT,
 	ADDITIONAL_BOOTS_MOVEMENT_WEIGHT,
 	ADDITIONAL_CLOTH_ARMOR_EVADE,
-	ADDITIONAL_CLOTH_ARMOR_MOVEMENT,
+	ADDITIONAL_CLOTH_ARMOR_MOVEMENT, ADDITIONAL_DEFENCE_COEFFICIENT,
 	ADDITIONAL_GAUNTLET_DAMAGE,
 	ADDITIONAL_GOOGLES_DICE_RESULT,
 	ADDITIONAL_HEAVY_ARMOR_EVADE,
@@ -309,7 +309,7 @@ export default class ArmorGeneratorService {
 
 	private generateDefenceModifier(defence: number): ArmorModifier {
 		return {
-			defence: Math.round((defence * Math.random()) / 2)
+			defence: Math.round((defence * ADDITIONAL_DEFENCE_COEFFICIENT))
 		}
 	}
 
@@ -322,15 +322,15 @@ export default class ArmorGeneratorService {
 		}
 	}
 
-	private generateEvadeChanceModifier(sizeMultiplier: number): ArmorModifier {
+	private generateEvadeChanceModifier(): ArmorModifier {
 		return {
-			evadeChance: (this.level / 2) * (1 - Math.random() / 1.5) * (sizeMultiplier / 2)
+			evadeChance: (this.level / 50) * (1 - Math.random() / 2)
 		}
 	}
 
 	private generateMoveDistanceModifier(): ArmorModifier {
 		return {
-			moveDistance: Math.round(this.level * 3 * (1 - Math.random() / 1.5))
+			moveDistance: Math.round((2 + getRandomInt(this.level) + this.level) / 2)
 		}
 	}
 }
