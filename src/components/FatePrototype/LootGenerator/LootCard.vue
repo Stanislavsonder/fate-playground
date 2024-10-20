@@ -6,7 +6,7 @@ import { ArmorType } from '../../../constants/Armor'
 import { BodyPart } from '../../../constants/Character'
 import { AppStore } from '@/store/app.store'
 import { LootQuality, WeaponRange } from '@/types'
-import { splitCamelCase } from '../../helpers/utils'
+import { splitCamelCase } from '@/helpers/utils'
 
 const {
 	value,

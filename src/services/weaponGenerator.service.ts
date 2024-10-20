@@ -1,6 +1,6 @@
 import { ChanceSheet, LootLevel, LootQuality, WeaponModifier, WeaponRange, WeaponStats, WeightSheet } from '@/types'
 import { Weapon } from '@/entities/Weapon'
-import { copy, decreaseModifierChance, getRandomInt, getRandomWithChance, invertModifiers, weightSheetToChances } from '@/components/helpers/utils'
+import { copy, decreaseModifierChance, getRandomInt, getRandomWithChance, invertModifiers, weightSheetToChances } from '@/helpers/utils'
 import {
 	ADDITIONAL_DAMAGE_COEFFICIENT,
 	ADDITIONAL_MELEE_DAMAGE_WEIGHT,

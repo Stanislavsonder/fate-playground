@@ -1,0 +1,432 @@
+<script setup lang="ts">
+import { ref, onMounted, watch, onUnmounted } from 'vue'
+import { Creature, RenderConfig } from './types'
+
+const { creature } = defineProps<{
+	creature: Creature
+}>()
+
+const config = ref<RenderConfig>({
+	canvasSize: 1000,
+	scale: 1,
+	shiftX: 0,
+	shiftY: 0,
+	bodyPartColor: '#8FBC8F',
+	connectionColor: '#2F4F4F'
+})
+
+// Ссылки на DOM-элементы
+const canvasRef = ref<HTMLCanvasElement | null>(null)
+const selectedPart = ref<string | null>(null)
+const isDragging = ref(false)
+const isEndingDrag = ref(false)
+const isSpacePressed = ref(false)
+const lastMousePosition = ref({ x: 0, y: 0 })
+
+// Функция отрисовки существа
+function renderCreature(creature: Creature, canvas: HTMLCanvasElement) {
+	const ctx = canvas.getContext('2d')
+	if (!ctx) {
+		throw new Error('Canvas 2D контекст не поддерживается.')
+	}
+
+	// Очищаем канвас
+	ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+	// Рисуем связи между частями тела
+	ctx.strokeStyle = config.value.connectionColor
+	ctx.lineWidth = 2
+
+	for (const part in creature.bodyParts) {
+		const bodyPart = creature.bodyParts[part]
+		bodyPart.connectedWith.forEach(neighbor => {
+			const neighborPart = creature.bodyParts[neighbor]
+
+			const startPos = {
+				x: bodyPart.canvasData.x * canvas.width * config.value.scale - config.value.shiftX,
+				y: bodyPart.canvasData.y * canvas.height * config.value.scale - config.value.shiftY
+			}
+			const endPos = {
+				x: neighborPart.canvasData.x * canvas.width * config.value.scale - config.value.shiftX,
+				y: neighborPart.canvasData.y * canvas.height * config.value.scale - config.value.shiftY
+			}
+
+			ctx.beginPath()
+			ctx.moveTo(startPos.x, startPos.y)
+			ctx.lineTo(endPos.x, endPos.y)
+			ctx.stroke()
+		})
+	}
+
+	for (const part in creature.bodyParts) {
+		const bodyPart = creature.bodyParts[part]
+		const size = bodyPart.size * Math.min(canvas.width, canvas.height) * config.value.scale
+		const posX = bodyPart.canvasData.x * canvas.width * config.value.scale - config.value.shiftX
+		const posY = bodyPart.canvasData.y * canvas.height * config.value.scale - config.value.shiftY
+		const rotationAngle = bodyPart.canvasData.rotationAngle * (Math.PI / 180)
+		ctx.fillStyle = config.value.bodyPartColor
+
+		ctx.save()
+		ctx.translate(posX, posY)
+		ctx.rotate(rotationAngle)
+
+		if (bodyPart.canvasData.shape === 'circle') {
+			ctx.beginPath()
+			const radiusX = (size * bodyPart.canvasData.aspectRatio) / 2
+			const radiusY = size / bodyPart.canvasData.aspectRatio / 2
+			ctx.ellipse(0, 0, radiusX, radiusY, 0, 0, 2 * Math.PI)
+			ctx.fill()
+		} else {
+			const width = size * bodyPart.canvasData.aspectRatio
+			const height = size / bodyPart.canvasData.aspectRatio
+			ctx.fillRect(-width / 2, -height / 2, width, height)
+		}
+
+		// Рисуем органы
+		bodyPart.organs.forEach(organ => {
+			ctx.beginPath()
+			ctx.arc(0, 0, size / 4, 0, 2 * Math.PI)
+			ctx.fillStyle = organ.critical ? 'red' : 'blue'
+			ctx.fill()
+		})
+
+		ctx.restore()
+
+		// Add outline for selected part
+		if (selectedPart.value && creature.bodyParts[selectedPart.value]) {
+			const part = creature.bodyParts[selectedPart.value]
+			const size = part.size * Math.min(canvas.width, canvas.height) * config.value.scale
+			const posX = part.canvasData.x * canvas.width * config.value.scale - config.value.shiftX
+			const posY = part.canvasData.y * canvas.height * config.value.scale - config.value.shiftY
+
+			ctx.save()
+			ctx.translate(posX, posY)
+			ctx.rotate(part.canvasData.rotationAngle * (Math.PI / 180))
+
+			ctx.strokeStyle = 'yellow'
+			ctx.lineWidth = 3
+			if (part.canvasData.shape === 'circle') {
+				ctx.beginPath()
+				const radiusX = (size * part.canvasData.aspectRatio) / 2
+				const radiusY = size / part.canvasData.aspectRatio / 2
+				ctx.ellipse(0, 0, radiusX, radiusY, 0, 0, 2 * Math.PI)
+				ctx.stroke()
+			} else {
+				const width = size * part.canvasData.aspectRatio
+				const height = size / part.canvasData.aspectRatio
+				ctx.strokeRect(-width / 2, -height / 2, width, height)
+			}
+
+			ctx.restore()
+
+			// Display part name
+			ctx.font = '18px Arial'
+			ctx.fillStyle = 'white'
+			ctx.strokeStyle = 'black'
+			ctx.lineWidth = 3
+			ctx.strokeText(part.name, posX + 10, posY - 10)
+			ctx.fillText(part.name, posX + 10, posY - 10)
+		}
+	}
+}
+
+// Вызываем отрисовку при монтировании компонента
+onMounted(() => {
+	if (canvasRef.value) {
+		renderCreature(creature, canvasRef.value)
+	}
+})
+
+// Следим за изменениями в creature и config, чтобы перерисовывать канвас
+watch(
+	() => [creature, config],
+	() => {
+		if (canvasRef.value) {
+			renderCreature(creature, canvasRef.value)
+		}
+	},
+	{ deep: true }
+)
+
+function onClick(event: MouseEvent) {
+	if (isEndingDrag.value) {
+		isEndingDrag.value = false
+		return
+	}
+
+	if (!canvasRef.value) {
+		return
+	}
+
+	const canvas = canvasRef.value
+	const rect = canvas.getBoundingClientRect()
+	const mouseX = event.clientX - rect.left
+	const mouseY = event.clientY - rect.top
+
+	for (const part in creature.bodyParts) {
+		const bodyPart = creature.bodyParts[part]
+		const size = bodyPart.size * Math.min(canvas.width, canvas.height) * config.value.scale
+		const posX = bodyPart.canvasData.x * canvas.width * config.value.scale - config.value.shiftX
+		const posY = bodyPart.canvasData.y * canvas.height * config.value.scale - config.value.shiftY
+		const halfSize = size / 2
+
+		// Преобразуем координаты мыши с учетом поворота
+		const rotationAngle = bodyPart.canvasData.rotationAngle * (Math.PI / 180)
+		const dx = mouseX - posX
+		const dy = mouseY - posY
+		const rotatedX = dx * Math.cos(-rotationAngle) - dy * Math.sin(-rotationAngle)
+		const rotatedY = dx * Math.sin(-rotationAngle) + dy * Math.cos(-rotationAngle)
+
+		if (Math.abs(rotatedX) <= halfSize && Math.abs(rotatedY) <= halfSize) {
+			selectedPart.value = part
+			renderCreature(creature, canvas)
+			return
+		}
+
+		// If no part was clicked, deselect
+		selectedPart.value = null
+		renderCreature(creature, canvas)
+	}
+}
+
+function onMouseDown(event: MouseEvent) {
+	if (isSpacePressed.value) {
+		lastMousePosition.value = { x: event.clientX, y: event.clientY }
+	} else if (selectedPart.value) {
+		isDragging.value = true
+		isEndingDrag.value = false
+		lastMousePosition.value = { x: event.clientX, y: event.clientY }
+	}
+}
+
+function onMouseMove(event: MouseEvent) {
+	if (isSpacePressed.value) {
+		const dx = event.clientX - lastMousePosition.value.x
+		const dy = event.clientY - lastMousePosition.value.y
+
+		config.value.shiftX -= dx
+		config.value.shiftY -= dy
+
+		lastMousePosition.value = { x: event.clientX, y: event.clientY }
+		renderCreature(creature, canvasRef.value!)
+	} else if (isDragging.value && selectedPart.value) {
+		const dx = event.clientX - lastMousePosition.value.x
+		const dy = event.clientY - lastMousePosition.value.y
+
+		const part = creature.bodyParts[selectedPart.value]
+		part.canvasData.x += dx / (config.value.canvasSize * config.value.scale)
+		part.canvasData.y += dy / (config.value.canvasSize * config.value.scale)
+
+		lastMousePosition.value = { x: event.clientX, y: event.clientY }
+		renderCreature(creature, canvasRef.value!)
+		isEndingDrag.value = true
+	}
+}
+
+function onMouseUp() {
+	isDragging.value = false
+}
+
+function onKeyDown(event: KeyboardEvent) {
+	if (event.code === 'Space') {
+		event.preventDefault()
+		isSpacePressed.value = true
+		if (canvasRef.value) {
+			canvasRef.value.style.cursor = 'move'
+		}
+	}
+
+	if (selectedPart.value) {
+		const part = creature.bodyParts[selectedPart.value]
+		const step = 0.01 // Adjust this value to change movement speed
+
+		switch (event.key) {
+			case 'ArrowUp':
+			case 'w':
+				part.canvasData.y -= step
+				break
+			case 'ArrowDown':
+			case 's':
+				part.canvasData.y += step
+				break
+			case 'ArrowLeft':
+			case 'a':
+				part.canvasData.x -= step
+				break
+			case 'ArrowRight':
+			case 'd':
+				part.canvasData.x += step
+				break
+		}
+
+		renderCreature(creature, canvasRef.value!)
+	}
+}
+
+function onWheel(event: WheelEvent) {
+	event.preventDefault()
+
+	if (selectedPart.value) {
+		const part = creature.bodyParts[selectedPart.value]
+
+		if (event.ctrlKey) {
+			// Change aspect ratio
+			const aspectRatioSpeed = 0.05
+			const newAspectRatio = part.canvasData.aspectRatio + (event.deltaY > 0 ? -aspectRatioSpeed : aspectRatioSpeed)
+			part.canvasData.aspectRatio = Math.max(0, Math.min(2, newAspectRatio))
+		} else if (event.shiftKey) {
+			// Rotate the part
+			const rotationSpeed = 2
+			part.canvasData.rotationAngle += event.deltaY > 0 ? rotationSpeed : -rotationSpeed
+		} else {
+			// Scale the part
+			const scaleSpeed = 0.01
+			const scaleFactor = event.deltaY > 0 ? 1 - scaleSpeed : 1 + scaleSpeed
+			part.size *= scaleFactor
+		}
+	} else {
+		// Scale the entire canvas
+		const scaleSpeed = 0.1
+		const newScale = config.value.scale * (event.deltaY > 0 ? 1 - scaleSpeed : 1 + scaleSpeed)
+		config.value.scale = Math.max(0.1, Math.min(5, newScale)) // Limit scale between 0.1 and 5
+	}
+
+	renderCreature(creature, canvasRef.value!)
+}
+
+function onKeyUp(event: KeyboardEvent) {
+	if (event.code === 'Space') {
+		isSpacePressed.value = false
+		if (canvasRef.value) {
+			canvasRef.value.style.cursor = 'default'
+		}
+	}
+}
+
+function onMouseEnter(event: MouseEvent) {
+	lastMousePosition.value = { x: event.clientX, y: event.clientY }
+}
+
+onMounted(() => {
+	if (canvasRef.value) {
+		renderCreature(creature, canvasRef.value)
+		window.addEventListener('keydown', onKeyDown)
+		window.addEventListener('keyup', onKeyUp)
+		canvasRef.value.addEventListener('wheel', onWheel, { passive: false })
+		canvasRef.value.addEventListener('mouseenter', onMouseEnter)
+	}
+})
+
+onUnmounted(() => {
+	window.removeEventListener('keydown', onKeyDown)
+	window.removeEventListener('keyup', onKeyUp)
+	if (canvasRef.value) {
+		canvasRef.value.removeEventListener('wheel', onWheel)
+		canvasRef.value.removeEventListener('mouseenter', onMouseEnter)
+	}
+})
+</script>
+
+<template>
+	<div class="container">
+		<div class="controls controls-up">
+			<button @click="config.shiftY += 1">↑</button>
+			<button @click="config.shiftY += 10">↑↑</button>
+			<button @click="config.shiftY += 100">↑↑↑</button>
+		</div>
+		<div class="controls controls-down">
+			<button @click="config.shiftY -= 1">↓</button>
+			<button @click="config.shiftY -= 10">↓↓</button>
+			<button @click="config.shiftY -= 100">↓↓↓</button>
+		</div>
+		<div class="controls controls-left">
+			<button @click="config.shiftX += 1">←</button>
+			<button @click="config.shiftX += 10">←←</button>
+			<button @click="config.shiftX += 100">←←←</button>
+		</div>
+		<div class="controls controls-right">
+			<button @click="config.shiftX -= 1">→</button>
+			<button @click="config.shiftX -= 10">→→</button>
+			<button @click="config.shiftX -= 100">→→→</button>
+		</div>
+		<canvas
+			ref="canvasRef"
+			class="creature-canvas"
+			:width="config.canvasSize"
+			:height="config.canvasSize"
+			@click="onClick"
+			@mousemove="onMouseMove"
+			@wheel="onWheel"
+		></canvas>
+	</div>
+	<div>
+		<p>Scale: {{ config.scale.toFixed(2) }}</p>
+		<p>X: {{ config.shiftX }}, Y: {{ config.shiftY }}</p>
+		<input
+			v-model="config.scale"
+			type="range"
+			min="0"
+			max="5"
+			step="0.1"
+		/>
+	</div>
+</template>
+
+<style scoped>
+.container {
+	display: grid;
+	grid-template-columns: 100px 1fr 100px;
+	grid-template-rows: 100px 1fr 100px;
+	gap: 16px;
+}
+
+.controls {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	button {
+		width: 100px;
+		font-size: 1.5rem;
+		padding: 8px;
+		margin: 4px;
+		aspect-ratio: 1;
+	}
+}
+
+.controls-up {
+	grid-column: 2;
+	grid-row: 1;
+	display: flex;
+	justify-content: center;
+}
+
+.controls-down {
+	grid-column: 2;
+	grid-row: 3;
+	display: flex;
+	justify-content: center;
+}
+
+.controls-left {
+	grid-column: 1;
+	grid-row: 2;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.controls-right {
+	grid-column: 3;
+	grid-row: 2;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+canvas {
+	border: 3px solid #ccc;
+	grid-column: 2;
+	grid-row: 2;
+}
+</style>

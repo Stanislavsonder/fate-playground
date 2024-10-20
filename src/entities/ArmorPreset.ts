@@ -1,6 +1,6 @@
 import { BodyPart, MAX_CHARACTER_LEVEL } from '@/constants/Character'
 import { CharacterBodySize, LootLevel } from '@/types'
-import { copy } from '@/components/helpers/utils'
+import { copy } from '@/helpers/utils'
 import { ArmorType } from '@/constants/Armor'
 import { ALL_WORLD_SETTINGS, WorldSetting } from '@/constants/Application'
 import { ArmorGeneratorModifier } from '@/services/armorGenerator.service'

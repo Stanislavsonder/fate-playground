@@ -2,7 +2,7 @@ import { ALL_WEAPON_TYPES, Shield } from '@/constants/Weapons'
 import { ChanceSheet, LootLevel, LootQuality, WeaponRange, WeightSheet } from '@/types'
 import { WeaponType } from '@/entities/WeaponType'
 import { WeaponGeneratorModifier } from '@/services/weaponGenerator.service'
-import { weightSheetToChances } from '@/components/helpers/utils'
+import { weightSheetToChances } from '@/helpers/utils'
 
 export const ALL_DEFENCE_WEAPON = [Shield]
 export const ALL_RANGED_WEAPONS = ALL_WEAPON_TYPES.filter(weapon => weapon.range === WeaponRange.Ranged)

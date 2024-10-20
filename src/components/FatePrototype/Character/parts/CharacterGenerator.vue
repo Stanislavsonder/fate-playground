@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { BODY_SIZE_WEIGHT } from '@/constants/ArmorGenerator'
-import { copy, enumKeys, weightSheetToChances } from '@/components/helpers/utils'
+import { copy, enumKeys, weightSheetToChances } from '@/helpers/utils'
 import WeightEditor from '@/components/FatePrototype/Character/parts/WeightEditor.vue'
 import { CharacterBodySize, LootLevel, WeightSheet } from '@/types'
 import { MAX_CHARACTER_LEVEL } from '@/constants/Character'

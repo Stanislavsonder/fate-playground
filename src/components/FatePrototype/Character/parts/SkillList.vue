@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Skills } from '@/types'
-import { capitalizeFirstLetter } from '../../../helpers/utils'
+import { capitalizeFirstLetter } from '@/helpers/utils'
 
 const { skills } = defineProps<{
 	skills: Skills

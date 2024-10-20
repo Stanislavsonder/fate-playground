@@ -1,6 +1,6 @@
 import { CharacterBody, CharacterBodySize, LootQuality } from '@/types'
 import { ArmorType, BLOCK_CONSTANT } from '@/constants/Armor'
-import { combineStats, copy } from '@/components/helpers/utils'
+import { combineStats, copy } from '@/helpers/utils'
 import { BodyPart } from '@/constants/Character'
 
 export type ArmorStats = {

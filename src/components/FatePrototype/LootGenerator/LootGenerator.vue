@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { enumKeys } from '../../helpers/utils'
+import { enumKeys } from '@/helpers/utils'
 import { LootLevel } from '@/types'
 import { ref } from 'vue'
 import { MAX_CHARACTER_LEVEL } from '@/constants/Character'

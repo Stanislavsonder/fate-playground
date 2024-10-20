@@ -1,5 +1,5 @@
 import { ChanceSheet, CharacterBodySize, WeightSheet } from '@/types'
-import { weightSheetToChances } from '@/components/helpers/utils'
+import { weightSheetToChances } from '@/helpers/utils'
 import { ArmorPreset } from '@/entities/ArmorPreset'
 import { BodyPart } from '@/constants/Character'
 import { ArmorType } from '@/constants/Armor'

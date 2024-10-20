@@ -1,6 +1,6 @@
 import { Character } from '@/entities/Character'
 import { ChanceSheet, CharacterBody, CharacterBodySize, LootLevel, Skills, WeaponSlot } from '@/types'
-import { copy, getRandomInt, getRandomWithChance, weightSheetToChances } from '@/components/helpers/utils'
+import { copy, getRandomInt, getRandomWithChance, weightSheetToChances } from '@/helpers/utils'
 import { BODY_SIZE_WEIGHT } from '@/constants/ArmorGenerator'
 import WeaponGeneratorService from '@/services/weaponGenerator.service'
 import ArmorGeneratorService from '@/services/armorGenerator.service'

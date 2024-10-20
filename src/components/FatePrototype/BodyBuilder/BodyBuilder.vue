@@ -2,7 +2,7 @@
 import { useMagicKeys } from '@vueuse/core'
 import { BodyPart, DEFAULT_HUMAN_BODY } from '@/constants/Character'
 import { CharacterBody, ArmorSlot } from '@/types'
-import { copy } from '@/components/helpers/utils'
+import { copy } from '@/helpers/utils'
 import { ref } from 'vue'
 
 const body = defineModel<CharacterBody>({

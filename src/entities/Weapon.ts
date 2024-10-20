@@ -1,5 +1,5 @@
 import { WeaponType } from './WeaponType'
-import { combineStats, copy } from '@/components/helpers/utils'
+import { combineStats, copy } from '@/helpers/utils'
 import { LootQuality, WeaponModifier, WeaponStats } from '@/types'
 
 export type WeaponProps = WeaponStats & {

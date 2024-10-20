@@ -1,0 +1,37 @@
+button {
+	cursor: pointer;
+}
+body {
+	font-family: var(--inter);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-align: center;
+	color: var(--text-color);
+	background-color: var(--background);
+
+	&::-webkit-scrollbar {
+		display: none;
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+}
+/* width */
+::-webkit-scrollbar {
+	width: 16px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: var(--primary);
+	border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}

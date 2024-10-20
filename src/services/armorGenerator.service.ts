@@ -1,7 +1,7 @@
 import { ChanceSheet, CharacterBody, CharacterBodySize, LootLevel, LootQuality, WeightSheet } from '@/types'
 import { Armor, ArmorModifier } from '@/entities/Armor'
 import { AMOUNT_OF_NEGATIVE_MODIFIERS_CHANCES, AMOUNT_OF_POSITIVE_MODIFIERS_CHANCES, LEVEL_RISE_CHANCES, QUALITY_CHANCES } from '@/constants/WeaponGenerator'
-import { copy, decreaseModifierChance, getRandomInt, getRandomWithChance, invertModifiers, weightSheetToChances } from '@/components/helpers/utils'
+import { copy, decreaseModifierChance, getRandomInt, getRandomWithChance, invertModifiers, weightSheetToChances } from '@/helpers/utils'
 import {
 	ADDITIONAL_BODY_SIZE_WEIGHT,
 	ADDITIONAL_BOOTS_MOVEMENT_WEIGHT,

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import FightWindow from '@/components/FatePrototype/FightWindow.vue'
 import LootGenerator from '@/components/FatePrototype/LootGenerator/LootGenerator.vue'
+import BodyEditor from '@/components/BodyEditor/BodyEditor.vue'
 </script>
 
 <template>
@@ -8,65 +9,19 @@ import LootGenerator from '@/components/FatePrototype/LootGenerator/LootGenerato
 		<summary>Loot generator (Armors / Weapons)</summary>
 		<LootGenerator />
 	</details>
-	<details open>
+	<details>
 		<summary>Fight window</summary>
 		<FightWindow />
 	</details>
+
+	<details open>
+		<summary>Body editor</summary>
+		<BodyEditor />
+	</details>
 </template>
 
-<style lang="scss" scoped>
-details {
-	summary {
-		text-align: center;
-		font-size: 24px;
-	}
-}
-</style>
+<style lang="scss" src="./app/styles/reset.scss" />
 
-<style lang="scss">
-body {
-	overflow-y: scroll;
-}
-button {
-	cursor: pointer;
-}
+<style lang="scss" src="./app/styles/variables.scss" />
 
-ul,
-ol,
-li {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-
-.weapon-editor {
-	&__list {
-		display: flex;
-		gap: 24px;
-		padding: 24px;
-		overflow: auto;
-	}
-
-	&__weapons {
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		gap: 16px;
-	}
-
-	&__weapon {
-		display: flex;
-		flex-direction: column;
-		gap: 16px;
-		flex-shrink: 0;
-		max-width: 400px;
-	}
-
-	&__delete {
-		background-color: #752d2d;
-		color: white;
-		height: 24px;
-		border-radius: 8px;
-		border: none;
-	}
-}
-</style>
+<style lang="scss" src="./app/styles/main.scss" />
